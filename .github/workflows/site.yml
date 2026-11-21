@@ -1,27 +1,37 @@
-# Relève les temps d'attente et les dépose dans data/wait-times.json.
-# La page lit ensuite ce fichier depuis son propre domaine : plus de CORS,
-# plus de proxy public, plus de panne de service tiers.
-name: Temps d'attente
+# Relève les temps d'attente, puis publie le site sur GitHub Pages.
+#
+# Les deux tâches sont dans le même workflow à dessein : un commit poussé par
+# GITHUB_TOKEN ne déclenche aucun autre workflow. Un déploiement séparé ne
+# verrait donc jamais les relevés, et le site resterait figé sur le premier.
+name: Relevé et publication
 
 on:
+  push:
+    branches: [main]
   schedule:
-    - cron: '*/10 * * * *'   # toutes les dix minutes
-  workflow_dispatch:          # déclenchement manuel depuis l'onglet Actions
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write   # écrire data/wait-times.json
+  pages: write      # publier le site
+  id-token: write   # authentifier le déploiement
 
 concurrency:
-  group: wait-times
-  cancel-in-progress: true
+  group: site
+  cancel-in-progress: false
 
 jobs:
-  releve:
+  publier:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Interroger Queue-Times
+        continue-on-error: true   # une API muette ne doit pas empêcher la publication
         run: |
           set -euo pipefail
           mkdir -p data
@@ -38,10 +48,21 @@ jobs:
             > data/wait-times.json
           echo "Attractions relevées : $(jq '[.parks[].lands[].rides[]] | length' data/wait-times.json)"
 
-      - name: Publier si le relevé a changé
+      - name: Conserver le relevé dans le dépôt
+        continue-on-error: true
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/wait-times.json
           git diff --staged --quiet || git commit -m "Relevé des temps d'attente $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Déployer
+        id: deploiement
+        uses: actions/deploy-pages@v4
