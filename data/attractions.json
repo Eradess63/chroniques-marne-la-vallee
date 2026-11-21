@@ -75,7 +75,10 @@
         "La version de Paris est la seule Big Thunder construite sur une île : le départ et le retour des trains se font par des tunnels sous la rivière.",
         "Les rochers rouges de Paris sont inspirés de Monument Valley (Arizona), comme à Orlando et à Tokyo ; la version californienne s'inspire de Bryce Canyon (Utah).",
         "Big Thunder Mountain et Phantom Manor partagent la même histoire : la fortune de Thunder Mesa et la malédiction qui frappe la famille Ravenswood.",
-        "Une file Single Rider a été ajoutée en août 2018 pour fluidifier l'attente."
+        "Une file Single Rider a été ajoutée en août 2018 pour fluidifier l'attente.",
+        "Le parcours commence par une descente : le train quitte la gare en plongeant dans un tunnel sous la rivière pour rejoindre l'île, et y revient de la même façon. Aucune autre Big Thunder ne fait cela.",
+        "Thunder Mesa n'est pas qu'un nom d'attraction : c'est la ville fictive qui donne sa cohérence à tout Frontierland, du manoir à l'embarcadère.",
+        "Tony Baxter, qui conçut la première Big Thunder en Californie en 1979, en était alors à son premier grand projet d'Imagineer."
       ],
       "gallery": [
         {
@@ -164,7 +167,10 @@
         "En version anglaise, le Fantôme est interprété par Vincent Price ; en français, la voix a été confiée à Gérard Chevalier (1992-2018) puis à Bernard Alane (depuis 2019).",
         "L'attraction compte 92 Audio-Animatronics.",
         "La scène finale se déroule à Phantom Canyon, un décor propre à Paris qui remplace le cimetière des autres Haunted Mansion.",
-        "Contrairement à ses cousins américains, le manoir parisien raconte une histoire officielle, en lien direct avec celle de Big Thunder Mountain."
+        "Contrairement à ses cousins américains, le manoir parisien raconte une histoire officielle, en lien direct avec celle de Big Thunder Mountain.",
+        "Le manoir domine Frontierland depuis une colline, ce qui lui donne une silhouette visible de presque tout le land — y compris depuis le pont du vapeur.",
+        "La rénovation de 2018-2019 a duré près de seize mois, bien plus que prévu à l'annonce.",
+        "Le parcours est l'un des rares du parc à n'imposer aucune taille minimale tout en étant déconseillé aux jeunes enfants : l'arbitrage est laissé aux parents."
       ],
       "gallery": [
         {
@@ -1644,15 +1650,14 @@
     {
       "id": "disneyland-railroad",
       "name": "Disneyland Railroad",
-      "tagline": "",
+      "tagline": "Le grand tour du royaume, à dix milles à l'heure",
       "park": "dlp",
       "land": "Main Street U.S.A.",
-      "motif": "tower",
+      "motif": "locomotive",
       "posterLines": [
         "DISNEYLAND",
         "RAILROAD"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Disneyland Railroad Main Street Station",
@@ -1669,47 +1674,86 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 (gare de Discoveryland : 24 juin 1993)"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering · locomotives H.P. Phillips Company et Severn Lamb",
+        "type": "Chemin de fer à vapeur, voie étroite",
+        "transport": "Quatre trains tractés par des locomotives à vapeur de type 4-4-0",
+        "duration": "Environ 20 minutes pour le tour complet",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Quatre trains en rotation · vitesse d'environ 16 km/h",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": false,
+          "pmr": "transfer"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le chemin de fer ouvre avec le parc le 12 avril 1992, sous le nom d'Euro Disneyland Railroad. Trois gares fonctionnent dès le premier jour : Main Street, le Frontierland Depot et Fantasyland. Celle de Discoveryland n'ouvre que le 24 juin 1993. L'attraction prend son nom actuel en 1994, quand Euro Disney devient Disneyland Paris. La voie, elle, n'a pas bougé depuis 1992 : elle court en grande partie sur la butte qui ceinture le parc et la dissimule du monde extérieur.",
+      "synopsis": "« All aboard ! » La façade de Main Street Station est le premier bâtiment que l'on rencontre en entrant. On s'installe sur les banquettes de bois, la vapeur siffle, et le train s'élance pour un tour complet du royaume. Les quatre gares desservent chacune un land, et l'on peut descendre où l'on veut — ou rester assis vingt minutes et regarder le parc défiler depuis sa hauteur.",
+      "secrets": [
+        "Les initiales EDRR, pour Euro Disneyland Railroad, sont encore visibles un peu partout dans le parc, notamment dans les ferronneries de Main Street Station : un vestige du nom d'origine, que personne n'a jamais effacé.",
+        "La voie mesure environ 2 180 mètres, soit 7 150 pieds, et le train la parcourt à une allure d'à peu près 16 km/h.",
+        "Les locomotives sont de type 4-4-0, la configuration emblématique des trains américains du XIXᵉ siècle. Les numéros 1, 2 et 3 ont été construites par la H.P. Phillips Company en 1992 ; la numéro 4 est sortie des ateliers Severn Lamb en 1993.",
+        "La gare de Main Street de Paris n'a aucun équivalent : son architecture est propre à ce parc, contrairement à la plupart des bâtiments de Main Street qui reprennent les modèles américains.",
+        "Fantasyland Station dessert aussi Adventureland, qui est le seul land du parc à ne pas avoir de gare à lui.",
+        "Un passage a été creusé sous la voie entre le labyrinthe d'Alice et le moulin, fin 1993, pour donner accès à une zone ajoutée après l'ouverture : la ligne était déjà là, il a fallu passer dessous.",
+        "La butte sur laquelle roule le train n'est pas qu'un décor : elle coupe la vue sur l'extérieur depuis l'intérieur du parc. Le chemin de fer en fait le tour et sert, au passage, de frontière visuelle au royaume."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : la locomotive de Main Street Station"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : le dernier tour avant la fermeture"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé : la boucle et ses quatre gares"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir du Grand Circle Tour"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "score": 4,
+        "pros": [
+          "Vue unique sur le parc depuis la butte",
+          "Repos bienvenu au milieu d'une journée de marche",
+          "Vraies locomotives à vapeur"
+        ],
+        "cons": [
+          "Attente souvent longue à Main Street",
+          "Gares parfois fermées selon la saison"
+        ],
+        "text": "À prendre au Frontierland Depot plutôt qu'à Main Street : même train, bien moins de monde. Le meilleur moyen de souffler sans quitter le décor."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://en.wikipedia.org/wiki/Disneyland_Railroad_(Paris)",
+        "https://d23.com/a-to-z/euro-disneyland-railroad/",
+        "https://www.dlpguide.com/guidebook/disneyland-park/main-street-usa/disneyland-railroad-station/",
+        "https://www.techno-science.net/fr/definitions/disneyland-paris-railroad"
       ]
     },
     {
       "id": "main-street-vehicles",
       "name": "Main Street Vehicles",
-      "tagline": "",
+      "tagline": "La révolution des transports, en cinq minutes",
       "park": "dlp",
       "land": "Main Street U.S.A.",
-      "motif": "tower",
+      "motif": "tram",
       "posterLines": [
         "MAIN STREET",
         "VEHICLES"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Main Street Vehicles"
@@ -1722,33 +1766,72 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Parcours en véhicules anciens, de Town Square à Central Plaza",
+        "transport": "Omnibus à impériale, camion de pompiers, limousine, panier à salade · tramways à chevaux (attraction distincte)",
+        "duration": "Environ 5 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Panier à salade : 8 passagers · tramway à chevaux : jusqu'à 15 passagers, 3 voitures",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": false,
           "pmr": null
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Les véhicules de Main Street roulent depuis l'ouverture du parc, le 12 avril 1992. Paris en possède la plus grande collection de tous les parcs de type royaume enchanté. Le jour de l'inauguration, quatre d'entre eux prenaient des passagers : le camion de pompiers, l'omnibus, la limousine et le panier à salade. Les deux premiers reprenaient les dessins de 1955 revus et enrichis pour le nouveau parc ; la limousine était inédite, et le panier à salade dérivait de la voiture sans chevaux des parcs américains.",
+      "synopsis": "Main Street raconte une époque de bascule, celle où le cheval cède la place au moteur. Les deux cohabitent dans la rue : on peut monter dans un tramway tiré par un cheval de trait, ou dans un omnibus à impériale qui pétarade. Le trajet est court, de Town Square à Central Plaza, mais il offre ce que la marche ne donne pas — la hauteur, la lenteur, et le droit de saluer la foule depuis la plateforme.",
+      "secrets": [
+        "Walt Disney tenait à ce que le camion de pompiers partage la rue avec les tramways à chevaux et les premières automobiles : la cohabitation met en scène, à l'œil nu, la révolution des transports urbains.",
+        "À Paris, les tramways à chevaux sont comptés comme une attraction à part entière, distincte des véhicules à moteur. C'est le seul parc à faire cette distinction.",
+        "Les tramways parisiens ont été entièrement redessinés pour l'ouverture : les passagers y sont assis face à face dans une cabine couverte, et non en plein air comme ailleurs.",
+        "Le panier à salade et la limousine sont propres à Disneyland Paris. Le camion de livraison Main Street Deliveries aussi.",
+        "De l'omnibus d'origine de Disneyland en Californie, un seul élément était authentiquement d'époque : son klaxon.",
+        "Les rails du tramway sont de vrais rails encastrés dans les pavés. Ils se dédoublent à mi-parcours pour permettre à deux voitures de se croiser."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : l'omnibus devant les façades"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : les lanternes de Town Square"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé : Town Square et Central Plaza"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir du tramway à chevaux"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "score": 3.5,
+        "pros": [
+          "Décor de Main Street vu d'en haut",
+          "Chevaux de trait bien soignés",
+          "Court et sans attente le matin"
+        ],
+        "cons": [
+          "Fonctionne rarement l'après-midi",
+          "Service interrompu dès qu'une parade approche"
+        ],
+        "text": "Plus un plaisir de décor qu'une attraction. À prendre à l'ouverture, dans le sens Town Square vers le château, pour la vue."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/main-street-usa/main-street-vehicles/",
+        "https://dlpguide.com/guidebook/disneyland-park/main-street-usa/horse-drawn-streetcars/",
+        "https://en.wikipedia.org/wiki/Main_Street_Vehicles",
+        "https://d23.com/a-to-z/horse-drawn-streetcars/"
       ]
     },
     {
@@ -2287,15 +2370,14 @@
     {
       "id": "thunder-mesa-riverboat",
       "name": "Thunder Mesa Riverboat Landing",
-      "tagline": "",
+      "tagline": "Le seul vapeur à roues latérales des parcs Disney",
       "park": "dlp",
       "land": "Frontierland",
-      "motif": "mesa",
+      "motif": "riverboat",
       "posterLines": [
         "THUNDER MESA",
         "RIVERBOAT"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Thunder Mesa Riverboat Landing"
@@ -2308,86 +2390,164 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Croisière fluviale sur les Rivers of the Far West",
+        "transport": "Vapeur à aubes · la Molly Brown, à roues latérales",
+        "duration": "Environ 15 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Non communiquée · embarquement de plain-pied, accessible en fauteuil",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": false,
+          "pmr": true
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'embarcadère ouvre avec le parc le 12 avril 1992, et dessert alors deux bateaux — un cas unique dans les parcs Disney. Le Mark Twain, à roue arrière, reprend celui d'Anaheim ; la Molly Brown, à roues latérales, a été dessinée et construite exclusivement pour Paris afin d'offrir de la capacité dès le premier jour. Le Mark Twain est entré en rénovation il y a plus de quatorze ans et n'en est jamais ressorti : en 2025, Disneyland Paris a retiré toute mention de lui de son site. Seule la Molly Brown navigue encore.",
+      "synopsis": "On largue les amarres depuis Thunder Mesa, et le vapeur remonte lentement les Rivers of the Far West. La rive défile : geysers, ossements de dinosaures, créatures animatroniques, le vieux Joe qui pêche sans lever les yeux. Le bateau contourne Big Thunder Mountain et Wilderness Island, passe sous le manoir, et revient à quai. C'est le seul endroit d'où l'on voit la montagne depuis l'eau.",
+      "secrets": [
+        "La Molly Brown est l'unique vapeur à roues latérales de tous les parcs Disney du monde. Partout ailleurs, la roue est à l'arrière.",
+        "Elle porte le nom de Margaret Brown, rescapée du Titanic, que l'on surnomma « Molly » après sa mort — jamais de son vivant.",
+        "Le Mark Twain doit son nom à l'écrivain, mais aussi au bateau d'origine de Disneyland en Californie dont il est la reprise.",
+        "À bord, le commentaire est une conversation enregistrée entre le capitaine et la personne qui a donné son nom au bateau.",
+        "Le Mark Twain est hors service depuis plus de quatorze ans. Il a longtemps été dissimulé sous une bâche décorée, visible au détour d'un méandre.",
+        "Depuis l'été 2026, deux nouvelles scènes animatroniques ont été ajoutées sur les berges, conçues par Walt Disney Imagineering Paris.",
+        "C'est l'une des rares attractions du parc sans aucune taille minimale, avec un embarquement de plain-pied et des places en fauteuil roulant."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : la Molly Brown sur la rivière"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : le vapeur au crépuscule"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé : la boucle autour de l'île"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir de l'embarcadère"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "score": 4,
+        "pros": [
+          "Vue sur Big Thunder impossible à obtenir autrement",
+          "Calme absolu au milieu du parc",
+          "Magnifique au crépuscule"
+        ],
+        "cons": [
+          "Départs espacés, il faut viser l'horaire",
+          "Un seul bateau en service"
+        ],
+        "text": "L'attraction la plus reposante du parc, et la mieux placée pour comprendre la géographie de Frontierland. À faire en fin de journée."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://d23.com/a-to-z/thunder-mesa-riverboat-landing",
+        "https://www.dlpguide.com/guidebook/disneyland-park/frontierland/thunder-mesa-riverboat-landing/",
+        "https://wdwnt.com/2025/05/all-references-to-mark-twain-riverboat-removed-from-disneyland-paris-website-14-years-after/",
+        "https://magic-tips.app/fr/decouvrir/disneyland-paris/attractions/thunder-mesa-riverboat-landing"
       ]
     },
     {
       "id": "river-rogue-keelboats",
       "name": "River Rogue Keelboats",
-      "tagline": "",
+      "tagline": "Les derniers keelboats des parcs Disney",
       "park": "dlp",
       "land": "Frontierland",
-      "motif": "mesa",
+      "motif": "keelboat",
       "posterLines": [
         "RIVER ROGUE",
         "KEELBOATS"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "River Rogue Keelboats"
         ]
       },
       "localStatus": {
-        "status": null,
+        "status": "closed",
         "until": null,
-        "note": ""
+        "note": "Hors service depuis 2010."
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · hors service depuis 2010"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Croisière fluviale commentée en direct",
+        "transport": "Deux keelboats de bois, le Coyote et le Raccoon, à moteur arrière",
+        "duration": "Environ 9 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Faible — c'est ce qui a condamné l'attraction",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": false,
+          "pmr": false
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Les keelboats ouvrent avec le parc le 12 avril 1992. Des attractions jumelles existaient à Disneyland de 1955 à 1997 et au Magic Kingdom de 1971 à 1997 : Paris fut le dernier parc au monde à en faire naviguer. Leur faible capacité les écarte peu à peu des horaires dès la fin des années 1990, et elles ferment vers 2000. Contre toute attente, elles reviennent en 2007, puis ne fonctionnent plus que les jours de forte affluence, avant de s'arrêter définitivement en 2010.",
+      "synopsis": "L'embarcadère se cache à Smugglers' Cove, entre deux rochers, à l'écart des vapeurs. On monte à bord du Coyote ou du Raccoon, deux petites coques de bois, et le capitaine lance le moteur. Le tour est rapide, bien plus que celui des vapeurs, et le commentaire se fait en direct — donc jamais tout à fait le même deux fois.",
+      "secrets": [
+        "Les deux bateaux s'appellent Coyote et Raccoon. Ailleurs dans le monde, les keelboats portaient les noms de Gullywhumper et Bertha Mae.",
+        "Ils s'inspirent des embarcations du film « Davy Crockett and the River Pirates », sorti en 1956.",
+        "Malgré leur allure, ils ne sont pas halés ni poussés à la perche : un moteur est dissimulé à l'arrière, et un capitaine les pilote.",
+        "Le commentaire était donné en direct par le capitaine, et non diffusé par un enregistrement comme sur les vapeurs.",
+        "Paris a été le dernier parc Disney du monde à exploiter des keelboats, dix ans après leur disparition en Californie et en Floride.",
+        "Une coque de keelboat est réapparue sur les Rivers of the Far West en 2026 — comme élément de décor, et non comme attraction."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : le Coyote à Smugglers' Cove"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : l'embarcadère abandonné"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé : la remontée rapide"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir, édition dernière saison"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "score": 3.5,
+        "pros": [
+          "Commentaire vivant, jamais deux fois pareil",
+          "Point de vue bas, au ras de l'eau",
+          "Rareté absolue"
+        ],
+        "cons": [
+          "Hors service depuis 2010",
+          "Capacité qui a eu raison d'elle"
+        ],
+        "text": "Fiche d'archive. Une attraction qu'on ne peut plus faire, et dont la disparition dit beaucoup des arbitrages de capacité dans un parc."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/frontierland/river-rogue-keelboats",
+        "https://d23.com/a-to-z/river-rogue-keelboats/",
+        "https://www.sortiraparis.com/en/what-to-visit-in-paris/walks/articles/342431-disneyland-paris-whatever-happened-to-the-river-rogue-keelboats-in-frontierland",
+        "https://en.wikipedia.com/wiki/Mike_Fink_Keel_Boats"
       ]
     },
     {
@@ -2396,7 +2556,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Frontierland",
-      "motif": "mesa",
+      "motif": "fort",
       "posterLines": [
         "FRONTIERLAND",
         "PLAYGROUND"

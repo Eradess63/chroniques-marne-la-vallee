@@ -255,7 +255,12 @@ const GROUND = {
   rocket:  { a: '#0A1E2E', b: '#15455E', accent: '#3E97B5' },
   tower:   { a: '#1A1A24', b: '#3B3547', accent: '#9B7BA6' },
   kitchen: { a: '#2B1D14', b: '#5C3A1F', accent: '#D08A33' },
-  frost:   { a: '#0D2430', b: '#1E5464', accent: '#6FB7C4' }
+  frost:   { a: '#0D2430', b: '#1E5464', accent: '#6FB7C4' },
+  locomotive: { a: '#1E1410', b: '#4A3326', accent: '#A8552C' },
+  tram:       { a: '#1C2418', b: '#3F5638', accent: '#6E8C4A' },
+  riverboat:  { a: '#122630', b: '#2F5F6B', accent: '#4E8FA0' },
+  keelboat:   { a: '#1A2218', b: '#3C4E33', accent: '#7A8F4C' },
+  fort:       { a: '#241A12', b: '#56402C', accent: '#996437' }
 };
 
 /* Variantes : la planche change de registre, pas de style. */
@@ -394,7 +399,96 @@ const MOTIFS = {
     ${steps(150, 226, 108, 46, 3, v.gold)}
     <rect x="30" y="226" width="240" height="3" fill="${v.gold}"/>
     ${[0, 1, 2, 3, 4, 5, 6, 7].map((i) => `<path d="M${44 + i * 30} 240 q7.5 -8 15 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".6"/>`).join('')}`;
-  }
+  },
+
+  /** Main Street : locomotive à vapeur de type 4-4-0, roues motrices et panache */
+  locomotive: (g, v) => `
+    ${fan(96, 48, 130, 13, v.gold, .3)}
+    <rect x="18" y="214" width="264" height="4" fill="${v.gold}"/>
+    ${[0,1,2,3,4,5,6,7,8,9].map((i) => `<rect x="${24 + i * 26}" y="218" width="16" height="5" fill="${v.gold}" opacity=".6"/>`).join('')}
+    <rect x="206" y="118" width="70" height="78" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    ${[0,1,2].map((i) => `<rect x="${216 + i * 20}" y="130" width="12" height="18" fill="${v.gold}"/>`).join('')}
+    <rect x="70" y="140" width="140" height="56" rx="28" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="96" y="140" width="5" height="56" fill="${v.gold}" opacity=".8"/>
+    <rect x="140" y="140" width="5" height="56" fill="${v.gold}" opacity=".8"/>
+    <rect x="184" y="140" width="5" height="56" fill="${v.gold}" opacity=".8"/>
+    <path d="M84 118 L112 118 L106 140 L90 140Z" fill="${v.gold}"/>
+    <path d="M80 110 L116 110 L116 118 L80 118Z" fill="${v.gold}"/>
+    <circle cx="68" cy="152" r="11" fill="${v.gold}"/>
+    <path d="M56 196 L36 214 L70 214Z" fill="${v.gold}"/>
+    <circle cx="106" cy="196" r="22" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    <circle cx="106" cy="196" r="6" fill="${v.gold}"/>
+    <circle cx="170" cy="196" r="22" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    <circle cx="170" cy="196" r="6" fill="${v.gold}"/>
+    <circle cx="238" cy="200" r="14" fill="none" stroke="${v.gold}" stroke-width="2.5"/>
+    ${[0,1,2,3,4].map((i) => `<ellipse cx="${98 - i * 4}" cy="${96 - i * 19}" rx="${15 + i * 5}" ry="${9 + i * 3}" fill="${v.gold}" opacity="${(.5 - i * .08).toFixed(2)}"/>`).join('')}`,
+
+  /** Main Street : omnibus à impériale et rails de tramway */
+  tram: (g, v) => `
+    ${fan(150, 40, 120, 14, v.gold, .22)}
+    <rect x="18" y="212" width="264" height="3" fill="${v.gold}"/>
+    <rect x="18" y="222" width="264" height="3" fill="${v.gold}" opacity=".5"/>
+    <rect x="72" y="96" width="156" height="104" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="66" y="86" width="168" height="12" fill="${v.gold}"/>
+    <rect x="72" y="146" width="156" height="4" fill="${v.gold}" opacity=".8"/>
+    ${[0,1,2,3].map((i) => `<rect x="${84 + i * 36}" y="106" width="24" height="30" fill="${v.gold}"/>`).join('')}
+    ${[0,1,2,3].map((i) => `<rect x="${84 + i * 36}" y="158" width="24" height="30" fill="${v.gold}" opacity=".85"/>`).join('')}
+    <circle cx="104" cy="204" r="16" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    <circle cx="196" cy="204" r="16" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    <circle cx="104" cy="204" r="4" fill="${v.gold}"/>
+    <circle cx="196" cy="204" r="4" fill="${v.gold}"/>
+    <rect x="46" y="118" width="7" height="82" fill="${v.gold}"/>
+    ${diamond(49, 110, 7, v.gold)}
+    <rect x="247" y="118" width="7" height="82" fill="${v.gold}" opacity=".7"/>`,
+
+  /** Frontierland : vapeur à roues latérales, cheminées jumelles */
+  riverboat: (g, v) => `
+    ${fan(150, 36, 120, 14, v.gold, .2)}
+    <path d="M52 186 L248 186 L228 220 L72 220Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="72" y="150" width="156" height="36" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="98" y="116" width="104" height="34" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="124" y="92" width="52" height="24" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    ${[0,1,2,3,4,5].map((i) => `<rect x="${80 + i * 25}" y="160" width="14" height="16" fill="${v.gold}"/>`).join('')}
+    ${[0,1,2,3].map((i) => `<rect x="${108 + i * 23}" y="126" width="13" height="15" fill="${v.gold}" opacity=".9"/>`).join('')}
+    <rect x="128" y="40" width="10" height="52" fill="${v.gold}"/>
+    <rect x="162" y="40" width="10" height="52" fill="${v.gold}"/>
+    <rect x="122" y="34" width="22" height="8" fill="${v.gold}"/>
+    <rect x="156" y="34" width="22" height="8" fill="${v.gold}"/>
+    <circle cx="56" cy="178" r="30" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="56" y1="178" x2="${(56 + Math.cos(a) * 30).toFixed(1)}" y2="${(178 + Math.sin(a) * 30).toFixed(1)}" stroke="${v.gold}" stroke-width="2.5"/>`; }).join('')}
+    <circle cx="56" cy="178" r="7" fill="${v.gold}"/>
+    ${[0,1,2,3,4,5,6,7,8,9].map((i) => `<path d="M${18 + i * 28} 232 q7 -8 14 0 t14 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".55"/>`).join('')}`,
+
+  /** Frontierland : keelboat de bois, cabine et voile carrée */
+  keelboat: (g, v) => `
+    ${fan(150, 44, 110, 12, v.gold, .18)}
+    <path d="M46 182 L254 182 L232 216 L68 216Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="104" y="128" width="98" height="54" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M98 128 L208 128 L202 114 L104 114Z" fill="${v.gold}"/>
+    ${[0,1,2].map((i) => `<rect x="${118 + i * 30}" y="142" width="18" height="22" fill="${v.gold}"/>`).join('')}
+    <rect x="68" y="60" width="6" height="122" fill="${v.gold}"/>
+    <path d="M74 70 L74 112 L132 92Z" fill="${v.gold}" opacity=".85"/>
+    ${diamond(71, 54, 7, v.gold)}
+    <path d="M214 120 L262 176" stroke="${v.gold}" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="150" cy="200" r="9" fill="none" stroke="${v.gold}" stroke-width="2.5"/>
+    ${[0,1,2,3,4,5,6,7,8,9].map((i) => `<path d="M${18 + i * 28} 228 q7 -8 14 0 t14 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".55"/>`).join('')}`,
+
+  /** Frontierland : palissade en rondins et tour de guet */
+  fort: (g, v) => `
+    ${fan(150, 40, 120, 14, v.gold, .2)}
+    ${[0,1,2,3,4,5,6,7,8,9,10,11].map((i) => {
+      const x = 24 + i * 22;
+      return `<rect x="${x}" y="150" width="18" height="72" fill="${g.accent}" stroke="${v.gold}" stroke-width="1.5"/><path d="M${x} 150 L${x + 9} 136 L${x + 18} 150Z" fill="${v.gold}"/>`;
+    }).join('')}
+    <rect x="112" y="96" width="76" height="126" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M100 96 L200 96 L188 74 L112 74Z" fill="${v.gold}"/>
+    <path d="M124 74 L150 48 L176 74Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="132" y="112" width="16" height="22" fill="${v.gold}"/>
+    <rect x="152" y="112" width="16" height="22" fill="${v.gold}"/>
+    <path d="M132 222 L132 172 Q150 156 168 172 L168 222Z" fill="${v.gold}"/>
+    <rect x="147" y="18" width="6" height="32" fill="${v.gold}"/>
+    <path d="M153 22 L186 32 L153 42Z" fill="${v.gold}"/>
+    <rect x="18" y="222" width="264" height="4" fill="${v.gold}"/>`
 };
 
 /**
