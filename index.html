@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chroniques de Marne-la-Vallée</title>
+<meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Jost:wght@300;400;500;600&family=Lora:ital@0;1&family=Poiret+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="deco-top" aria-hidden="true"></div>
+  <div class="sign">
+    <span class="sign__corner sign__corner--tl" aria-hidden="true"></span>
+    <span class="sign__corner sign__corner--tr" aria-hidden="true"></span>
+    <span class="sign__corner sign__corner--bl" aria-hidden="true"></span>
+    <span class="sign__corner sign__corner--br" aria-hidden="true"></span>
+    <p class="sign__kicker">Encyclopédie des attractions</p>
+    <h1 class="sign__title">Chroniques de Marne-la-Vallée</h1>
+    <p class="sign__sub">Parc Disneyland et Disney Adventure World, attraction par attraction</p>
+    <div class="rule" aria-hidden="true"><i>◆</i></div>
+  </div>
+</header>
+
+<main>
+  <section class="controls" aria-label="Filtres">
+    <h2 class="controls__title rule"><span>Programme du jour</span></h2>
+    <div class="search">
+      <label for="search" class="sr-only">Rechercher une attraction</label>
+      <input id="search" type="search" placeholder="Rechercher une attraction…" autocomplete="off">
+    </div>
+    <div class="filter-row">
+      <div class="filter-group" role="group" aria-labelledby="lbl-park">
+        <span class="filter-label" id="lbl-park">Parc</span>
+        <div class="seg" id="filter-park"></div>
+      </div>
+      <div class="filter-group" role="group" aria-labelledby="lbl-state">
+        <span class="filter-label" id="lbl-state">État</span>
+        <div class="seg" id="filter-state"></div>
+      </div>
+    </div>
+    <div class="filter-group" role="group" aria-labelledby="lbl-land">
+      <span class="filter-label" id="lbl-land">Land</span>
+      <div class="chips" id="filter-land"></div>
+    </div>
+  </section>
+
+  <div class="livebar" id="livebar" role="status" aria-live="polite"></div>
+  <p class="count" id="count"></p>
+  <section class="grid" id="grid" aria-label="Attractions"></section>
+</main>
+
+<footer class="footer">
+  <p>Temps d'attente : <a href="https://queue-times.com/" target="_blank" rel="noopener">Powered by Queue-Times.com</a></p>
+  <p>Site de fans, non officiel, sans lien avec The Walt Disney Company ni Disneyland Paris. Illustrations originales.</p>
+</footer>
+
+<dialog id="fiche" class="fiche" aria-labelledby="fiche-title"></dialog>
+<dialog id="lightbox" class="lightbox" aria-label="Galerie"></dialog>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

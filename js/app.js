@@ -1,0 +1,413 @@
+/** Point d'entrée : données, filtres, grille, fiche détaillée, galerie, avis. */
+import { CONFIG } from './config.js';
+import { loadWaitTimes } from './api.js';
+import { posterSVG } from './posters.js';
+import { loadReviews, addReview, average } from './reviews.js';
+
+const $ = (sel, root = document) => root.querySelector(sel);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+const state = {
+  parks: [],
+  attractions: [],
+  live: new Map(),
+  mode: 'loading',
+  via: '',
+  updatedAt: null,
+  filters: { park: 'all', land: 'all', state: 'all', q: '' },
+  openId: null
+};
+
+const STATE_OPTIONS = [
+  { id: 'all', label: 'Toutes' },
+  { id: 'open', label: 'Ouvertes' },
+  { id: 'closed', label: 'Fermées / En rénovation' }
+];
+
+/* ---------- Utilitaires ---------- */
+const fold = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const parkName = (id) => state.parks.find((p) => p.id === id)?.name || id;
+const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+/** Statut affiché : réglage local (localStatus) > données Queue-Times, sinon indisponible */
+function statusOf(a) {
+  const local = a.localStatus || {};
+  const live = state.live.get(a.id);
+  if (local.status === 'refurb') return { kind: 'refurb', label: local.until ? `En rénovation jusqu'au ${fmtDate(local.until)}` : 'En rénovation', wait: null };
+  if (local.status === 'closed') return { kind: 'closed', label: 'Fermée', wait: null };
+  if (!live) return { kind: 'unknown', label: state.mode === 'loading' ? 'Chargement…' : 'Statut indisponible', wait: null };
+  if (live.open) return { kind: 'open', label: 'Ouverte', wait: live.wait };
+  return { kind: 'closed', label: 'Fermée', wait: null };
+}
+
+function matches(a) {
+  const f = state.filters;
+  if (f.park !== 'all' && a.park !== f.park) return false;
+  if (f.land !== 'all' && a.land !== f.land) return false;
+  const kind = statusOf(a).kind;
+  if (f.state === 'open' && kind !== 'open') return false;
+  if (f.state === 'closed' && kind !== 'closed' && kind !== 'refurb') return false;
+  if (f.q && !fold(a.name).includes(fold(f.q)) && !fold(a.tagline).includes(fold(f.q))) return false;
+  return true;
+}
+
+const poster = (a, variant = 'poster') => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, alt: `Affiche vintage de ${a.name}` });
+
+/* ---------- Filtres ---------- */
+function landsForFilter() {
+  const parks = state.filters.park === 'all' ? state.parks : state.parks.filter((p) => p.id === state.filters.park);
+  return parks.flatMap((p) => p.lands);
+}
+
+function chip(group, id, label, pressed, cls = 'chip') {
+  return `<button type="button" class="${cls}" data-group="${group}" data-id="${esc(id)}" aria-pressed="${pressed}">${esc(label)}</button>`;
+}
+
+function renderFilters() {
+  const f = state.filters;
+  $('#filter-park').innerHTML = chip('park', 'all', 'Tous', f.park === 'all', 'seg__btn') + state.parks.map((p) => chip('park', p.id, p.name, f.park === p.id, 'seg__btn')).join('');
+  const lands = landsForFilter();
+  if (f.land !== 'all' && !lands.includes(f.land)) f.land = 'all';
+  $('#filter-land').innerHTML = chip('land', 'all', 'Tous', f.land === 'all') + lands.map((l) => chip('land', l, l, f.land === l)).join('');
+  $('#filter-state').innerHTML = STATE_OPTIONS.map((o) => chip('state', o.id, o.label, f.state === o.id, 'seg__btn')).join('');
+}
+
+/* ---------- Grille ---------- */
+function ribbonHTML(st) {
+  const wait = st.kind === 'open' ? `<span class="ribbon__wait">${st.wait} min</span>` : '';
+  return `<div class="ribbon ribbon--${st.kind}"><span>${esc(st.label)}</span>${wait}</div>`;
+}
+
+function renderGrid() {
+  const list = state.attractions.filter(matches);
+  $('#count').textContent = `${list.length} attraction${list.length > 1 ? 's' : ''} affichée${list.length > 1 ? 's' : ''} sur ${state.attractions.length}`;
+  $('#grid').innerHTML = list.length
+    ? list.map((a) => {
+        const st = statusOf(a);
+        return `<article class="card">
+          <div class="card__art" aria-hidden="true">${poster(a)}</div>
+          <div class="card__body">
+            <h2 class="card__title"><button type="button" class="card__btn" data-open="${esc(a.id)}">${esc(a.name)}</button></h2>
+            <p class="card__park">${esc(parkName(a.park))}</p>
+          </div>
+          ${ribbonHTML(st)}
+        </article>`;
+      }).join('')
+    : '<p class="empty">Aucune attraction ne correspond à ces critères. Modifiez les filtres ou la recherche.</p>';
+}
+
+function renderLivebar() {
+  const bar = $('#livebar');
+  bar.dataset.mode = state.mode;
+  const time = state.updatedAt ? state.updatedAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
+  const text = {
+    loading: `Chargement des temps d'attente…`,
+    live: `Temps d'attente en direct (Queue-Times) · mis à jour à ${time}`,
+    partial: `Temps d'attente en direct pour une partie des attractions · ${time}`,
+    unavailable: `Temps d'attente indisponibles : Queue-Times ne répond pas depuis cette page.`
+  }[state.mode];
+  bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh">Actualiser</button>`;
+}
+
+/* ---------- Données en direct ---------- */
+async function refreshLive() {
+  const btn = $('#refresh');
+  if (btn) { btn.disabled = true; btn.textContent = 'Actualisation…'; }
+  const res = await loadWaitTimes(state.parks, state.attractions).catch(() => ({ entries: new Map(), mode: 'unavailable', via: '' }));
+  state.live = res.entries;
+  state.mode = res.mode;
+  state.via = res.via;
+  state.updatedAt = new Date();
+  renderLivebar();
+  renderGrid();
+  if (state.openId) renderFicheStatus();
+}
+
+/* ---------- Fiche détaillée ---------- */
+const ICONS = {
+  premierAccess: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+  singleRider: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-5 4-8 8-8s8 3 8 8"/></svg>',
+  photoPass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v12H3z"/><circle cx="12" cy="13" r="4"/></svg>',
+  pmr: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10" cy="4" r="2"/><path d="M10 7v7h6l3 6M10 11h6M7 14a5 5 0 1 0 7 6"/></svg>'
+};
+
+function serviceBadge(key, label, value) {
+  let cls = 'svc svc--unknown', text = `${label} : à confirmer`;
+  if (value === true) { cls = 'svc'; text = label; }
+  else if (value === false) { cls = 'svc svc--no'; text = label; }
+  else if (value === 'transfer') { cls = 'svc svc--partial'; text = 'Accessible PMR avec transfert'; }
+  return `<span class="${cls}">${ICONS[key]}${esc(text)}</span>`;
+}
+
+function starsHTML(score) {
+  const full = Math.round(score);
+  return `<span class="stars" role="img" aria-label="${score} sur 5">${'★'.repeat(full)}<span class="off">${'★'.repeat(5 - full)}</span></span>`;
+}
+
+function liveBlock(a) {
+  const st = statusOf(a);
+  const wait = st.kind === 'open' ? `<div class="live__wait">${st.wait} min<small>d'attente</small></div>` : '';
+  return `<div class="live"><div class="live__status ribbon--${st.kind}">${esc(st.label)}</div>${wait}</div>`;
+}
+
+function renderFicheStatus() {
+  const a = state.attractions.find((x) => x.id === state.openId);
+  const holder = $('#fiche-live');
+  if (a && holder) holder.innerHTML = liveBlock(a);
+  const meta = $('#fiche-meta');
+  if (meta) meta.textContent = state.mode === 'unavailable' ? 'Temps d\'attente non disponibles sur cette page.' : state.mode === 'loading' ? '' : 'Source : Queue-Times.com';
+}
+
+function reviewsHTML(a) {
+  const mine = loadReviews(a.id);
+  const avg = average(mine);
+  const editorial = a.review
+    ? `<div class="chronicle">
+      <h3>L'avis du chroniqueur</h3>
+      <div class="score-line">${starsHTML(a.review.score)}<b>${a.review.score}/5</b></div>
+      <p>${esc(a.review.text)}</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Points forts</h4><ul>${a.review.pros.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>
+        <div class="cons"><h4>Points faibles</h4><ul>${a.review.cons.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>
+      </div>
+      <p class="note">Avis éditorial rédigé pour ce site.</p>
+    </div>`
+    : `<div class="chronicle"><h3>L'avis du chroniqueur</h3><p>Pas encore rédigé pour cette attraction.</p></div>`;
+  return `
+    ${editorial}
+    <div class="visitors">
+      <h3>L'avis des visiteurs</h3>
+      <div class="score-line">${avg ? `${starsHTML(avg)}<b>${avg.toFixed(1)}/5</b> <small>(${mine.length})</small>` : '<span>Aucun avis pour le moment.</span>'}</div>
+      <form class="form" id="review-form" data-id="${esc(a.id)}">
+        <fieldset>
+          <legend>Votre note</legend>
+          <div class="rate">
+            ${[5, 4, 3, 2, 1].map((n) => `<input type="radio" name="score" id="rate-${n}" value="${n}" required><label for="rate-${n}" title="${n} sur 5"><span class="sr-only">${n} sur 5</span>★</label>`).join('')}
+          </div>
+        </fieldset>
+        <div><label for="rv-name">Votre prénom</label><input type="text" id="rv-name" name="name" maxlength="40" required></div>
+        <div><label for="rv-text">Votre commentaire</label><textarea id="rv-text" name="text" maxlength="600" required></textarea></div>
+        <button type="submit" class="btn">Publier mon avis</button>
+        <p class="form__msg" id="rv-msg" role="status"></p>
+      </form>
+      <ul class="review-list">
+        ${mine.map((r) => `<li>${starsHTML(r.score)} <strong>${esc(r.name)}</strong> <small>${new Date(r.date).toLocaleDateString('fr-FR')}</small><p>${esc(r.text)}</p></li>`).join('')}
+      </ul>
+    </div>`;
+}
+
+/** Éléments de la galerie : photos fournies (si présentes) puis planches originales */
+function galleryItems(a) {
+  const photos = (a.images || []).map((i) => ({ type: 'img', src: i.src, caption: i.caption || a.name, credit: i.credit }));
+  const posters = (a.gallery || []).map((g) => ({ type: 'poster', variant: g.variant, caption: g.caption }));
+  return [...photos, ...posters];
+}
+
+function itemHTML(a, it) {
+  if (it.type === 'img') return `<img src="${esc(it.src)}" alt="${esc(it.caption)}" data-fallback="1">`;
+  return poster(a, it.variant);
+}
+
+function openFiche(id) {
+  const a = state.attractions.find((x) => x.id === id);
+  if (!a) return;
+  state.openId = id;
+  const f = a.fiche;
+  const dlg = $('#fiche');
+  const items = galleryItems(a);
+  dlg.innerHTML = `
+    <button type="button" class="fiche__close" data-close>Fermer ✕</button>
+    <div class="fiche__head">
+      <div class="fiche__art" role="img" aria-label="Affiche vintage de ${esc(a.name)}">${poster(a)}</div>
+      <div>
+        <p class="fiche__kicker"><span class="tag tag--land">${esc(a.land)}</span><span class="tag tag--park">${esc(parkName(a.park))}</span></p>
+        <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>
+        <p class="fiche__tagline">${esc(a.tagline)}</p>
+        <div id="fiche-live">${liveBlock(a)}</div>
+        <p class="live__meta" id="fiche-meta"></p>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="h-tech">
+      <h3 class="section__title rule" id="h-tech"><span>Fiche technique</span></h3>
+      <div class="ticket">
+       <div class="ticket__main">
+        <div class="ticket__head"><span>Programme de l'attraction</span><b>E-Ticket</b></div>
+        <dl class="ticket__rows">
+          <div class="ticket__row"><dt>Date d'ouverture</dt><dd>${esc(f.opening.label)}</dd></div>
+          <div class="ticket__row"><dt>Constructeur</dt><dd>${esc(f.builder)}</dd></div>
+          <div class="ticket__row"><dt>Type d'attraction</dt><dd>${esc(f.type)}</dd></div>
+          <div class="ticket__row"><dt>Système de transport</dt><dd>${esc(f.transport)}</dd></div>
+          <div class="ticket__row"><dt>Durée du tour</dt><dd>${esc(f.duration)}</dd></div>
+          <div class="ticket__row"><dt>Taille minimale</dt><dd>${esc(f.minHeight.label)}</dd></div>
+          <div class="ticket__row ticket__row--wide"><dt>Capacité</dt><dd>${esc(f.capacity)}</dd></div>
+          <div class="ticket__row ticket__row--wide"><dt>Services</dt><dd><div class="services">
+            ${serviceBadge('premierAccess', 'Disney Premier Access', f.services.premierAccess)}
+            ${serviceBadge('singleRider', 'Single Rider', f.services.singleRider)}
+            ${serviceBadge('photoPass', 'PhotoPass', f.services.photoPass)}
+            ${serviceBadge('pmr', 'Accessibilité PMR', f.services.pmr)}
+          </div></dd></div>
+        </dl>
+        <p class="ticket__foot">Les mentions « à confirmer » sont à vérifier sur le site officiel avant votre visite.</p>
+       </div>
+       <aside class="ticket__stub" aria-hidden="true"><span class="stub__admit">Admit one</span><span class="stub__letter"><span>E</span></span><span class="stub__no">N° ${String(state.attractions.indexOf(a) + 1).padStart(4, '0')}</span></aside>
+      </div>
+    </section>
+
+    ${a.history || a.synopsis ? `<section class="section" aria-labelledby="h-story">
+      <h3 class="section__title rule" id="h-story"><span>L'histoire et le synopsis</span></h3>
+      <div class="prose">${a.history ? `<p>${esc(a.history)}</p>` : ''}${a.synopsis ? `<p>${esc(a.synopsis)}</p>` : ''}</div>
+    </section>` : `<section class="section"><p class="empty">Fiche en cours de rédaction : l'histoire, le synopsis et les anecdotes seront ajoutés.</p></section>`}
+
+    ${a.secrets && a.secrets.length ? `<section class="section" aria-labelledby="h-secrets">
+      <h3 class="section__title rule" id="h-secrets"><span>Les secrets des Imagineers</span></h3>
+      <div class="parchment"><ol>${a.secrets.map((s) => `<li>${esc(s)}</li>`).join('')}</ol></div>
+    </section>` : ''}
+
+    ${items.length ? `<section class="section" aria-labelledby="h-gal">
+      <h3 class="section__title rule" id="h-gal"><span>Galerie</span></h3>
+      <div class="gallery">
+        ${items.map((it, i) => `<button type="button" class="thumb" data-lightbox="${i}"><div class="thumb__art">${itemHTML(a, it)}</div><span class="cap">${esc(it.caption)}</span></button>`).join('')}
+      </div>
+    </section>` : ''}
+
+    <section class="section" aria-labelledby="h-rev">
+      <h3 class="section__title rule" id="h-rev"><span>Avis et notation</span></h3>
+      <div class="reviews" id="reviews">${reviewsHTML(a)}</div>
+    </section>
+
+    ${(a.sources || []).length ? `<div class="sources"><strong>Sources</strong><ul>${(a.sources || []).map((u) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a></li>`).join('')}</ul></div>` : ''}`;
+
+  fixBrokenImages(dlg, a);
+  renderFicheStatus();
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+  try { if (location.hash !== '#' + id) location.hash = id; } catch {}
+}
+
+/** Si une photo ne charge pas, on la remplace par l'affiche originale */
+function fixBrokenImages(root, a) {
+  root.querySelectorAll('img[data-fallback]').forEach((img) => {
+    img.addEventListener('error', () => { img.replaceWith(Object.assign(document.createElement('div'), { innerHTML: poster(a) }).firstElementChild); }, { once: true });
+  });
+}
+
+function closeFiche() {
+  const dlg = $('#fiche');
+  if (dlg.open) dlg.close();
+}
+
+/* ---------- Lightbox ---------- */
+let lb = { id: null, i: 0 };
+function showLightbox(id, index) {
+  const a = state.attractions.find((x) => x.id === id);
+  const items = galleryItems(a);
+  lb = { id, i: (index + items.length) % items.length };
+  const it = items[lb.i];
+  const box = $('#lightbox');
+  box.innerHTML = `
+    <div class="lightbox__top"><strong>${esc(a.name)} · ${lb.i + 1}/${items.length}</strong><button type="button" class="fiche__close" style="float:none;position:static;margin:0" data-lb-close>Fermer ✕</button></div>
+    <div class="lightbox__stage">
+      <button type="button" class="lightbox__btn" data-lb="-1" aria-label="Image précédente">‹</button>
+      <div class="lightbox__img">${itemHTML(a, it)}</div>
+      <button type="button" class="lightbox__btn" data-lb="1" aria-label="Image suivante">›</button>
+    </div>
+    <p class="lightbox__cap">${esc(it.caption)}${it.credit ? ` · ${esc(it.credit)}` : ''}</p>`;
+  fixBrokenImages(box, a);
+  if (!box.open) box.showModal();
+}
+
+/* ---------- Événements ---------- */
+function bindEvents() {
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    const chipEl = t.closest('[data-group]');
+    if (chipEl) {
+      state.filters[chipEl.dataset.group] = chipEl.dataset.id;
+      renderFilters();
+      renderGrid();
+      return;
+    }
+    const card = t.closest('[data-open]');
+    if (card) return openFiche(card.dataset.open);
+    if (t.closest('#refresh')) return refreshLive();
+    if (t.closest('[data-close]')) return closeFiche();
+    const th = t.closest('[data-lightbox]');
+    if (th) return showLightbox(state.openId, Number(th.dataset.lightbox));
+    if (t.closest('[data-lb-close]')) return $('#lightbox').close();
+    const nav = t.closest('[data-lb]');
+    if (nav) return showLightbox(lb.id, lb.i + Number(nav.dataset.lb));
+    // clic sur le fond d'une boîte de dialogue
+    if (t.tagName === 'DIALOG') t.close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if ($('#lightbox').open) {
+      if (e.key === 'ArrowRight') showLightbox(lb.id, lb.i + 1);
+      if (e.key === 'ArrowLeft') showLightbox(lb.id, lb.i - 1);
+    }
+  });
+
+  $('#search').addEventListener('input', (e) => {
+    state.filters.q = e.target.value.trim();
+    renderGrid();
+  });
+
+  $('#fiche').addEventListener('close', () => {
+    state.openId = null;
+    try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch { try { location.hash = ''; } catch {} }
+  });
+
+  document.addEventListener('submit', (e) => {
+    const form = e.target.closest('#review-form');
+    if (!form) return;
+    e.preventDefault();
+    const data = new FormData(form);
+    const review = { score: Number(data.get('score')), name: String(data.get('name')).trim(), text: String(data.get('text')).trim(), date: new Date().toISOString() };
+    if (!review.score || !review.name || !review.text) return;
+    const saved = addReview(form.dataset.id, review);
+    const a = state.attractions.find((x) => x.id === form.dataset.id);
+    $('#reviews').innerHTML = reviewsHTML(a);
+    const msg = $('#rv-msg');
+    msg.textContent = saved ? 'Merci, votre avis est enregistré dans ce navigateur.' : 'Avis affiché, mais le stockage local est indisponible : il sera perdu à la fermeture.';
+    if (!saved) msg.classList.add('form__msg--err');
+  });
+
+  window.addEventListener('hashchange', routeFromHash);
+}
+
+function routeFromHash() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (id && state.attractions.some((a) => a.id === id)) { if (state.openId !== id) openFiche(id); }
+  else if (!id) closeFiche();
+}
+
+/* ---------- Démarrage ---------- */
+async function init() {
+  try {
+    // données intégrées à la page si présentes, sinon fichier JSON
+    const inline = document.getElementById('app-data');
+    let data;
+    if (inline) data = JSON.parse(inline.textContent);
+    else {
+      const res = await fetch(CONFIG.DATA_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      data = await res.json();
+    }
+    state.parks = data.parks;
+    state.attractions = data.attractions;
+  } catch (err) {
+    $('#grid').innerHTML = `<p class="empty">Impossible de charger les attractions (${esc(err.message)}). Servez le site via un serveur web local plutôt qu'en ouvrant le fichier directement.</p>`;
+    return;
+  }
+  renderFilters();
+  bindEvents();
+  // rendu immédiat (statuts « Chargement… »), puis mise à jour en direct sans bloquer l'affichage
+  renderLivebar();
+  renderGrid();
+  routeFromHash();
+  refreshLive();
+  setInterval(refreshLive, CONFIG.REFRESH_MS);
+}
+
+init();

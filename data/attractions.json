@@ -1,0 +1,1633 @@
+{
+  "meta": {
+    "title": "Chroniques de Marne-la-Vallée",
+    "updated": "2026-11-21",
+    "note": "Données compilées à partir de sources publiques. Les fiches marquées « en cours » n'ont que leur nom, leur land et leur sources ; les champs « À confirmer » restent à compléter. Le parc compte 51 attractions au total (38 + 13 selon tarifs.org)."
+  },
+  "parks": [
+    {
+      "id": "dlp",
+      "name": "Parc Disneyland",
+      "queueTimesId": 4,
+      "lands": [
+        "Main Street U.S.A.",
+        "Frontierland",
+        "Adventureland",
+        "Fantasyland",
+        "Discoveryland"
+      ]
+    },
+    {
+      "id": "daw",
+      "name": "Disney Adventure World",
+      "queueTimesId": 28,
+      "lands": [
+        "World Premiere Plaza",
+        "Adventure Way",
+        "Avengers Campus",
+        "Worlds of Pixar",
+        "World of Frozen"
+      ]
+    }
+  ],
+  "attractions": [
+    {
+      "id": "big-thunder-mountain",
+      "name": "Big Thunder Mountain",
+      "tagline": "Le train de mine le plus sauvage de l'Ouest",
+      "park": "dlp",
+      "land": "Frontierland",
+      "motif": "mesa",
+      "queueTimes": {
+        "aliases": [
+          "Big Thunder Mountain"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
+        },
+        "builder": "Vekoma (matériel) · Walt Disney Imagineering (conception)",
+        "type": "Montagnes russes de type train de mine",
+        "transport": "Train de mine lancé sur rails, tour en partie à l'extérieur et en tunnel",
+        "duration": "Environ 4 minutes",
+        "minHeight": {
+          "cm": 102,
+          "label": "1,02 m"
+        },
+        "capacity": "5 trains de 30 passagers, environ 2 424 personnes par heure (RCDB)",
+        "services": {
+          "premierAccess": null,
+          "singleRider": true,
+          "photoPass": null,
+          "pmr": "transfer"
+        }
+      },
+      "history": "Le premier Big Thunder naît à Disneyland (Californie) en 1979 : c'est le premier grand projet de l'Imagineer Tony Baxter. La version parisienne ouvre avec le parc, le 12 avril 1992, et reste la seule Big Thunder du monde à avoir été inaugurée le jour même de l'ouverture de son parc. Elle est aussi la seule à se dresser sur une île, au milieu des Rivers of the Far West.",
+      "synopsis": "Bienvenue à Thunder Mesa, ville champignon de la ruée vers l'or. La montagne, dit-on, est maudite : depuis que les mineurs ont réveillé ses entrailles, les trains de la Big Thunder Mining Company foncent sans conducteur à travers geysers, galeries effondrées et squelettes de dinosaures. Vous embarquez à bord du dernier convoi, dans un grondement de poussière rouge, pour un tour où la montagne semble décider seule de la suite du voyage.",
+      "secrets": [
+        "La version de Paris est la seule Big Thunder construite sur une île : le départ et le retour des trains se font par des tunnels sous la rivière.",
+        "Les rochers rouges de Paris sont inspirés de Monument Valley (Arizona), comme à Orlando et à Tokyo ; la version californienne s'inspire de Bryce Canyon (Utah).",
+        "Big Thunder Mountain et Phantom Manor partagent la même histoire : la fortune de Thunder Mesa et la malédiction qui frappe la famille Ravenswood.",
+        "Une file Single Rider a été ajoutée en août 2018 pour fluidifier l'attente."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : la montagne rouge de Thunder Mesa"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : le dernier train avant l'aube"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Plan de l'ingénieur : le tracé de la voie"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir de Frontierland"
+        }
+      ],
+      "images": [],
+      "review": {
+        "score": 4.5,
+        "pros": [
+          "Décor spectaculaire et île unique au monde",
+          "Parcours rythmé, accessible dès 1,02 m",
+          "Superbe de nuit"
+        ],
+        "cons": [
+          "Attente longue en milieu de journée",
+          "Tour assez court pour la file"
+        ],
+        "text": "Une valeur sûre : pas la plus violente, mais la mieux mise en scène. À faire à l'ouverture ou pendant la parade."
+      },
+      "sources": [
+        "https://rcdb.com/956.htm",
+        "https://www.dlpguide.com/guidebook/disneyland-park/frontierland/bigthundermountain/",
+        "https://disneyparks.fandom.com/wiki/Big_Thunder_Mountain_(Disneyland_Paris)"
+      ],
+      "posterLines": [
+        "BIG THUNDER",
+        "MOUNTAIN"
+      ]
+    },
+    {
+      "id": "phantom-manor",
+      "name": "Phantom Manor",
+      "tagline": "Le manoir hanté de Thunder Mesa",
+      "park": "dlp",
+      "land": "Frontierland",
+      "motif": "manor",
+      "queueTimes": {
+        "aliases": [
+          "Phantom Manor"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 (réouverture : 3 mai 2019)"
+        },
+        "builder": "Walt Disney Imagineering",
+        "type": "Dark ride / parcours scénique hanté",
+        "transport": "Omnimover (véhicules en continu, 1 à 3 passagers)",
+        "duration": "Environ 6 minutes (parcours), davantage avec l'ascenseur et les couloirs",
+        "minHeight": {
+          "cm": 0,
+          "label": "Aucune"
+        },
+        "capacity": "130 véhicules en circulation continue",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": "transfer"
+        }
+      },
+      "history": "Phantom Manor est la version parisienne du Haunted Mansion de Californie, de Floride et de Tokyo, mais avec un ton plus sombre et une vraie histoire officielle. Inauguré avec le parc le 12 avril 1992, il ferme le 8 janvier 2018 pour une rénovation complète, puis rouvre fin avril 2019 avec de nouveaux effets, une nouvelle voix française du Fantôme et une scène finale remaniée.",
+      "synopsis": "Au sommet d'une colline de Frontierland, le manoir des Ravenswood domine la ville. Une jeune mariée, Mélanie, a vu son fiancé mourir le jour de ses noces ; le Fantôme, maître des lieux, a répandu le malheur sur toute la famille. Le visiteur franchit le portail, traverse un salon qui s'étire à vue d'œil, puis embarque dans un voyage de tombes, de bals fantômes et de fenêtres brisées, jusqu'à Phantom Canyon, une ville fantôme où règne le Fantôme.",
+      "secrets": [
+        "L'architecture est de style Second Empire ; l'inspiration vient notamment de la Fourth Ward School de Virginia City (Nevada).",
+        "En version anglaise, le Fantôme est interprété par Vincent Price ; en français, la voix a été confiée à Gérard Chevalier (1992-2018) puis à Bernard Alane (depuis 2019).",
+        "L'attraction compte 92 Audio-Animatronics.",
+        "La scène finale se déroule à Phantom Canyon, un décor propre à Paris qui remplace le cimetière des autres Haunted Mansion.",
+        "Contrairement à ses cousins américains, le manoir parisien raconte une histoire officielle, en lien direct avec celle de Big Thunder Mountain."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : le manoir sous la lune"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : les fenêtres s'allument"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Plan de l'ingénieur : façade Second Empire"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir pour une visite après minuit"
+        }
+      ],
+      "images": [],
+      "review": {
+        "score": 5,
+        "pros": [
+          "Histoire tragique et cohérente avec tout Frontierland",
+          "Décors d'une densité rare",
+          "Scène finale unique"
+        ],
+        "cons": [
+          "Parcours un peu sombre pour les plus petits",
+          "Rénovation de 2019 qui divise les fans"
+        ],
+        "text": "L'une des plus belles attractions de tous les parcs Disney. À voir au moins deux fois pour saisir les détails."
+      },
+      "sources": [
+        "https://fr.wikipedia.org/wiki/Phantom_Manor",
+        "https://www.ed92.org/en/the-legend-of-phantom-manor-technical-data/amp/",
+        "https://www.dlpguide.com/guides/disneylandpark/frontierland/phantommanor/"
+      ],
+      "posterLines": [
+        "PHANTOM",
+        "MANOR"
+      ]
+    },
+    {
+      "id": "star-wars-hyperspace-mountain",
+      "name": "Star Wars Hyperspace Mountain",
+      "tagline": "Un duel spatial lancé à 70 km/h",
+      "park": "dlp",
+      "land": "Discoveryland",
+      "motif": "rocket",
+      "queueTimes": {
+        "aliases": [
+          "Star Wars Hyperspace Mountain",
+          "Hyperspace Mountain",
+          "Space Mountain"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "1995-06-01",
+          "label": "1995 (Space Mountain : De la Terre à la Lune) · Star Wars en 2017"
+        },
+        "builder": "Vekoma · calculs Werner Stengel · Walt Disney Imagineering",
+        "type": "Montagnes russes lancées dans le noir, avec inversions",
+        "transport": "Lancement par câble électrique depuis le canon Columbiad, trains à rails fermés",
+        "duration": "Environ 2 minutes 15 (hors file d'attente)",
+        "minHeight": {
+          "cm": 120,
+          "label": "1,20 m"
+        },
+        "capacity": "Environ 2 400 personnes par heure, trains de 24 passagers",
+        "services": {
+          "premierAccess": true,
+          "singleRider": true,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "Ouverte en 1995 sous le nom Space Mountain : De la Terre à la Lune, d'après le roman de Jules Verne, l'attraction devient Space Mountain : Mission 2 en 2005. Pour les 25 ans du parc, elle se pare en 2017 de projections Star Wars et de trains neufs avec des harnais plus confortables, ce qui fait passer la taille minimale de 1,32 m à 1,20 m.",
+      "synopsis": "Au cœur de Discoveryland, un immense canon pointé vers le ciel : le Columbiad. Vous êtes tiré à toute vitesse dans une obscurité striée d'étoiles, de tirs laser et de vaisseaux impériaux. Les Rebelles ont besoin de vous. Il faut traverser la bataille, esquiver les croiseurs et, à chaque virage, tenir bon avant l'inversion suivante.",
+      "secrets": [
+        "C'est le seul Space Mountain du monde avec des inversions (3 selon RCDB), et le seul lancé par catapulte.",
+        "Le bâtiment est un polygone à 16 côtés d'environ 62 m de diamètre et 43 m de haut : l'un des plus grands repères du parc.",
+        "Paris voulait d'abord reprendre le Space Mountain de Tokyo ; le projet a changé quand le terrain de Discoveryland a été choisi.",
+        "Le canon Columbiad rend hommage au roman de Jules Verne « De la Terre à la Lune », qui a inspiré toute l'esthétique de Discoveryland."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : le canon vers les étoiles"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : la bataille commence"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Plan de l'ingénieur : trajectoire de lancement"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir pour la Lune"
+        }
+      ],
+      "images": [],
+      "review": {
+        "score": 4.5,
+        "pros": [
+          "Lancement impressionnant",
+          "Seule version avec inversions",
+          "Mise en scène sonore efficace"
+        ],
+        "cons": [
+          "Taille minimale de 1,20 m",
+          "Secousses sur les premiers rangs"
+        ],
+        "text": "Un classique réinventé. Plus rapide que ses cousins, il reste une référence du genre."
+      },
+      "sources": [
+        "https://rcdb.com/959.htm",
+        "https://coasterpedia.net/wiki/Space_Mountain:_Mission_2",
+        "https://www.dlpguide.com/guidebook/disneyland-park/discoveryland/spacemountainmission2/"
+      ],
+      "posterLines": [
+        "HYPERSPACE",
+        "MOUNTAIN"
+      ]
+    },
+    {
+      "id": "tower-of-terror",
+      "name": "The Twilight Zone Tower of Terror",
+      "tagline": "Un ascenseur vers la quatrième dimension",
+      "park": "daw",
+      "land": "World Premiere Plaza",
+      "motif": "tower",
+      "queueTimes": {
+        "aliases": [
+          "The Twilight Zone Tower of Terror",
+          "Twilight Zone Tower of Terror",
+          "Tower of Terror"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "2007-12-22",
+          "label": "22 décembre 2007"
+        },
+        "builder": "Otis Elevator Company · Walt Disney Imagineering",
+        "type": "Chute libre / dark ride à thème",
+        "transport": "Cabines d'ascenseur à accélération supérieure à la gravité",
+        "duration": "Environ 3 minutes",
+        "minHeight": {
+          "cm": 102,
+          "label": "1,02 m"
+        },
+        "capacity": "Non communiquée",
+        "services": {
+          "premierAccess": true,
+          "singleRider": false,
+          "photoPass": null,
+          "pmr": "transfer"
+        }
+      },
+      "history": "Le Tower of Terror d'origine ouvre en 1994 à Disney-MGM Studios, en Floride. La version parisienne, inspirée de celle de Californie, ouvre le 22 décembre 2007 dans l'ancien Walt Disney Studios Park, aujourd'hui Disney Adventure World. Il aura fallu près de six ans et plus de 180 millions d'euros pour faire de cette tour la pièce maîtresse du parc.",
+      "synopsis": "Hollywood, 1939. Le Hollywood Tower Hotel brille de tous ses feux. Une nuit d'orage, cinq personnes montent dans un ascenseur : la foudre frappe et ils disparaissent. Des décennies plus tard, vous franchissez le hall poussiéreux et la voix de Rod Serling vous invite à monter dans l'ascenseur de service. À l'étage, la quatrième dimension vous attend.",
+      "secrets": [
+        "À Paris, trois séquences de chute différentes se succèdent : on ne vit jamais deux fois le même voyage.",
+        "Des Hidden Mickeys sont disséminés dans le hall et dans les zones qui précèdent le show.",
+        "La hauteur varie selon les sources : de 55 m (Disney Adventure World, hors fondations) à 61 m.",
+        "La tour de Paris reprend l'allure de celle qui existait à Disney California Adventure, remplacée depuis par Guardians of the Galaxy : Mission Breakout!"
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : le Hollywood Tower Hotel"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : l'éclair de 1939"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Plan de l'ingénieur : la cage d'ascenseur"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir pour la quatrième dimension"
+        }
+      ],
+      "images": [],
+      "review": {
+        "score": 4.5,
+        "pros": [
+          "Pré-show et décors remarquables",
+          "Trois séquences de chute différentes",
+          "Frissons garantis sans être trop brutal"
+        ],
+        "cons": [
+          "Tour parfois impressionnante pour les plus jeunes",
+          "Single Rider indisponible"
+        ],
+        "text": "Le grand classique de l'horreur élégante. Un frisson de théâtre qui a gardé tout son charme."
+      },
+      "sources": [
+        "https://d23.com/disney-a-to-z/twilight-zone-tower-of-terror-the",
+        "https://www.dlpguide.com/guides/15thanniversary/thetwilightzonetowerofterror",
+        "https://www.paristickets.com/disneyland-paris/tower-of-terror"
+      ],
+      "posterLines": [
+        "TOWER",
+        "OF TERROR"
+      ]
+    },
+    {
+      "id": "ratatouille",
+      "name": "Ratatouille : L'Aventure Totalement Toquée de Rémy",
+      "tagline": "Rétrécissez-vous et filez dans les cuisines de Paris",
+      "park": "daw",
+      "land": "Worlds of Pixar",
+      "motif": "kitchen",
+      "queueTimes": {
+        "aliases": [
+          "Ratatouille: The Adventure",
+          "Ratatouille",
+          "Remy's Totally Zany Adventure",
+          "L'Aventure Totalement Toquée de Rémy"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "2014-07-10",
+          "label": "10 juillet 2014"
+        },
+        "builder": "Walt Disney Imagineering",
+        "type": "Dark ride sans rail avec projections géantes",
+        "transport": "Véhicules « ratmobiles » guidés sans rail (trackless)",
+        "duration": "Environ 4 min 30",
+        "minHeight": {
+          "cm": 0,
+          "label": "Aucune"
+        },
+        "capacity": "Non communiquée",
+        "services": {
+          "premierAccess": true,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "Soixantième attraction de Disneyland Paris, elle ouvre le 10 juillet 2014 pour un coût d'environ 270 millions de dollars. Elle devait s'appeler Ratatouille Kitchen Calamity avant de recevoir son titre français. Elle a donné naissance à une version à Epcot (Floride), ouverte en 2021.",
+      "synopsis": "Vous êtes rétréci à la taille d'un rat et embarqué dans une « ratmobile » à travers les cuisines du restaurant Gusteau. Entre les placards, les casseroles géantes et les poursuites folles, Rémy cherche à préparer la recette qui le rendra célèbre, mais le chef Skinner n'est pas loin. Odeurs, vapeur et décors immenses vous plongent dans un Paris de cuisine à l'échelle d'un rongeur.",
+      "secrets": [
+        "C'est la première attraction Disney à associer véhicules sans rail et projections 3D géantes sur le même parcours.",
+        "La musique est signée Michael Giacchino, compositeur du film.",
+        "Le projet inclut aussi le restaurant Bistrot Chez Rémy (370 places) et la Place de Rémy, inspirée de Paris.",
+        "Le bâtiment est aussi haut que celui de Pirates of the Caribbean dans le parc voisin."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : la cuisine à hauteur de rat"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : la salle du restaurant"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Plan de l'ingénieur : le parcours sans rail"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir pour une table réservée"
+        }
+      ],
+      "images": [],
+      "review": {
+        "score": 4,
+        "pros": [
+          "Mise en scène très immersive",
+          "Accessible à tous, sans taille minimale",
+          "Musique et odeurs soignées"
+        ],
+        "cons": [
+          "File d'attente régulièrement longue",
+          "Parcours court au regard de l'attente"
+        ],
+        "text": "Un voyage à hauteur de rat plein de charme. Idéal pour les familles."
+      },
+      "sources": [
+        "https://www.dlpguide.com/ratatouille/",
+        "https://touringplans.com/blog/five-things-to-know-remys-ratatouille-adventure/",
+        "https://www.inparkmagazine.com/ratatouille-paris-details/"
+      ],
+      "posterLines": [
+        "RATATOUILLE"
+      ]
+    },
+    {
+      "id": "frozen-ever-after",
+      "name": "Frozen Ever After",
+      "tagline": "Une croisière vers le royaume d'Arendelle",
+      "park": "daw",
+      "land": "World of Frozen",
+      "motif": "frost",
+      "queueTimes": {
+        "aliases": [
+          "Frozen Ever After",
+          "La Reine des Neiges"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "2026-03-29",
+          "label": "29 mars 2026"
+        },
+        "builder": "Walt Disney Imagineering",
+        "type": "Parcours scénique en bateau",
+        "transport": "Bateaux guidés sur canal",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "La World of Frozen ouvre au public le 29 mars 2026, au cœur de la transformation à 2 milliards d'euros du parc Walt Disney Studios en Disney Adventure World. La première attraction du même nom était apparue à Epcot (Floride) en 2016.",
+      "synopsis": "Sur les rives du lagon, un village de bois aux couleurs nordiques vous accueille. Vous prenez place à bord d'un bateau pour une croisière à travers les montagnes enneigées, la forêt de Troll et le palais de glace d'Elsa, au fil des chansons du film.",
+      "secrets": [
+        "Selon Walt Disney Imagineering, le conte d'Andersen qui inspire le film a des racines européennes : un village de bois nordique avait donc toute sa place à Disneyland Paris.",
+        "Le décor de la land comprend un lagon et un village de bois, et Olaf, un robot qui répond aux enfants.",
+        "Le nom reprend celui de l'attraction d'Epcot, ouverte en 2016."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : les montagnes d'Arendelle"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : la lumière du Nord"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Plan de l'ingénieur : le canal de glace"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir pour un voyage au Nord"
+        }
+      ],
+      "images": [],
+      "review": {
+        "score": 4,
+        "pros": [
+          "Décor de village nordique soigné",
+          "Plaît à toute la famille",
+          "Chansons du film"
+        ],
+        "cons": [
+          "Attente probablement forte à la sortie",
+          "Caractéristiques techniques encore à confirmer"
+        ],
+        "text": "Une nouveauté très attendue. Avis provisoire, à affiner après plusieurs visites."
+      },
+      "sources": [
+        "https://thewaltdisneycompany.com/news/disneyland-paris-adventure-world-opening/",
+        "https://www.nbcnewyork.com/entertainment/entertainment-news/disney-world-of-frozen-paris-park/6482932/",
+        "https://abc7ny.com/post/disney-adventure-world-debuts-disneyland-paris-frozen-bay-spark-bold-new-era-resort/18812091/"
+      ],
+      "posterLines": [
+        "FROZEN",
+        "EVER AFTER"
+      ]
+    },
+    {
+      "id": "its-a-small-world",
+      "name": "It's a Small World",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Fantasyland",
+      "motif": "frost",
+      "posterLines": [
+        "IT'S A",
+        "SMALL WORLD"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "it's a small world",
+          "It's a Small World"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+      ]
+    },
+    {
+      "id": "mickeys-philharmagic",
+      "name": "Mickey's PhilharMagic",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Fantasyland",
+      "motif": "kitchen",
+      "posterLines": [
+        "MICKEY'S",
+        "PHILHARMAGIC"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Mickey's PhilharMagic"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://foursquare.com/cmcbridejr/list/disneyland-paris-attractions"
+      ]
+    },
+    {
+      "id": "pays-des-contes-de-fees",
+      "name": "Le Pays des Contes de Fées",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Fantasyland",
+      "motif": "manor",
+      "posterLines": [
+        "LE PAYS DES",
+        "CONTES DE FÉES"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Storybook Land Canal Boats",
+          "Le Pays des Contes de Fées"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://themeparkinsider.com/reviews/disneyland-paris"
+      ]
+    },
+    {
+      "id": "casey-jr-circus-train",
+      "name": "Casey Jr. Circus Train",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Fantasyland",
+      "motif": "tower",
+      "posterLines": [
+        "CASEY JR.",
+        "CIRCUS TRAIN"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Casey Jr. Circus Train"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+      ]
+    },
+    {
+      "id": "meet-mickey-mouse",
+      "name": "Meet Mickey Mouse",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Fantasyland",
+      "motif": "kitchen",
+      "posterLines": [
+        "MEET",
+        "MICKEY MOUSE"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Meet Mickey Mouse"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+      ]
+    },
+    {
+      "id": "alices-curious-labyrinth",
+      "name": "Alice's Curious Labyrinth",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Fantasyland",
+      "motif": "manor",
+      "posterLines": [
+        "ALICE'S CURIOUS",
+        "LABYRINTH"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Alice's Curious Labyrinth"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://themeparkinsider.com/reviews/disneyland_paris/"
+      ]
+    },
+    {
+      "id": "la-taniere-du-dragon",
+      "name": "La Tanière du Dragon",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Fantasyland",
+      "motif": "mesa",
+      "posterLines": [
+        "LA TANIÈRE",
+        "DU DRAGON"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "La Tanière du Dragon"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://themeparkinsider.com/reviews/disneyland-paris"
+      ]
+    },
+    {
+      "id": "pirates-of-the-caribbean",
+      "name": "Pirates of the Caribbean",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Adventureland",
+      "motif": "mesa",
+      "posterLines": [
+        "PIRATES OF THE",
+        "CARIBBEAN"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Pirates of the Caribbean"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://www.dlpguide.com/guides/disneylandpark/"
+      ]
+    },
+    {
+      "id": "indiana-jones-temple-du-peril",
+      "name": "Indiana Jones et le Temple du Péril",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Adventureland",
+      "motif": "mesa",
+      "posterLines": [
+        "INDIANA JONES",
+        "TEMPLE DU PÉRIL"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Indiana Jones and the Temple du Peril",
+          "Indiana Jones"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://www.freizeitpark-welt.de/freizeitparks/disneyland_paris/attraktionen/"
+      ]
+    },
+    {
+      "id": "star-tours",
+      "name": "Star Tours : L'Aventure Continue",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Discoveryland",
+      "motif": "rocket",
+      "posterLines": [
+        "STAR TOURS"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Star Tours"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://themeparkinsider.com/reviews/disneyland-paris"
+      ]
+    },
+    {
+      "id": "buzz-lightyear-laser-blast",
+      "name": "Buzz Lightyear Laser Blast",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Discoveryland",
+      "motif": "rocket",
+      "posterLines": [
+        "BUZZ LIGHTYEAR",
+        "LASER BLAST"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Buzz Lightyear Laser Blast"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+      ]
+    },
+    {
+      "id": "orbitron",
+      "name": "Orbitron",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Discoveryland",
+      "motif": "rocket",
+      "posterLines": [
+        "ORBITRON"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Orbitron"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+      ]
+    },
+    {
+      "id": "autopia",
+      "name": "Autopia",
+      "tagline": "",
+      "park": "dlp",
+      "land": "Discoveryland",
+      "motif": "rocket",
+      "posterLines": [
+        "AUTOPIA"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Autopia"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://tarifs.org/en/disneyland-paris-height-requirements"
+      ]
+    },
+    {
+      "id": "raiponce-tangled-spin",
+      "name": "Raiponce Tangled Spin",
+      "tagline": "",
+      "park": "daw",
+      "land": "Adventure Way",
+      "motif": "frost",
+      "posterLines": [
+        "RAIPONCE",
+        "TANGLED SPIN"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Raiponce Tangled Spin",
+          "Tangled Spin"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://www.themeparkinsider.com/reviews/disney-adventure-world/"
+      ]
+    },
+    {
+      "id": "avengers-flight-force",
+      "name": "Avengers Assemble : Flight Force",
+      "tagline": "",
+      "park": "daw",
+      "land": "Avengers Campus",
+      "motif": "tower",
+      "posterLines": [
+        "AVENGERS",
+        "FLIGHT FORCE"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Avengers Assemble - Flight Force",
+          "Flight Force"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://www.themeparkinsider.com/reviews/disney-adventure-world/"
+      ]
+    },
+    {
+      "id": "spider-man-web-adventure",
+      "name": "Spider-Man WEB Adventure",
+      "tagline": "",
+      "park": "daw",
+      "land": "Avengers Campus",
+      "motif": "tower",
+      "posterLines": [
+        "SPIDER-MAN",
+        "WEB ADVENTURE"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Spider-Man WEB Adventure"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://www.themeparkinsider.com/reviews/disney-adventure-world/"
+      ]
+    },
+    {
+      "id": "toy-soldiers-parachute-drop",
+      "name": "Toy Soldiers Parachute Drop",
+      "tagline": "",
+      "park": "daw",
+      "land": "Worlds of Pixar",
+      "motif": "rocket",
+      "posterLines": [
+        "TOY SOLDIERS",
+        "PARACHUTE DROP"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Toy Soldiers Parachute Drop"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://tarifs.org/en/disneyland-paris-height-requirements"
+      ]
+    },
+    {
+      "id": "crushs-coaster",
+      "name": "Crush's Coaster",
+      "tagline": "",
+      "park": "daw",
+      "land": "Worlds of Pixar",
+      "motif": "rocket",
+      "posterLines": [
+        "CRUSH'S",
+        "COASTER"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Crush's Coaster"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://wdwnt.com/2026/01/updated-disney-adventure-world-map-more-detailed-than-previous-simplified-map/"
+      ]
+    },
+    {
+      "id": "cars-road-trip",
+      "name": "Cars Road Trip",
+      "tagline": "",
+      "park": "daw",
+      "land": "Worlds of Pixar",
+      "motif": "mesa",
+      "posterLines": [
+        "CARS",
+        "ROAD TRIP"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Cars ROAD TRIP",
+          "Cars Road Trip"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://wdwnt.com/2026/01/updated-disney-adventure-world-map-more-detailed-than-previous-simplified-map/"
+      ]
+    },
+    {
+      "id": "cars-quatre-roues-rallye",
+      "name": "Cars Quatre Roues Rallye",
+      "tagline": "",
+      "park": "daw",
+      "land": "Worlds of Pixar",
+      "motif": "mesa",
+      "posterLines": [
+        "CARS QUATRE",
+        "ROUES RALLYE"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Cars Quatre Roues Rallye"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://wdwnt.com/2026/01/updated-disney-adventure-world-map-more-detailed-than-previous-simplified-map/"
+      ]
+    }
+  ]
+}
