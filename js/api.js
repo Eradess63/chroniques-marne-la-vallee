@@ -48,9 +48,13 @@ function flattenRides(json) {
 
 function findRide(rides, aliases) {
   const wanted = aliases.map(norm);
-  const named = rides.map((r) => ({ r, n: norm(r.name) }));
+  // Les files « Single Rider » sont listées à part : on ne les retient qu'en dernier recours.
+  const named = rides
+    .map((r) => ({ r, n: norm(r.name) }))
+    .sort((a, b) => Number(a.n.includes('single rider')) - Number(b.n.includes('single rider')));
   return (
     named.find((x) => wanted.includes(x.n))?.r ||
+    named.find((x) => wanted.some((w) => x.n.startsWith(w)))?.r ||
     named.find((x) => wanted.some((w) => x.n.includes(w) || w.includes(x.n)))?.r ||
     null
   );
