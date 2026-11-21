@@ -397,10 +397,10 @@
       "motif": "kitchen",
       "queueTimes": {
         "aliases": [
+          "Ratatouille : L’Aventure Totalement Toquée de Rémy",
+          "Ratatouille : L'Aventure Totalement Toquée de Rémy",
           "Ratatouille: The Adventure",
-          "Ratatouille",
-          "Remy's Totally Zany Adventure",
-          "L'Aventure Totalement Toquée de Rémy"
+          "Ratatouille"
         ]
       },
       "localStatus": {
@@ -1332,6 +1332,7 @@
       "stub": true,
       "queueTimes": {
         "aliases": [
+          "Avengers Assemble: Flight Force",
           "Avengers Assemble - Flight Force",
           "Flight Force"
         ]
@@ -1386,7 +1387,9 @@
       "stub": true,
       "queueTimes": {
         "aliases": [
-          "Spider-Man WEB Adventure"
+          "Spider-Man W.E.B. Adventure",
+          "Spider-Man WEB Adventure",
+          "W.E.B. Adventure"
         ]
       },
       "localStatus": {
@@ -2560,9 +2563,9 @@
       "stub": true,
       "queueTimes": {
         "aliases": [
+          "Les Tapis Volants - Flying Carpets Over Agrabah®",
           "Les Tapis Volants - Flying Carpets Over Agrabah",
-          "Les Tapis Volants",
-          "Flying Carpets Over Agrabah"
+          "Les Tapis Volants"
         ]
       },
       "localStatus": {
@@ -2652,6 +2655,219 @@
       "review": null,
       "sources": [
         "https://queue-times.com/parks/4/"
+      ]
+    },
+    {
+      "id": "rc-racer",
+      "name": "RC Racer",
+      "tagline": "",
+      "park": "daw",
+      "land": "Worlds of Pixar",
+      "motif": "rocket",
+      "posterLines": [
+        "RC RACER"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "RC Racer"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://queue-times.com/parks/28/"
+      ]
+    },
+    {
+      "id": "slinky-dog",
+      "name": "Slinky Dog Zigzag Spin",
+      "tagline": "",
+      "park": "daw",
+      "land": "Worlds of Pixar",
+      "motif": "kitchen",
+      "posterLines": [
+        "SLINKY DOG",
+        "ZIGZAG SPIN"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Slinky® Dog Zigzag Spin",
+          "Slinky Dog Zigzag Spin"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://queue-times.com/parks/28/"
+      ]
+    },
+    {
+      "id": "meet-spider-man",
+      "name": "Meet Spider-Man",
+      "tagline": "",
+      "park": "daw",
+      "land": "Avengers Campus",
+      "motif": "tower",
+      "posterLines": [
+        "MEET",
+        "SPIDER-MAN"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Meet Spider Man",
+          "Meet Spider-Man"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://queue-times.com/parks/28/"
+      ]
+    },
+    {
+      "id": "art-of-disney-animation",
+      "name": "Art of Disney Animation",
+      "tagline": "",
+      "park": "daw",
+      "land": "World Premiere Plaza",
+      "motif": "kitchen",
+      "posterLines": [
+        "ART OF DISNEY",
+        "ANIMATION"
+      ],
+      "stub": true,
+      "queueTimes": {
+        "aliases": [
+          "Art of Disney Animation"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": null,
+          "label": "À confirmer"
+        },
+        "builder": "À confirmer",
+        "type": "À confirmer",
+        "transport": "À confirmer",
+        "duration": "À confirmer",
+        "minHeight": {
+          "cm": null,
+          "label": "À confirmer"
+        },
+        "capacity": "À confirmer",
+        "services": {
+          "premierAccess": null,
+          "singleRider": null,
+          "photoPass": null,
+          "pmr": null
+        }
+      },
+      "history": "",
+      "synopsis": "",
+      "secrets": [],
+      "gallery": [],
+      "images": [],
+      "review": null,
+      "sources": [
+        "https://queue-times.com/parks/28/"
       ]
     }
   ]

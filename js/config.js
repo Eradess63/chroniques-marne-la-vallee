@@ -12,10 +12,16 @@ export const CONFIG = {
   /** URL de votre Cloudflare Worker (laisser vide pour ne pas l'utiliser). Ex : 'https://qt-proxy.moncompte.workers.dev' */
   WORKER_URL: '',
 
-  /** Proxies CORS publics, essayés dans l'ordre si l'appel direct échoue (utiles pour tester, déconseillés en production) */
+  /**
+   * Proxies CORS publics, essayés après le Worker et l'appel direct.
+   * Queue-Times n'envoie aucun en-tête CORS : sans proxy, aucun navigateur ne peut l'appeler.
+   * Ces services sont limités en débit — pour un usage fiable, déployez le Worker.
+   */
   PUBLIC_PROXIES: [
-    (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-    (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`
+    {
+      url: (u) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+      unwrap: (data) => (typeof data?.contents === 'string' ? JSON.parse(data.contents) : data)
+    }
   ],
 
   /** Délai maximal par requête (ms) */

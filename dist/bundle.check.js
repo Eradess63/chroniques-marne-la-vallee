@@ -13,10 +13,16 @@ const CONFIG = {
   /** URL de votre Cloudflare Worker (laisser vide pour ne pas l'utiliser). Ex : 'https://qt-proxy.moncompte.workers.dev' */
   WORKER_URL: '',
 
-  /** Proxies CORS publics, essayés dans l'ordre si l'appel direct échoue (utiles pour tester, déconseillés en production) */
+  /**
+   * Proxies CORS publics, essayés après le Worker et l'appel direct.
+   * Queue-Times n'envoie aucun en-tête CORS : sans proxy, aucun navigateur ne peut l'appeler.
+   * Ces services sont limités en débit — pour un usage fiable, déployez le Worker.
+   */
   PUBLIC_PROXIES: [
-    (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-    (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`
+    {
+      url: (u) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+      unwrap: (data) => (typeof data?.contents === 'string' ? JSON.parse(data.contents) : data)
+    }
   ],
 
   /** Délai maximal par requête (ms) */
@@ -52,14 +58,16 @@ async function fetchJson(url) {
 async function fetchPark(queueTimesId) {
   const target = CONFIG.QUEUE_TIMES_URL(queueTimesId);
   const routes = [];
-  if (CONFIG.WORKER_URL) routes.push(['worker', `${CONFIG.WORKER_URL}?park=${queueTimesId}`]);
-  routes.push(['direct', target]);
-  CONFIG.PUBLIC_PROXIES.forEach((make, i) => routes.push(['proxy ' + (i + 1), make(target)]));
+  const asIs = (d) => d;
+  if (CONFIG.WORKER_URL) routes.push(['worker', `${CONFIG.WORKER_URL}?park=${queueTimesId}`, asIs]);
+  // L'appel direct n'aboutit que derrière un proxy qui ajoute les en-têtes CORS ; on l'essaie au cas où.
+  routes.push(['direct', target, asIs]);
+  CONFIG.PUBLIC_PROXIES.forEach((p, i) => routes.push(['proxy ' + (i + 1), p.url(target), p.unwrap || asIs]));
 
   let lastError = new Error('Aucune route disponible');
-  for (const [via, url] of routes) {
+  for (const [via, url, unwrap] of routes) {
     try {
-      const json = await fetchJson(url);
+      const json = unwrap(await fetchJson(url));
       if (!json || (!json.lands && !json.rides)) throw new Error('Format inattendu');
       return { json, via };
     } catch (err) {
