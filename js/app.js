@@ -14,6 +14,8 @@ const state = {
   mode: 'loading',
   via: '',
   updatedAt: null,
+  failures: [],
+  age: null,
   filters: { park: 'all', land: 'all', state: 'all', q: '' },
   openId: null
 };
@@ -100,23 +102,42 @@ function renderLivebar() {
   const bar = $('#livebar');
   bar.dataset.mode = state.mode;
   const time = state.updatedAt ? state.updatedAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
+  const detail = (state.failures || []).length
+    ? ` Routes essayées — ${state.failures.join(' | ')}`
+    : '';
+  const horodatage = state.age
+    ? `relevé ${ageLabel(state.age)}`
+    : `à l'instant`;
   const text = {
     loading: `Chargement des temps d'attente…`,
-    live: `Temps d'attente en direct (Queue-Times) · mis à jour à ${time}`,
-    partial: `Temps d'attente en direct pour une partie des attractions · ${time}`,
-    unavailable: `Temps d'attente indisponibles : Queue-Times ne répond pas depuis cette page.`
+    live: `Temps d'attente ${horodatage} · source : ${state.via || 'Queue-Times'}`,
+    partial: `Temps d'attente pour une partie des attractions seulement · ${horodatage}`,
+    unavailable: `Temps d'attente indisponibles.${detail}`
   }[state.mode];
   bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh">Actualiser</button>`;
+}
+
+/** « il y a 4 minutes », « il y a 2 heures » */
+function ageLabel(iso) {
+  const min = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+  if (min < 1) return "à l'instant";
+  if (min === 1) return 'il y a 1 minute';
+  if (min < 60) return `il y a ${min} minutes`;
+  const h = Math.round(min / 60);
+  return h === 1 ? 'il y a 1 heure' : `il y a ${h} heures`;
 }
 
 /* ---------- Données en direct ---------- */
 async function refreshLive() {
   const btn = $('#refresh');
   if (btn) { btn.disabled = true; btn.textContent = 'Actualisation…'; }
-  const res = await loadWaitTimes(state.parks, state.attractions).catch(() => ({ entries: new Map(), mode: 'unavailable', via: '' }));
+  const res = await loadWaitTimes(state.parks, state.attractions)
+    .catch((err) => ({ entries: new Map(), mode: 'unavailable', via: '', age: null, failures: [err.message] }));
   state.live = res.entries;
   state.mode = res.mode;
   state.via = res.via;
+  state.failures = res.failures || [];
+  state.age = res.age || null;
   state.updatedAt = new Date();
   renderLivebar();
   renderGrid();
@@ -155,7 +176,13 @@ function renderFicheStatus() {
   const holder = $('#fiche-live');
   if (a && holder) holder.innerHTML = liveBlock(a);
   const meta = $('#fiche-meta');
-  if (meta) meta.textContent = state.mode === 'unavailable' ? 'Temps d\'attente non disponibles sur cette page.' : state.mode === 'loading' ? '' : 'Source : Queue-Times.com';
+  if (meta) {
+    meta.textContent = state.mode === 'unavailable'
+      ? "Temps d'attente non disponibles."
+      : state.mode === 'loading'
+        ? ''
+        : `Queue-Times · ${state.age ? `relevé ${ageLabel(state.age)}` : 'en direct'}`;
+  }
 }
 
 function reviewsHTML(a) {

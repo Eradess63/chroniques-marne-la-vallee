@@ -1,0 +1,47 @@
+# Relève les temps d'attente et les dépose dans data/wait-times.json.
+# La page lit ensuite ce fichier depuis son propre domaine : plus de CORS,
+# plus de proxy public, plus de panne de service tiers.
+name: Temps d'attente
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # toutes les dix minutes
+  workflow_dispatch:          # déclenchement manuel depuis l'onglet Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wait-times
+  cancel-in-progress: true
+
+jobs:
+  releve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Interroger Queue-Times
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          tmp=$(mktemp -d)
+          for id in 4 28; do
+            curl --fail --silent --show-error --max-time 30 --retry 3 --retry-delay 5 \
+              -H 'Accept: application/json' \
+              "https://queue-times.com/parks/$id/queue_times.json" > "$tmp/$id.json"
+          done
+          jq -n \
+            --slurpfile p4 "$tmp/4.json" \
+            --slurpfile p28 "$tmp/28.json" \
+            '{releve: (now | todateiso8601), parks: {"4": $p4[0], "28": $p28[0]}}' \
+            > data/wait-times.json
+          echo "Attractions relevées : $(jq '[.parks[].lands[].rides[]] | length' data/wait-times.json)"
+
+      - name: Publier si le relevé a changé
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/wait-times.json
+          git diff --staged --quiet || git commit -m "Relevé des temps d'attente $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push

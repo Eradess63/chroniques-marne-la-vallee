@@ -6,6 +6,12 @@ export const CONFIG = {
   /** Fichier de données des attractions */
   DATA_URL: 'data/attractions.json',
 
+  /**
+   * Relevé déposé par le workflow GitHub Actions, servi par le même domaine
+   * que la page : ni CORS, ni proxy. C'est la source la plus fiable.
+   */
+  SNAPSHOT_URL: 'data/wait-times.json',
+
   /** Endpoint officiel Queue-Times (id 4 = Parc Disneyland, id 28 = Disney Adventure World) */
   QUEUE_TIMES_URL: (id) => `https://queue-times.com/parks/${id}/queue_times.json`,
 
@@ -24,8 +30,17 @@ export const CONFIG = {
     }
   ],
 
-  /** Délai maximal par requête (ms) */
-  TIMEOUT_MS: 6000,
+  /**
+   * Délais par route (ms). Le proxy public doit lui-même aller chercher la page
+   * en amont : il lui faut nettement plus de temps qu'un appel direct.
+   */
+  TIMEOUT_MS: { snapshot: 8000, worker: 8000, direct: 5000, proxy: 30000 },
+
+  /**
+   * Pause entre les deux parcs (ms). Les proxies publics limitent le débit :
+   * deux appels simultanés suffisent à se faire éconduire.
+   */
+  STAGGER_MS: 600,
 
   /** Intervalle d'actualisation automatique (ms) */
   REFRESH_MS: 5 * 60 * 1000,
