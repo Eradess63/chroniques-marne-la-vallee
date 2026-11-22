@@ -269,6 +269,8 @@ function openFiche(id) {
           <div class="ticket__row"><dt>Durée du tour</dt><dd>${esc(f.duration)}</dd></div>
           <div class="ticket__row"><dt>Taille minimale</dt><dd>${esc(f.minHeight.label)}</dd></div>
           <div class="ticket__row ticket__row--wide"><dt>Capacité</dt><dd>${esc(f.capacity)}</dd></div>
+          ${Object.entries(f.extra || {}).map(([k, val]) =>
+            `<div class="ticket__row"><dt>${esc(k)}</dt><dd>${esc(val)}</dd></div>`).join('')}
           <div class="ticket__row ticket__row--wide"><dt>Services</dt><dd><div class="services">
             ${serviceBadge('premierAccess', 'Disney Premier Access', f.services.premierAccess)}
             ${serviceBadge('singleRider', 'Single Rider', f.services.singleRider)}

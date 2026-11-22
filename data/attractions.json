@@ -431,7 +431,21 @@
       "posterLines": [
         "TOWER",
         "OF TERROR"
-      ]
+      ],
+      "visitors": {
+        "summary": "C'est l'attraction la mieux notée du parc dans les avis publics, et la plus souvent décrite comme tenant ses promesses. Le mot qui revient est l'attente du vide plus que la chute elle-même : la mise en scène et le jeu du personnel y comptent autant que la mécanique.",
+        "praise": [
+          "La narration et le décor Art déco, cités avant même les sensations",
+          "Le jeu des équipes en costume, qui prolonge la mise en scène jusque dans la file",
+          "La succession de chutes, plus variée qu'attendu",
+          "La fidélité au thème d'origine, que plusieurs préfèrent au remplacement opéré en Californie"
+        ],
+        "gripes": [
+          "Des visiteurs estiment la taille minimale de 1,02 m trop basse et réclament une limite d'âge",
+          "Plusieurs signalent un malaise passager après le tour"
+        ],
+        "tip": "Une porte de sortie est prévue juste avant l'embarquement, et plusieurs visiteurs rappellent qu'elle existe pour de bonnes raisons. Mieux vaut éviter juste après un repas."
+      }
     },
     {
       "id": "ratatouille",
@@ -1378,15 +1392,14 @@
     {
       "id": "avengers-flight-force",
       "name": "Avengers Assemble : Flight Force",
-      "tagline": "",
+      "tagline": "Zéro à quatre-vingt-douze en moins de trois secondes",
       "park": "daw",
       "land": "Avengers Campus",
-      "motif": "tower",
+      "motif": "launch",
       "posterLines": [
-        "AVENGERS",
-        "FLIGHT FORCE"
+        "FLIGHT",
+        "FORCE"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Avengers Assemble: Flight Force",
@@ -1401,34 +1414,97 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "2022-07-20",
+          "label": "20 juillet 2022 (Rock 'n' Roller Coaster : 16 mars 2002)"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Vekoma · conception Walt Disney Imagineering · calculs Peter Clerx",
+        "type": "Montagnes russes lancées, en intérieur, avec trois inversions",
+        "transport": "Lancement par moteur linéaire synchrone · de 0 à 92 km/h en 2,8 secondes",
+        "duration": "Environ 1 min 10 à 1 min 22 selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 120,
+          "label": "1,20 m"
         },
-        "capacity": "À confirmer",
+        "capacity": "1 800 personnes par heure · trains de 24 passagers (6 voitures de 4)",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
+          "premierAccess": true,
+          "singleRider": true,
+          "photoPass": true,
           "pmr": null
+        },
+        "extra": {
+          "Hauteur maximale": "24,4 m",
+          "Vitesse de pointe": "91,7 km/h",
+          "Accélération maximale": "5 G",
+          "Longueur de voie": "996 à 1 037 m selon les sources",
+          "Inversions": "3 (sea serpent roll et tire-bouchon)"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction a eu deux vies dans le même bâtiment. Elle ouvre le 16 mars 2002, jour de l'inauguration du parc, sous le nom de Rock 'n' Roller Coaster avec Aerosmith, et reprend exactement le tracé de son aînée de Floride, ouverte en 1999. Elle ferme le 2 septembre 2019, et rouvre le 20 juillet 2022 sous son nom actuel, en même temps que le Marvel Avengers Campus. La structure n'a pas bougé : c'est l'habillage, le son et la narration qui ont changé.",
+      "synopsis": "Vous êtes recruté pour une mission spatiale. Dans la file, puis dans la salle de briefing, on vous explique ce qui vous attend. Puis la rampe de lancement : un moteur linéaire synchrone vous expédie de zéro à quatre-vingt-douze kilomètres-heure en moins de trois secondes, directement dans le noir. Suivent une minute et demie de retournements, de virages serrés et de champs d'étoiles, jusqu'au freinage final.",
+      "secrets": [
+        "Le tracé est un clone exact de celui de Floride. Seuls la file, le décor intérieur et la bande-son distinguent les deux attractions.",
+        "Le lancement est assuré par un moteur linéaire synchrone (LSM), une catapulte électromagnétique sans aucune pièce mobile en contact avec le train.",
+        "Les trois inversions ne sont pas de même nature : un sea serpent roll, qui en compte deux à lui seul, puis un tire-bouchon.",
+        "Les calculs du parcours sont signés Peter Clerx, ingénieur de Vekoma.",
+        "Le train transporte vingt-quatre personnes, réparties sur six voitures de deux rangées de deux places.",
+        "Le débit théorique est de mille huit cents personnes par heure, l'un des plus élevés du parc.",
+        "Les sources publiques ne s'accordent ni sur la longueur de la voie, annoncée entre 996 et 1 037 mètres, ni sur la durée du tour, donnée tantôt à 1 min 10, tantôt à 1 min 22. Les deux fourchettes sont reportées telles quelles ci-dessus.",
+        "Le bâtiment ne laisse rien deviner de l'extérieur : rien n'y signale la présence de montagnes russes, contrairement à la plupart des coasters du complexe."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale : la rampe de lancement"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne : le champ d'étoiles"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé : lancement et inversions"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir de la mission"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Débit élevé, donc file qui avance",
+          "Parcours dense du début à la fin",
+          "File Single Rider efficace"
+        ],
+        "cons": [
+          "Tour très court au regard de l'attente",
+          "Décor intérieur en retrait de la file"
+        ],
+        "text": "Le parcours le plus physique du complexe. Court, dense, et sans temps mort — mais le bâtiment n'offre rien à regarder une fois lancé."
+      },
       "sources": [
-        "https://www.themeparkinsider.com/reviews/disney-adventure-world/"
-      ]
+        "https://en.wikipedia.org/wiki/Avengers_Assemble:_Flight_Force",
+        "https://coasterpedia.net/wiki/Rock_%27n%27_Roller_Coaster_(Disneyland_Paris)",
+        "https://rcdb.com/1444.htm",
+        "https://www.ed92.org/en/avengers-assemble-flight-force-technical-data/amp",
+        "https://www.dein-dlrp.de/en/disneyland-resort-paris/disney-adventure-world/avengers-campus/avengers-assemble-flight-force.html"
+      ],
+      "visitors": {
+        "summary": "Les retours sont plus partagés que sur les autres grandes attractions du complexe. Les amateurs de sensations la classent au sommet de Disney Adventure World, tandis que les habitués des parcs à sensations trouvent le lancement en deçà de sa réputation.",
+        "praise": [
+          "Un rythme soutenu sur toute la longueur, sans temps mort",
+          "La grande boucle, régulièrement citée comme le moment fort, à faire les yeux ouverts",
+          "Le décor intérieur : du noir profond ponctué de petites lumières en semis d'étoiles",
+          "La file Single Rider, jugée très efficace"
+        ],
+        "gripes": [
+          "Le lancement, que plusieurs comparent défavorablement aux catapultes des parcs à sensations européens",
+          "Un tour court, qui pèse quand la file est longue",
+          "Une file d'attente parfois très longue en journée"
+        ],
+        "tip": "La file Single Rider est le meilleur rapport attente/temps de tour de la land, à condition d'accepter d'être séparé de son groupe."
+      }
     },
     {
       "id": "spider-man-web-adventure",

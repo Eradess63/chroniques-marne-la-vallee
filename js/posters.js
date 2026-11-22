@@ -16,7 +16,8 @@ const GROUND = {
   tram:       { a: '#1C2418', b: '#3F5638', accent: '#6E8C4A' },
   riverboat:  { a: '#122630', b: '#2F5F6B', accent: '#4E8FA0' },
   keelboat:   { a: '#1A2218', b: '#3C4E33', accent: '#7A8F4C' },
-  fort:       { a: '#241A12', b: '#56402C', accent: '#996437' }
+  fort:       { a: '#241A12', b: '#56402C', accent: '#996437' },
+  launch:     { a: '#0A1020', b: '#1E2A55', accent: '#C0392B' }
 };
 
 /* Variantes : la planche change de registre, pas de style. */
@@ -244,7 +245,22 @@ const MOTIFS = {
     <path d="M132 222 L132 172 Q150 156 168 172 L168 222Z" fill="${v.gold}"/>
     <rect x="147" y="18" width="6" height="32" fill="${v.gold}"/>
     <path d="M153 22 L186 32 L153 42Z" fill="${v.gold}"/>
-    <rect x="18" y="222" width="264" height="4" fill="${v.gold}"/>`
+    <rect x="18" y="222" width="264" height="4" fill="${v.gold}"/>`,
+
+  /** Avengers Campus : rampe de lancement, chevrons de vitesse et champ d'étoiles */
+  launch: (g, v) => `
+    ${fan(150, 236, 200, 20, v.gold, .26)}
+    ${[[42,58],[254,46],[76,112],[228,124],[150,34],[34,166],[266,172],[108,74],[196,88]]
+      .map(([x, y], i) => diamond(x, y, i % 3 ? 3.5 : 5.5, v.gold)).join('')}
+    <circle cx="150" cy="128" r="86" fill="none" stroke="${v.gold}" stroke-width="1" opacity=".55"/>
+    <circle cx="150" cy="128" r="64" fill="none" stroke="${v.gold}" stroke-width="1.5" opacity=".75"/>
+    ${[0,1,2,3].map((i) => `<path d="M${98 + i * 7} ${212 - i * 26} L150 ${182 - i * 26} L${202 - i * 7} ${212 - i * 26}" fill="none" stroke="${v.gold}" stroke-width="${(4 - i * .6).toFixed(1)}" opacity="${(1 - i * .2).toFixed(2)}" stroke-linejoin="miter"/>`).join('')}
+    <path d="M150 48 L178 142 L150 170 L122 142 Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M150 48 L164 142 L150 162 L136 142 Z" fill="${v.gold}"/>
+    <path d="M122 132 L100 178 L134 158 Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="1.5"/>
+    <path d="M178 132 L200 178 L166 158 Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="1.5"/>
+    ${diamond(150, 104, 9, v.gold)}
+    <rect x="18" y="232" width="264" height="3" fill="${v.gold}"/>`
 };
 
 /**
