@@ -110,7 +110,9 @@ function renderBilan() {
   const b = bilan();
   el.hidden = b.epingles === 0;
   if (b.epingles === 0) return;
-  el.innerHTML = `<span class="bilan__texte"><b>${b.faits}</b> sur <b>${b.epingles}</b> attraction${b.epingles > 1 ? 's' : ''} épinglée${b.epingles > 1 ? 's' : ''} ${b.faits > 1 ? 'faites' : 'faite'}</span>
+  // L'accord porte sur toute la locution, pas seulement sur son dernier mot.
+  const acc = (v, sing, plur) => `<b>${v}</b> ${v > 1 ? plur : sing}`;
+  el.innerHTML = `<span class="bilan__texte">${acc(b.epingles, 'attraction épinglée', 'attractions épinglées')} · ${acc(b.faits, 'faite', 'faites')}</span>
     <button type="button" class="bilan__vider" data-vider-parcours>Vider le carnet</button>`;
 }
 
