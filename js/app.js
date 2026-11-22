@@ -381,7 +381,12 @@ function openFiche(id) {
   const dlg = $('#fiche');
   const items = galleryItems(a);
   dlg.innerHTML = `
-    <button type="button" class="fiche__close" data-close>Fermer ✕</button>
+    <div class="fiche__bar">
+      <button type="button" class="fiche__back" data-close>
+        <span aria-hidden="true">←</span> Toutes les attractions
+      </button>
+      <span class="fiche__bar-nom">${esc(a.name)}</span>
+    </div>
     <div class="fiche__head">
       <div class="fiche__art${['closed', 'refurb'].includes(statusOf(a).kind) ? ' card__art--fanee' : ''}" role="img" aria-label="Illustration de ${esc(a.name)}">${visuel(a)}</div>
       <div>
@@ -449,9 +454,36 @@ function openFiche(id) {
 
   fixBrokenImages(dlg, a);
   renderFicheStatus();
-  if (!dlg.open) dlg.showModal();
-  dlg.scrollTop = 0;
+  montrerVue('fiche');
   try { if (location.hash !== '#' + id) location.hash = id; } catch {}
+}
+
+/* Position dans la liste, pour y revenir là où on l'avait quittée. */
+let defilementListe = 0;
+
+/**
+ * Bascule entre la liste et la fiche. Ce n'est pas une fenêtre qui s'ouvre :
+ * la fiche prend toute la page, le bouton Retour du téléphone la referme, et
+ * la liste se retrouve à l'endroit exact où on l'avait laissée.
+ */
+function montrerVue(vue) {
+  const liste = $('#vue-liste'), fiche = $('#fiche');
+  if (vue === 'fiche' && fiche.hidden) defilementListe = window.scrollY;
+
+  const bascule = () => {
+    const versFiche = vue === 'fiche';
+    liste.hidden = versFiche;
+    fiche.hidden = !versFiche;
+    document.body.classList.toggle('vue-fiche', versFiche);
+    window.scrollTo({ top: versFiche ? 0 : defilementListe, behavior: 'instant' });
+  };
+
+  // Transition native là où le navigateur la propose, bascule nette ailleurs.
+  if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.startViewTransition(bascule);
+  } else {
+    bascule();
+  }
 }
 
 /** Si une photo ne charge pas, on la remplace par l'affiche originale */
@@ -462,8 +494,15 @@ function fixBrokenImages(root, a) {
 }
 
 function closeFiche() {
-  const dlg = $('#fiche');
-  if (dlg.open) dlg.close();
+  if ($('#fiche').hidden) return;
+  state.openId = null;
+  montrerVue('liste');
+}
+
+/** Fermer, c'est revenir en arrière : le bouton Retour et la croix font un. */
+function quitterFiche() {
+  if (location.hash) history.back();
+  else closeFiche();
 }
 
 /* ---------- Lightbox ---------- */
@@ -513,7 +552,7 @@ function bindEvents() {
     const card = t.closest('[data-open]');
     if (card) return openFiche(card.dataset.open);
     if (t.closest('#refresh')) return refreshLive();
-    if (t.closest('[data-close]')) return closeFiche();
+    if (t.closest('[data-close]')) return quitterFiche();
     const th = t.closest('[data-lightbox]');
     if (th) return showLightbox(state.openId, Number(th.dataset.lightbox));
     if (t.closest('[data-lb-close]')) return $('#lightbox').close();
@@ -527,7 +566,10 @@ function bindEvents() {
     if ($('#lightbox').open) {
       if (e.key === 'ArrowRight') showLightbox(lb.id, lb.i + 1);
       if (e.key === 'ArrowLeft') showLightbox(lb.id, lb.i - 1);
+      return;
     }
+    // La fiche n'étant plus une fenêtre, Échap ne la ferme plus tout seul.
+    if (e.key === 'Escape' && !$('#fiche').hidden) quitterFiche();
   });
 
   $('#search').addEventListener('input', (e) => {

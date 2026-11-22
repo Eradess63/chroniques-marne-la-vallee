@@ -581,6 +581,61 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
   .retour { top: 12px; right: 12px; padding: 8px 14px; font-size: .66rem; }
 }
 
+/* ===========================================================================
+   La fiche comme vue, et non comme fenêtre
+   Elle remplace la liste au lieu de flotter par-dessus : on fait défiler la
+   page elle-même, le bouton Retour du téléphone la referme, et l'adresse
+   désigne l'attraction. C'était la bonne manière depuis le début sur mobile.
+   =========================================================================== */
+
+.fiche {
+  display: block; width: min(1040px, 100%); margin: 0 auto; overflow: visible;
+  max-height: none; border: 0; background: none; box-shadow: none;
+}
+.fiche > * { background: var(--acajou); }
+
+/* Barre de retour : collée en haut, assez haute pour le pouce. */
+.fiche__bar {
+  position: sticky; top: 0; z-index: 6;
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
+  background: linear-gradient(180deg, var(--acajou-fonce) 72%, rgba(28, 15, 10, .92));
+  border-bottom: 1px solid var(--cuivre);
+  backdrop-filter: blur(8px);
+}
+.fiche__back {
+  display: inline-flex; align-items: center; gap: 9px; flex: none;
+  min-height: 44px; padding: 10px 18px; cursor: pointer;
+  border: 1px solid var(--cuivre); border-radius: 22px; background: rgba(0, 0, 0, .3);
+  color: var(--laiton-clair);
+  font-family: var(--font-plaque); font-size: .66rem; font-weight: 600; letter-spacing: .12em;
+  transition: border-color .2s, background .2s, color .2s;
+}
+.fiche__back span { font-size: 1.05rem; line-height: 1; }
+.fiche__back:hover, .fiche__back:focus-visible { border-color: var(--laiton); background: rgba(200, 153, 63, .22); color: var(--encre); }
+.fiche__bar-nom {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--font-display); font-weight: 700; font-size: .95rem; color: var(--encre-faible);
+}
+
+/* En vue fiche, l'en-tête et le pied de la liste n'ont plus lieu d'être. */
+body.vue-fiche .masthead, body.vue-fiche .footer { display: none; }
+body.vue-fiche main { padding: 0; }
+
+@media (max-width: 640px) {
+  .fiche__bar-nom { display: none; }
+  .fiche__back { width: 100%; justify-content: center; }
+  .fiche__head { padding: 22px 16px 18px; }
+}
+
+/* Transition entre la liste et la fiche, là où le navigateur la propose. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: sortie .26s cubic-bezier(.4, 0, 1, 1) both; }
+  ::view-transition-new(root) { animation: entree .34s cubic-bezier(0, 0, .2, 1) both; }
+}
+@keyframes sortie { to { opacity: 0; transform: translateY(-10px) scale(.985); } }
+@keyframes entree { from { opacity: 0; transform: translateY(16px) scale(.99); } }
+
 </style>
 </head>
 <body>
@@ -601,6 +656,7 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 </header>
 
 <main>
+  <div id="vue-liste">
   <section class="controls" aria-label="Filtres">
     <h2 class="controls__title rule"><span>Programme du jour</span></h2>
     <div class="search">
@@ -631,6 +687,11 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
   <div class="livebar" id="livebar" role="status" aria-live="polite"></div>
   <p class="count" id="count"></p>
   <section class="grid" id="grid" aria-label="Attractions"></section>
+  </div>
+
+  <!-- La fiche n'est plus une fenêtre : c'est une vue à part entière, qui
+       remplace la liste et que le bouton Retour du téléphone referme. -->
+  <article id="fiche" class="fiche" aria-labelledby="fiche-title" hidden></article>
 </main>
 
 <footer class="footer">
@@ -638,7 +699,6 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
   <p>Site de fans, non officiel, sans lien avec The Walt Disney Company ni Disneyland Paris. Illustrations originales.</p>
 </footer>
 
-<dialog id="fiche" class="fiche" aria-labelledby="fiche-title"></dialog>
 <dialog id="lightbox" class="lightbox" aria-label="Galerie"></dialog>
 
 <script type="application/json" id="app-data">{
@@ -6877,7 +6937,12 @@ function openFiche(id) {
   const dlg = $('#fiche');
   const items = galleryItems(a);
   dlg.innerHTML = `
-    <button type="button" class="fiche__close" data-close>Fermer ✕</button>
+    <div class="fiche__bar">
+      <button type="button" class="fiche__back" data-close>
+        <span aria-hidden="true">←</span> Toutes les attractions
+      </button>
+      <span class="fiche__bar-nom">${esc(a.name)}</span>
+    </div>
     <div class="fiche__head">
       <div class="fiche__art${['closed', 'refurb'].includes(statusOf(a).kind) ? ' card__art--fanee' : ''}" role="img" aria-label="Illustration de ${esc(a.name)}">${visuel(a)}</div>
       <div>
@@ -6945,9 +7010,36 @@ function openFiche(id) {
 
   fixBrokenImages(dlg, a);
   renderFicheStatus();
-  if (!dlg.open) dlg.showModal();
-  dlg.scrollTop = 0;
+  montrerVue('fiche');
   try { if (location.hash !== '#' + id) location.hash = id; } catch {}
+}
+
+/* Position dans la liste, pour y revenir là où on l'avait quittée. */
+let defilementListe = 0;
+
+/**
+ * Bascule entre la liste et la fiche. Ce n'est pas une fenêtre qui s'ouvre :
+ * la fiche prend toute la page, le bouton Retour du téléphone la referme, et
+ * la liste se retrouve à l'endroit exact où on l'avait laissée.
+ */
+function montrerVue(vue) {
+  const liste = $('#vue-liste'), fiche = $('#fiche');
+  if (vue === 'fiche' && fiche.hidden) defilementListe = window.scrollY;
+
+  const bascule = () => {
+    const versFiche = vue === 'fiche';
+    liste.hidden = versFiche;
+    fiche.hidden = !versFiche;
+    document.body.classList.toggle('vue-fiche', versFiche);
+    window.scrollTo({ top: versFiche ? 0 : defilementListe, behavior: 'instant' });
+  };
+
+  // Transition native là où le navigateur la propose, bascule nette ailleurs.
+  if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.startViewTransition(bascule);
+  } else {
+    bascule();
+  }
 }
 
 /** Si une photo ne charge pas, on la remplace par l'affiche originale */
@@ -6958,8 +7050,15 @@ function fixBrokenImages(root, a) {
 }
 
 function closeFiche() {
-  const dlg = $('#fiche');
-  if (dlg.open) dlg.close();
+  if ($('#fiche').hidden) return;
+  state.openId = null;
+  montrerVue('liste');
+}
+
+/** Fermer, c'est revenir en arrière : le bouton Retour et la croix font un. */
+function quitterFiche() {
+  if (location.hash) history.back();
+  else closeFiche();
 }
 
 /* ---------- Lightbox ---------- */
@@ -7009,7 +7108,7 @@ function bindEvents() {
     const card = t.closest('[data-open]');
     if (card) return openFiche(card.dataset.open);
     if (t.closest('#refresh')) return refreshLive();
-    if (t.closest('[data-close]')) return closeFiche();
+    if (t.closest('[data-close]')) return quitterFiche();
     const th = t.closest('[data-lightbox]');
     if (th) return showLightbox(state.openId, Number(th.dataset.lightbox));
     if (t.closest('[data-lb-close]')) return $('#lightbox').close();
@@ -7023,7 +7122,10 @@ function bindEvents() {
     if ($('#lightbox').open) {
       if (e.key === 'ArrowRight') showLightbox(lb.id, lb.i + 1);
       if (e.key === 'ArrowLeft') showLightbox(lb.id, lb.i - 1);
+      return;
     }
+    // La fiche n'étant plus une fenêtre, Échap ne la ferme plus tout seul.
+    if (e.key === 'Escape' && !$('#fiche').hidden) quitterFiche();
   });
 
   $('#search').addEventListener('input', (e) => {

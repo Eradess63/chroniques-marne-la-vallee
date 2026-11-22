@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202611221924">
+<link rel="stylesheet" href="css/style.css?v=202611221933">
 </head>
 <body>
 
@@ -40,6 +40,7 @@
 </header>
 
 <main>
+  <div id="vue-liste">
   <section class="controls" aria-label="Filtres">
     <h2 class="controls__title rule"><span>Programme du jour</span></h2>
     <div class="search">
@@ -70,6 +71,11 @@
   <div class="livebar" id="livebar" role="status" aria-live="polite"></div>
   <p class="count" id="count"></p>
   <section class="grid" id="grid" aria-label="Attractions"></section>
+  </div>
+
+  <!-- La fiche n'est plus une fenêtre : c'est une vue à part entière, qui
+       remplace la liste et que le bouton Retour du téléphone referme. -->
+  <article id="fiche" class="fiche" aria-labelledby="fiche-title" hidden></article>
 </main>
 
 <footer class="footer">
@@ -77,10 +83,9 @@
   <p>Site de fans, non officiel, sans lien avec The Walt Disney Company ni Disneyland Paris. Illustrations originales.</p>
 </footer>
 
-<dialog id="fiche" class="fiche" aria-labelledby="fiche-title"></dialog>
 <dialog id="lightbox" class="lightbox" aria-label="Galerie"></dialog>
 
-<script type="module" src="js/app.js?v=202611221924"></script>
+<script type="module" src="js/app.js?v=202611221933"></script>
 <script>
   /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
      ouvert depuis un fichier local, le site fonctionne sans lui. */
