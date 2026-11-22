@@ -65,7 +65,10 @@ function visuel(a) {
   const illu = state.art && state.art[a.id];
   return illu
     ? `<div class="illu">${illu}</div>`
-    : `<div class="illu illu--planche">${poster(a, 'poster')}</div>`;
+    : `<div class="illu illu--planche">${posterSVG(a.motif, 'poster', {
+        label: a.land, lines: a.posterLines, tag: a.tagline, paysage: true,
+        alt: `Planche gravée de ${a.name}`
+      })}</div>`;
 }
 
 const poster = (a, variant = 'poster', fade = false) => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, fade, alt: `Planche gravée de ${a.name}` });

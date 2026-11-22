@@ -937,7 +937,12 @@ export function posterSVG(motif, variant = 'poster', opts = {}) {
     ? `<filter id="${uid}f"><feColorMatrix type="saturate" values="0.14"/></filter>`
     : '';
 
-  return `<svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Planche gravée')}"${opts.fade ? ` filter="url(#${uid}f)" opacity=".74"` : ''}>
+  /* Recadrage paysage : on garde le motif et on laisse tomber le cadre et le
+     lettrage, pour que la planche remplisse une fenêtre large au lieu d'y
+     flotter en timbre-poste. */
+  const vue = opts.paysage ? '14 96 272 159' : '0 0 300 420';
+
+  return `<svg viewBox="${vue}"" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Planche gravée')}"${opts.fade ? ` filter="url(#${uid}f)" opacity=".74"` : ''}>
   <defs>${fade}
     <linearGradient id="${uid}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${g.b}"/><stop offset="1" stop-color="${g.a}"/></linearGradient>
     <clipPath id="${uid}c"><rect x="18" y="60" width="264" height="240"/></clipPath>

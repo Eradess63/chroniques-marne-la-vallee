@@ -157,7 +157,7 @@ main { max-width: 1300px; margin: 0 auto; padding: 0 16px 52px; }
 .card:focus-within { outline: 2px solid var(--laiton-clair); outline-offset: 3px; }
 
 /* L'affiche est sertie dans un hublot */
-.card__art { position: relative; margin: 18px 16px 12px; aspect-ratio: 360 / 210; background: var(--acajou-fonce);
+.card__art { position: relative; margin: 10px 10px 10px; aspect-ratio: 360 / 210; background: var(--acajou-fonce);
   border: 3px solid var(--cuivre); border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(230,199,126,.3), inset 0 0 22px rgba(0,0,0,.75); overflow: hidden; }
 .card__art::after { content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -463,8 +463,8 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 
 .illu { width: 100%; height: 100%; }
 .illu svg { display: block; width: 100%; height: 100%; }
-.illu--planche { display: grid; place-items: center; background: var(--acajou-fonce); }
-.illu--planche svg { width: auto; height: 100%; max-width: 100%; }
+.illu--planche { background: var(--acajou-fonce); }
+.illu--planche svg { width: 100%; height: 100%; }
 
 /* Une attraction fermée : l'illustration perd ses couleurs, pas son dessin. */
 .card__art--fanee .illu { filter: saturate(.14) brightness(.82); opacity: .78; }
@@ -6258,7 +6258,12 @@ function posterSVG(motif, variant = 'poster', opts = {}) {
     ? `<filter id="${uid}f"><feColorMatrix type="saturate" values="0.14"/></filter>`
     : '';
 
-  return `<svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Planche gravée')}"${opts.fade ? ` filter="url(#${uid}f)" opacity=".74"` : ''}>
+  /* Recadrage paysage : on garde le motif et on laisse tomber le cadre et le
+     lettrage, pour que la planche remplisse une fenêtre large au lieu d'y
+     flotter en timbre-poste. */
+  const vue = opts.paysage ? '14 96 272 159' : '0 0 300 420';
+
+  return `<svg viewBox="${vue}"" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Planche gravée')}"${opts.fade ? ` filter="url(#${uid}f)" opacity=".74"` : ''}>
   <defs>${fade}
     <linearGradient id="${uid}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${g.b}"/><stop offset="1" stop-color="${g.a}"/></linearGradient>
     <clipPath id="${uid}c"><rect x="18" y="60" width="264" height="240"/></clipPath>
@@ -6385,7 +6390,10 @@ function visuel(a) {
   const illu = state.art && state.art[a.id];
   return illu
     ? `<div class="illu">${illu}</div>`
-    : `<div class="illu illu--planche">${poster(a, 'poster')}</div>`;
+    : `<div class="illu illu--planche">${posterSVG(a.motif, 'poster', {
+        label: a.land, lines: a.posterLines, tag: a.tagline, paysage: true,
+        alt: `Planche gravée de ${a.name}`
+      })}</div>`;
 }
 
 const poster = (a, variant = 'poster', fade = false) => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, fade, alt: `Planche gravée de ${a.name}` });
