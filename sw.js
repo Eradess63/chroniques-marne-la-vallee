@@ -8,13 +8,14 @@
  * affiche d'elle-même la date du dernier relevé quand elle ne peut pas joindre
  * l'API.
  */
-const VERSION = '202611221853';
+const VERSION = '202611221856';
 const CACHE = `chroniques-${VERSION}`;
 
 /** Ressources mises de côté dès l'installation, chemins relatifs à la portée. */
 const SOCLE = [
   './', './app/icone-180.png', './app/icone-192.png', './app/icone-512.png',
-  './app/manifeste.webmanifest'
+  './app/manifeste.webmanifest',
+  'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap'
 ];
 
 self.addEventListener('install', (e) => {
@@ -68,7 +69,10 @@ self.addEventListener('fetch', (e) => {
       const cache = await caches.open(CACHE);
       const garde = await cache.match(req);
       const reseau = fetch(req).then((rep) => {
-        if (rep && rep.ok) cache.put(req, rep.clone());
+        // Une feuille de style ou une police tierce revient en réponse opaque :
+        // son statut est 0, jamais « ok ». La refuser pour autant priverait
+        // l'application de ses trois polices dès qu'elle est hors connexion.
+        if (rep && (rep.ok || rep.type === 'opaque')) cache.put(req, rep.clone());
         return rep;
       }).catch(() => null);
       return garde || (await reseau) || Response.error();
