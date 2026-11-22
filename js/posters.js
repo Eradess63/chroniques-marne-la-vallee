@@ -45,7 +45,19 @@ const GROUND = {
   galleon:     { a: '#0E1A22', b: '#1E3A48', accent: '#44788E' },
   anchor:      { a: '#101E24', b: '#204048', accent: '#3E8292' },
   isle:        { a: '#14200E', b: '#2E4420', accent: '#6A9038' },
-  lamp:        { a: '#1E1408', b: '#48300E', accent: '#B07A1E' }
+  lamp:        { a: '#1E1408', b: '#48300E', accent: '#B07A1E' },
+  shell:       { a: '#0A1C22', b: '#17434C', accent: '#2E8A86' },
+  controller:  { a: '#201408', b: '#4C3010', accent: '#C4761A' },
+  parachute:   { a: '#14200E', b: '#2C4420', accent: '#6E9440' },
+  spring:      { a: '#1E1810', b: '#443624', accent: '#A8842E' },
+  route66:     { a: '#241408', b: '#523214', accent: '#C06A24' },
+  cone:        { a: '#201006', b: '#4E2610', accent: '#D4662A' },
+  carpet:      { a: '#1A1026', b: '#3C2454', accent: '#8A5CB8' },
+  satellite:   { a: '#0C1424', b: '#1E2C4E', accent: '#4A74B0' },
+  zoetrope:    { a: '#1C1408', b: '#423014', accent: '#A87C28' },
+  lantern:     { a: '#201406', b: '#4A2E0C', accent: '#D4941E' },
+  web:         { a: '#1A0C14', b: '#3E1828', accent: '#A8304E' },
+  webshooter:  { a: '#101A26', b: '#223C54', accent: '#3E7EA8' }
 };
 
 /* Variantes : la planche change de registre, pas de style. */
@@ -709,7 +721,166 @@ const MOTIFS = {
     ${diamond(150, 148, 6, v.gold)}
     ${[0,1,2,3].map((i) => `<path d="M${248 - i * 4} ${152 - i * 20} q10 -16 16 0" fill="none" stroke="${v.gold}" stroke-width="2.2" opacity="${(.85 - i * .18).toFixed(2)}"/>`).join('')}
     <rect x="62" y="226" width="176" height="6" fill="${v.gold}"/>
-    ${[0,1,2,3,4,5].map((i) => `<rect x="${72 + i * 28}" y="214" width="12" height="12" fill="${v.gold}" opacity=".5"/>`).join('')}`
+    ${[0,1,2,3,4,5].map((i) => `<rect x="${72 + i * 28}" y="214" width="12" height="12" fill="${v.gold}" opacity=".5"/>`).join('')}`,
+
+  /** Crush's Coaster : la carapace, et le courant qui la porte */
+  shell: (g, v) => `
+    ${[0,1,2,3,4].map((i) => `<path d="M10 ${54 + i * 46} q44 -20 88 0 t88 0 t88 0 t88 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity="${(.5 - i * .07).toFixed(2)}"/>`).join('')}
+    <path d="M44 184 Q44 92 150 92 Q256 92 256 184Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    <path d="M150 92 L150 184 M70 136 L230 136 M62 160 L238 160" stroke="${v.gold}" stroke-width="1.6" opacity=".75"/>
+    <path d="M104 100 L104 184 M196 100 L196 184" stroke="${v.gold}" stroke-width="1.6" opacity=".75"/>
+    <path d="M150 104 L124 126 L136 156 L164 156 L176 126Z" fill="none" stroke="${v.gold}" stroke-width="2.2"/>
+    <rect x="36" y="184" width="228" height="10" rx="5" fill="${v.gold}"/>
+    <path d="M36 194 q10 20 30 18 M264 194 q-10 20 -30 18" fill="none" stroke="${v.gold}" stroke-width="5" stroke-linecap="round"/>
+    ${diamond(150, 78, 8, v.gold)}
+    ${[[52,70],[248,70]].map(([x, y]) => diamond(x, y, 5, v.gold)).join('')}
+    <path d="M18 240 q18 -14 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0" fill="none" stroke="${v.gold}" stroke-width="2.5" opacity=".6"/>`,
+
+  /** RC Racer : la télécommande, et la demi-lune qu'elle pilote */
+  controller: (g, v) => `
+    ${fan(150, 34, 120, 16, v.gold, .18)}
+    <path d="M52 236 Q52 120 92 120 M248 236 Q248 120 208 120" fill="none" stroke="${v.gold}" stroke-width="3" opacity=".5"/>
+    <rect x="86" y="96" width="128" height="104" rx="12" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    <rect x="98" y="108" width="104" height="30" rx="4" fill="none" stroke="${v.gold}" stroke-width="2"/>
+    ${[0,1,2].map((i) => `<rect x="${106 + i * 32}" y="116" width="20" height="14" fill="${v.gold}" opacity="${(.9 - i * .22).toFixed(2)}"/>`).join('')}
+    <circle cx="118" cy="168" r="17" fill="none" stroke="${v.gold}" stroke-width="2.6"/>
+    <circle cx="182" cy="168" r="17" fill="none" stroke="${v.gold}" stroke-width="2.6"/>
+    <circle cx="118" cy="162" r="7" fill="${v.gold}"/>
+    <circle cx="182" cy="174" r="7" fill="${v.gold}"/>
+    <path d="M196 96 L214 46" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/>
+    <circle class="a-ping" cx="214" cy="44" r="7" fill="${v.gold}" style="transform-origin:214px 44px"/>
+    ${[0,1,2].map((i) => `<path d="M${222 + i * 10} ${38 - i * 7} q${10 + i * 5} ${12 + i * 6} 0 ${26 + i * 12}" fill="none" stroke="${v.gold}" stroke-width="2" opacity="${(.8 - i * .22).toFixed(2)}"/>`).join('')}
+    <rect x="40" y="232" width="220" height="7" fill="${v.gold}"/>`,
+
+  /** Toy Soldiers : la voile du parachute et sa caisse */
+  parachute: (g, v) => `
+    ${fan(150, 28, 112, 14, v.gold, .16)}
+    <g class="a-canopy" style="transform-origin:150px 48px">
+      <path d="M46 116 Q46 36 150 36 Q254 36 254 116 Q214 96 186 116 Q166 94 150 116 Q134 94 114 116 Q86 96 46 116Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+      ${[0,1,2,3].map((i) => `<path d="M${94 + i * 37} 110 Q${110 + i * 30} 44 150 36" fill="none" stroke="${v.gold}" stroke-width="1.5" opacity=".65"/>`).join('')}
+    </g>
+    ${[[52,112],[116,114],[184,114],[248,112]].map(([x, y]) => `<path d="M${x} ${y} L150 190" stroke="${v.gold}" stroke-width="1.8" opacity=".8"/>`).join('')}
+    <rect x="112" y="190" width="76" height="52" rx="4" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    <path d="M112 216 L188 216 M150 190 L150 242" stroke="${v.gold}" stroke-width="1.6" opacity=".7"/>
+    ${diamond(150, 216, 9, v.gold)}
+    ${[[36,66],[264,66]].map(([x, y]) => diamond(x, y, 5, v.gold)).join('')}`,
+
+  /** Slinky Dog : le ressort, seul et sans chien */
+  spring: (g, v) => `
+    ${fan(150, 30, 118, 16, v.gold, .16)}
+    <rect x="34" y="70" width="40" height="50" rx="6" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    <rect x="226" y="150" width="40" height="50" rx="6" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6,7,8,9,10].map((i) => {
+      const t = i / 10, x = 74 + t * 152, y = 96 + t * 78, r = 30 - t * 6;
+      return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(r * .42).toFixed(1)}" ry="${r.toFixed(1)}" fill="none" stroke="${v.gold}" stroke-width="2.6" opacity="${(.95 - i * .045).toFixed(2)}"/>`;
+    }).join('')}
+    ${diamond(54, 60, 7, v.gold)}${diamond(246, 212, 7, v.gold)}
+    <rect x="30" y="238" width="240" height="6" fill="${v.gold}"/>
+    ${[0,1,2,3,4,5].map((i) => `<rect x="${44 + i * 38}" y="228" width="14" height="10" fill="${v.gold}" opacity=".45"/>`).join('')}`,
+
+  /** Cars Road Trip : l'écusson de la nationale sur son poteau */
+  route66: (g, v) => `
+    ${[0,1,2,3].map((i) => `<path d="M${-20 + i * 90} 244 L${60 + i * 90} 150" stroke="${v.gold}" stroke-width="2" opacity=".28"/>`).join('')}
+    <path d="M104 244 L128 118 L172 118 L196 244Z" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".4"/>
+    <rect x="144" y="150" width="12" height="94" fill="${v.gold}"/>
+    <path d="M88 52 L212 52 L212 120 Q212 150 150 164 Q88 150 88 120Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3.5"/>
+    <path d="M98 62 L202 62 L202 118 Q202 142 150 154 Q98 142 98 118Z" fill="none" stroke="${v.gold}" stroke-width="1.4" opacity=".7"/>
+    <text x="150" y="98" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="20" letter-spacing="2" fill="${v.gold}">ROUTE</text>
+    <text x="150" y="134" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="30" letter-spacing="3" fill="${v.gold}">66</text>
+    ${[[48,80],[252,80]].map(([x, y]) => diamond(x, y, 6, v.gold)).join('')}
+    <rect x="36" y="244" width="228" height="6" fill="${v.gold}"/>`,
+
+  /** Cars Quatre Roues Rallye : le cône de chantier et les deux plateaux */
+  cone: (g, v) => `
+    ${fan(150, 34, 116, 14, v.gold, .14)}
+    <ellipse cx="100" cy="206" rx="72" ry="22" fill="none" stroke="${v.gold}" stroke-width="2.4" opacity=".55"/>
+    <ellipse cx="200" cy="206" rx="72" ry="22" fill="none" stroke="${v.gold}" stroke-width="2.4" opacity=".55"/>
+    <path d="M124 214 L144 72 L156 72 L176 214Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    <path d="M136 156 L164 156 M132 182 L168 182" stroke="${v.gold}" stroke-width="7"/>
+    <ellipse cx="150" cy="214" rx="46" ry="13" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    ${diamond(150, 62, 7, v.gold)}
+    ${[[52,112],[248,112]].map(([x, y]) => diamond(x, y, 5, v.gold)).join('')}
+    <rect x="30" y="238" width="240" height="6" fill="${v.gold}"/>`,
+
+  /** Les Tapis Volants : le tapis, ses franges et son arabesque */
+  carpet: (g, v) => `
+    ${fan(150, 30, 114, 18, v.gold, .18)}
+    ${[0,1,2,3,4,5,6].map((i) => `${diamond(40 + i * 37, 60 + (i % 2) * 14, 4, v.gold)}`).join('')}
+    <path d="M40 150 Q90 112 150 134 Q210 156 260 118 L260 176 Q210 214 150 192 Q90 170 40 208Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    <path d="M48 160 Q94 126 150 146 Q206 166 252 132" fill="none" stroke="${v.gold}" stroke-width="1.5" opacity=".75"/>
+    <path d="M48 196 Q94 162 150 182 Q206 202 252 168" fill="none" stroke="${v.gold}" stroke-width="1.5" opacity=".75"/>
+    <path d="M150 150 q-18 14 0 28 q18 -14 0 -28Z" fill="${v.gold}"/>
+    ${[[108,152],[192,170]].map(([x, y]) => diamond(x, y, 5, v.gold)).join('')}
+    ${[0,1,2,3,4].map((i) => `<path d="M${42 + i * 5} ${206 + i * 1} l-10 16" stroke="${v.gold}" stroke-width="2" opacity=".8"/>`).join('')}
+    ${[0,1,2,3,4].map((i) => `<path d="M${238 + i * 5} ${118 + i * 1} l10 -16" stroke="${v.gold}" stroke-width="2" opacity=".8"/>`).join('')}
+    <path d="M18 242 q18 -10 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".45"/>`,
+
+  /** Stitch Live! : la parabole qui écoute, et le signal qui revient */
+  satellite: (g, v) => `
+    ${[0,1,2,3,4,5,6].map((i) => `${diamond(30 + i * 40, 44 + (i % 3) * 18, i % 2 ? 3 : 4.5, v.gold)}`).join('')}
+    <path d="M62 170 Q62 78 150 78 Q238 78 238 170Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+    <path d="M80 168 Q80 94 150 94 Q220 94 220 168" fill="none" stroke="${v.gold}" stroke-width="1.4" opacity=".65"/>
+    <path d="M62 170 L238 170" stroke="${v.gold}" stroke-width="3"/>
+    <path d="M150 170 L150 110" stroke="${v.gold}" stroke-width="3"/>
+    <circle cx="150" cy="106" r="9" fill="${v.gold}"/>
+    <circle class="a-ping" cx="150" cy="106" r="9" fill="none" stroke="${v.gold}" stroke-width="2" style="transform-origin:150px 106px"/>
+    <path d="M144 170 L132 236 L168 236 L156 170Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.6"/>
+    <rect x="110" y="236" width="80" height="8" rx="4" fill="${v.gold}"/>
+    ${[0,1,2].map((i) => `<path d="M${196 + i * 16} ${60 - i * 6} q${14 + i * 6} ${18 + i * 8} 0 ${36 + i * 16}" fill="none" stroke="${v.gold}" stroke-width="2.2" opacity="${(.8 - i * .2).toFixed(2)}"/>`).join('')}`,
+
+  /** Art of Disney Animation : le zootrope, première machine à animer */
+  zoetrope: (g, v) => `
+    ${fan(150, 32, 112, 16, v.gold, .16)}
+    <ellipse cx="150" cy="96" rx="92" ry="24" fill="none" stroke="${v.gold}" stroke-width="2.6"/>
+    <g class="a-turn" style="transform-origin:150px 150px">
+      <path d="M58 96 L58 186 Q58 208 150 208 Q242 208 242 186 L242 96" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
+      ${[0,1,2,3,4,5,6,7].map((i) => `<rect x="${64 + i * 23}" y="104" width="7" height="62" fill="${v.gold}" opacity=".85"/>`).join('')}
+    </g>
+    <path d="M58 186 Q58 208 150 208 Q242 208 242 186" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    <rect x="144" y="208" width="12" height="26" fill="${v.gold}"/>
+    <ellipse cx="150" cy="238" rx="58" ry="12" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.6"/>
+    ${diamond(150, 62, 8, v.gold)}
+    ${[[44,74],[256,74]].map(([x, y]) => diamond(x, y, 5, v.gold)).join('')}`,
+
+  /** Raiponce Tangled Spin : la lanterne qui monte, et celles qui suivent */
+  lantern: (g, v) => `
+    ${[[46,70,.5],[256,58,.45],[72,186,.35],[236,176,.4],[108,44,.3],[200,40,.3]].map(([x, y, o]) =>
+      `<g opacity="${o}"><path d="M${x - 11} ${y} L${x - 8} ${y - 18} L${x + 8} ${y - 18} L${x + 11} ${y} L${x + 7} ${y + 13} L${x - 7} ${y + 13}Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="1.6"/></g>`).join('')}
+    <g class="a-flicker" style="transform-origin:150px 150px">
+      <path d="M108 110 L116 64 L184 64 L192 110 L180 192 L120 192Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3.2"/>
+      <path d="M120 110 L180 110 M124 150 L176 150" stroke="${v.gold}" stroke-width="1.6" opacity=".7"/>
+      ${diamond(150, 130, 11, v.gold)}
+      <path d="M116 64 L184 64 L178 50 L122 50Z" fill="${v.gold}"/>
+      <path d="M120 192 L180 192 L172 206 L128 206Z" fill="${v.gold}" opacity=".8"/>
+    </g>
+    <path d="M150 206 L150 234" stroke="${v.gold}" stroke-width="2" opacity=".5" stroke-dasharray="4 5"/>
+    ${[0,1,2,3,4,5].map((i) => `${diamond(34 + i * 46, 240, 4, v.gold)}`).join('')}`,
+
+  /** Spider-Man W.E.B. Adventure : la toile, radiale et spiralée */
+  web: (g, v) => `
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = -Math.PI + i * Math.PI / 7;
+      return `<line x1="150" y1="42" x2="${(150 + Math.cos(a) * 180).toFixed(1)}" y2="${(42 + Math.abs(Math.sin(a)) * 210).toFixed(1)}" stroke="${v.gold}" stroke-width="2" opacity=".75"/>`; }).join('')}
+    ${[46,86,126,166,206].map((r, k) => {
+      const pts = [0,1,2,3,4,5,6,7].map((i) => { const a = -Math.PI + i * Math.PI / 7;
+        return `${(150 + Math.cos(a) * r * .86).toFixed(1)},${(42 + Math.abs(Math.sin(a)) * r).toFixed(1)}`; });
+      return `<polyline points="${pts.join(' ')}" fill="none" stroke="${v.gold}" stroke-width="${(2.4 - k * .22).toFixed(1)}" opacity="${(.9 - k * .1).toFixed(2)}"/>`;
+    }).join('')}
+    <circle cx="150" cy="42" r="8" fill="${v.gold}"/>
+    ${[[60,96],[240,96],[96,186],[204,186]].map(([x, y], i) => diamond(x, y, i % 2 ? 4 : 5.5, g.accent)).join('')}
+    <rect x="24" y="36" width="252" height="4" fill="${v.gold}"/>`,
+
+  /** Meet Spider-Man : le lance-toile, bracelet et buse */
+  webshooter: (g, v) => `
+    ${fan(150, 32, 110, 14, v.gold, .14)}
+    <path d="M88 108 Q150 86 212 108 L212 162 Q150 184 88 162Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="3.2"/>
+    <path d="M96 120 Q150 102 204 120 M96 150 Q150 168 204 150" fill="none" stroke="${v.gold}" stroke-width="1.5" opacity=".7"/>
+    <rect x="128" y="118" width="44" height="34" rx="6" fill="none" stroke="${v.gold}" stroke-width="2.6"/>
+    ${diamond(150, 135, 8, v.gold)}
+    <rect x="140" y="152" width="20" height="26" rx="4" fill="${v.gold}"/>
+    <circle cx="150" cy="184" r="9" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3].map((i) => `<path d="M150 194 q${(i - 1.5) * 26} ${24 + i * 6} ${(i - 1.5) * 44} ${44 + i * 4}" fill="none" stroke="${v.gold}" stroke-width="2.2" opacity="${(.85 - i * .13).toFixed(2)}"/>`).join('')}
+    ${[[56,96],[244,96]].map(([x, y]) => diamond(x, y, 5, v.gold)).join('')}
+    <rect x="30" y="242" width="240" height="5" fill="${v.gold}"/>`
 };
 
 /**
