@@ -37,6 +37,13 @@ js = '\n'.join(mod(n) for n in ['config.js', 'api.js', 'posters.js', 'reviews.js
 css = (root / 'css' / 'style.css').read_text(encoding='utf-8')
 data = (root / 'data' / 'attractions.json').read_text(encoding='utf-8').replace('</', '<\\/')
 
+# Les illustrations voyagent avec la page : une par attraction, repliées en un
+# seul objet. Sans cela il faudrait 45 requêtes, et le fichier unique perdrait
+# tout son intérêt.
+import json as _json
+art = {f.stem: f.read_text(encoding='utf-8').strip() for f in sorted((root / 'illustrations').glob('*.svg'))}
+art_json = _json.dumps(art, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+
 # Les liens datés ne doivent pas gêner le repli : on vise le motif, pas la chaîne exacte.
 # Le remplacement passe par une fonction : sinon re.sub interpréterait les
 # antislashs du CSS et du JS comme des références de groupe.
@@ -44,6 +51,7 @@ html = re.sub(r'<link rel="stylesheet" href="css/style\.css(?:\?v=\d+)?">',
               lambda _: '<style>\n' + css + '\n</style>', html, count=1)
 html = re.sub(r'<script type="module" src="js/app\.js(?:\?v=\d+)?"></script>',
               lambda _: '<script type="application/json" id="app-data">' + data + '</script>\n'
+                        '<script type="application/json" id="app-art">' + art_json + '</script>\n'
                         '<script>\n(function(){\n' + js + '\n})();\n</script>', html, count=1)
 
 assert '<style>' in html and 'app-data' in html, 'le repli a manqué sa cible'

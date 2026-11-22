@@ -10,6 +10,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const state = {
   parks: [],
   attractions: [],
+  art: {},
   live: new Map(),
   mode: 'loading',
   via: '',
@@ -52,6 +53,19 @@ function matches(a) {
   if (f.state === 'closed' && kind !== 'closed' && kind !== 'refurb') return false;
   if (f.q && !fold(a.name).includes(fold(f.q)) && !fold(a.tagline).includes(fold(f.q))) return false;
   return true;
+}
+
+/**
+ * Le visuel d'une attraction : son illustration quand elle existe, sa planche
+ * gravée sinon. Les deux n'ont pas le même format — l'illustration est un
+ * paysage, la planche un portrait — donc le cadre centre la seconde sur fond
+ * sombre plutôt que de l'étirer.
+ */
+function visuel(a) {
+  const illu = state.art && state.art[a.id];
+  return illu
+    ? `<div class="illu">${illu}</div>`
+    : `<div class="illu illu--planche">${poster(a, 'poster')}</div>`;
 }
 
 const poster = (a, variant = 'poster', fade = false) => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, fade, alt: `Planche gravée de ${a.name}` });
@@ -97,7 +111,7 @@ function renderGrid() {
     ? list.map((a, i) => {
         const st = statusOf(a);
         return `<article class="card" style="--i:${i}" data-etat="${st.kind}">
-          <div class="card__art" aria-hidden="true">${poster(a, 'poster', st.kind === 'closed' || st.kind === 'refurb')}</div>
+          <div class="card__art${st.kind === 'closed' || st.kind === 'refurb' ? ' card__art--fanee' : ''}" aria-hidden="true">${visuel(a)}</div>
           <div class="card__body">
             <h2 class="card__title"><button type="button" class="card__btn" data-open="${esc(a.id)}">${esc(a.name)}</button></h2>
             <p class="card__park">${esc(parkName(a.park))}</p>
@@ -304,11 +318,13 @@ function reviewsHTML(a) {
 function galleryItems(a) {
   const photos = (a.images || []).map((i) => ({ type: 'img', src: i.src, caption: i.caption || a.name, credit: i.credit }));
   const posters = (a.gallery || []).map((g) => ({ type: 'poster', variant: g.variant, caption: g.caption }));
-  return [...photos, ...posters];
+  const illu = state.art && state.art[a.id] ? [{ type: 'illu', caption: 'Illustration' }] : [];
+  return [...illu, ...photos, ...posters];
 }
 
 function itemHTML(a, it) {
   if (it.type === 'img') return `<img src="${esc(it.src)}" alt="${esc(it.caption)}" data-fallback="1">`;
+  if (it.type === 'illu') return `<div class="illu">${state.art[a.id]}</div>`;
   return poster(a, it.variant);
 }
 
@@ -322,7 +338,7 @@ function openFiche(id) {
   dlg.innerHTML = `
     <button type="button" class="fiche__close" data-close>Fermer ✕</button>
     <div class="fiche__head">
-      <div class="fiche__art" role="img" aria-label="Planche gravée de ${esc(a.name)}">${poster(a, 'poster', statusOf(a).kind === 'closed' || statusOf(a).kind === 'refurb')}</div>
+      <div class="fiche__art${['closed', 'refurb'].includes(statusOf(a).kind) ? ' card__art--fanee' : ''}" role="img" aria-label="Illustration de ${esc(a.name)}">${visuel(a)}</div>
       <div>
         <p class="fiche__kicker"><span class="tag tag--land">${esc(a.land)}</span><span class="tag tag--park">${esc(parkName(a.park))}</span></p>
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>
@@ -502,6 +518,15 @@ async function init() {
     }
     state.parks = data.parks;
     state.attractions = data.attractions;
+
+    // Illustrations : intégrées à la page par la construction. Celles qui
+    // manquent ne cassent rien — l'attraction garde sa planche gravée.
+    const art = document.getElementById('app-art');
+    if (art) { try { state.art = JSON.parse(art.textContent); } catch { state.art = {}; } }
+    else {
+      const res = await fetch('illustrations/index.json').catch(() => null);
+      state.art = res && res.ok ? await res.json() : {};
+    }
   } catch (err) {
     $('#grid').innerHTML = `<p class="empty">Impossible de charger les attractions (${esc(err.message)}). Servez le site via un serveur web local plutôt qu'en ouvrant le fichier directement.</p>`;
     return;
