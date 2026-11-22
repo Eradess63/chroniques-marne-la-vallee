@@ -515,7 +515,7 @@ async function init() {
     let data;
     if (inline) data = JSON.parse(inline.textContent);
     else {
-      const res = await fetch(CONFIG.DATA_URL);
+      const res = await fetch(CONFIG.DATA_URL, { cache: 'no-cache' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       data = await res.json();
     }
@@ -527,7 +527,7 @@ async function init() {
     const art = document.getElementById('app-art');
     if (art) { try { state.art = JSON.parse(art.textContent); } catch { state.art = {}; } }
     else {
-      const res = await fetch('illustrations/index.json').catch(() => null);
+      const res = await fetch('illustrations/index.json', { cache: 'no-cache' }).catch(() => null);
       state.art = res && res.ok ? await res.json() : {};
     }
   } catch (err) {

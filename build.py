@@ -44,6 +44,12 @@ import json as _json
 art = {f.stem: f.read_text(encoding='utf-8').strip() for f in sorted((root / 'illustrations').glob('*.svg'))}
 art_json = _json.dumps(art, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
 
+# La racine du dépôt est servie telle quelle par d'autres hébergeurs (un Worker
+# Cloudflare, un serveur local), qui ne voient pas dist/. Le même objet y est
+# donc écrit en fichier, que la page va chercher quand elle n'est pas repliée.
+(root / 'illustrations' / 'index.json').write_text(
+    _json.dumps(art, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+
 # Les liens datés ne doivent pas gêner le repli : on vise le motif, pas la chaîne exacte.
 # Le remplacement passe par une fonction : sinon re.sub interpréterait les
 # antislashs du CSS et du JS comme des références de groupe.
