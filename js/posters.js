@@ -38,7 +38,14 @@ const GROUND = {
   roadster:    { a: '#101C1E', b: '#24423E', accent: '#4E8A72' },
   porthole:    { a: '#08181E', b: '#163840', accent: '#2E7686' },
   beacon:      { a: '#101428', b: '#2A2E56', accent: '#6670B8' },
-  playground:  { a: '#201A10', b: '#44361E', accent: '#90723A' }
+  playground:  { a: '#201A10', b: '#44361E', accent: '#90723A' },
+  chest:       { a: '#1E1206', b: '#452A10', accent: '#9C6A22' },
+  temple:      { a: '#1C1610', b: '#3E3020', accent: '#8A6B38' },
+  treehouse:   { a: '#121C10', b: '#2A4020', accent: '#5E8A3A' },
+  galleon:     { a: '#0E1A22', b: '#1E3A48', accent: '#44788E' },
+  anchor:      { a: '#101E24', b: '#204048', accent: '#3E8292' },
+  isle:        { a: '#14200E', b: '#2E4420', accent: '#6A9038' },
+  lamp:        { a: '#1E1408', b: '#48300E', accent: '#B07A1E' }
 };
 
 /* Variantes : la planche change de registre, pas de style. */
@@ -571,7 +578,119 @@ const MOTIFS = {
     <line x1="92" y1="125" x2="92" y2="180" stroke="${v.gold}" stroke-width="2"/>
     <rect x="60" y="180" width="38" height="8" rx="4" fill="${v.gold}"/>
     <rect x="18" y="226" width="264" height="4" fill="${v.gold}"/>
-    ${[0,1,2,3,4,5,6,7,8].map((i) => `<path d="M${22 + i * 31} 238 q8 -7 16 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".5"/>`).join('')}`
+    ${[0,1,2,3,4,5,6,7,8].map((i) => `<path d="M${22 + i * 31} 238 q8 -7 16 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".5"/>`).join('')}`,
+
+  /** Pirates of the Caribbean : coffre au trésor et sabres croisés */
+  chest: (g, v) => `
+    ${fan(150, 40, 124, 16, v.gold, .2)}
+    <path d="M62 112 Q150 56 238 112 L238 128 L62 128Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    ${[0,1,2,3].map((i) => `<path d="M${86 + i * 43} 108 Q${92 + i * 43} 74 ${150} 68" fill="none" stroke="${v.gold}" stroke-width="1.6" opacity=".55"/>`).join('')}
+    <rect x="62" y="128" width="176" height="76" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    <rect x="62" y="126" width="176" height="10" fill="${v.gold}"/>
+    ${[94,206].map((x) => `<rect x="${x - 6}" y="112" width="12" height="92" fill="${v.gold}" opacity=".85"/>`).join('')}
+    <rect x="136" y="140" width="28" height="30" rx="3" fill="${v.gold}"/>
+    <circle cx="150" cy="152" r="5" fill="${g.a}"/>
+    <path d="M150 156 L150 166" stroke="${g.a}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6].map((i) => `<circle cx="${78 + i * 24}" cy="214" r="7" fill="${v.gold}" opacity="${(.95 - i * .07).toFixed(2)}"/>`).join('')}
+    ${[0,1,2,3,4,5].map((i) => `<circle cx="${92 + i * 24}" cy="228" r="6" fill="${v.gold}" opacity=".7"/>`).join('')}
+    <path d="M34 96 L112 176" stroke="${v.gold}" stroke-width="5" stroke-linecap="round"/>
+    <path d="M266 96 L188 176" stroke="${v.gold}" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="30" cy="92" r="9" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    <circle cx="270" cy="92" r="9" fill="none" stroke="${v.gold}" stroke-width="3"/>`,
+
+  /** Indiana Jones : temple en gradins, torche et boucle de voie */
+  temple: (g, v) => `
+    ${fan(150, 36, 118, 14, v.gold, .2)}
+    ${steps(150, 224, 210, 118, 5, g.accent)}
+    ${[0,1,2,3,4].map((i) => `<rect x="${150 - (105 - i * 21)}" y="${224 - (i + 1) * 23.6}" width="${(105 - i * 21) * 2}" height="2" fill="${v.gold}" opacity=".6"/>`).join('')}
+    <path d="M130 224 L130 166 Q150 150 170 166 L170 224Z" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    ${diamond(150, 100, 11, v.gold)}
+    <circle cx="150" cy="100" r="22" fill="none" stroke="${v.gold}" stroke-width="2"/>
+    <circle cx="86" cy="150" r="34" fill="none" stroke="${v.gold}" stroke-width="4"/>
+    <path d="M52 150 L52 206" stroke="${v.gold}" stroke-width="4"/>
+    <path d="M120 150 L120 206" stroke="${v.gold}" stroke-width="4"/>
+    ${[0,1,2,3,4,5].map((i) => `<rect x="${50 + i * 14}" y="${206 + (i % 2) * 2}" width="8" height="4" fill="${v.gold}" opacity=".6"/>`).join('')}
+    <rect x="232" y="128" width="9" height="96" fill="${v.gold}"/>
+    <path d="M226 128 q10 -30 20 0Z" fill="${v.gold}"/>
+    ${[0,1,2].map((i) => `<path d="M${230 + i * 3} ${118 - i * 12} q6 -12 10 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity="${(.8 - i * .22).toFixed(2)}"/>`).join('')}
+    <rect x="18" y="224" width="264" height="4" fill="${v.gold}"/>`,
+
+  /** La Cabane des Robinson : arbre-maison et roue à aubes */
+  treehouse: (g, v) => `
+    ${fan(150, 34, 116, 14, v.gold, .18)}
+    <path d="M138 226 L138 142 Q126 118 150 104 Q174 118 162 142 L162 226Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    ${[[-1,126],[1,126],[-1,160],[1,160]].map(([s, y]) => `<path d="M150 ${y} q${s * 36} -14 ${s * 62} -34" fill="none" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/>`).join('')}
+    ${[[150,64,54],[86,92,34],[214,92,34]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>`).join('')}
+    ${[[150,64,54],[86,92,34],[214,92,34]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r - 10}" fill="none" stroke="${v.gold}" stroke-width="1.2" opacity=".55"/>`).join('')}
+    <rect x="96" y="132" width="52" height="34" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M90 132 L122 108 L154 132Z" fill="${v.gold}"/>
+    <rect x="106" y="142" width="14" height="18" fill="${v.gold}"/>
+    <rect x="166" y="166" width="46" height="30" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M160 166 L189 144 L218 166Z" fill="${v.gold}"/>
+    <circle cx="238" cy="206" r="26" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="238" y1="206" x2="${(238 + Math.cos(a) * 26).toFixed(1)}" y2="${(206 + Math.sin(a) * 26).toFixed(1)}" stroke="${v.gold}" stroke-width="2.2"/>`; }).join('')}
+    <rect x="18" y="226" width="264" height="4" fill="${v.gold}"/>`,
+
+  /** Le Galion des Pirates : coque, mâts et voiles carrées */
+  galleon: (g, v) => `
+    ${fan(150, 32, 120, 16, v.gold, .2)}
+    <path d="M46 180 L254 180 L224 224 L76 224Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    <rect x="46" y="172" width="208" height="10" fill="${v.gold}"/>
+    ${[0,1,2,3,4,5,6].map((i) => `<rect x="${68 + i * 24}" y="190" width="14" height="12" fill="${v.gold}" opacity=".8"/>`).join('')}
+    <path d="M214 180 L214 148 L254 148 L254 180Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
+    <rect x="104" y="46" width="7" height="134" fill="${v.gold}"/>
+    <rect x="186" y="62" width="7" height="118" fill="${v.gold}"/>
+    <path d="M62 68 L104 68 L104 110 L62 110Z" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M111 68 L160 68 L160 110 L111 110Z" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M111 120 L172 120 L172 160 L111 160Z" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    <path d="M193 84 L238 84 L238 122 L193 122Z" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    ${diamond(107, 40, 8, v.gold)}
+    <path d="M193 62 L232 70 L193 78Z" fill="${v.gold}"/>
+    <path d="M46 180 L18 162" stroke="${v.gold}" stroke-width="5" stroke-linecap="round"/>
+    ${[0,1,2,3,4,5,6,7,8,9].map((i) => `<path d="M${18 + i * 28} 236 q7 -8 14 0 t14 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".5"/>`).join('')}`,
+
+  /** Pirates' Beach : ancre, cordage et roue de gouvernail */
+  anchor: (g, v) => `
+    ${fan(150, 232, 170, 18, v.gold, .18)}
+    <circle cx="150" cy="54" r="18" fill="none" stroke="${v.gold}" stroke-width="6"/>
+    <rect x="144" y="70" width="12" height="130" fill="${v.gold}"/>
+    <rect x="108" y="92" width="84" height="11" rx="5" fill="${v.gold}"/>
+    <path d="M150 200 Q98 200 82 150 L66 164 Q78 230 150 230 Q222 230 234 164 L218 150 Q202 200 150 200Z" fill="${v.gold}"/>
+    <circle cx="150" cy="140" r="64" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".5"/>
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4 + Math.PI / 8; return `<line x1="${(150 + Math.cos(a) * 64).toFixed(1)}" y1="${(140 + Math.sin(a) * 64).toFixed(1)}" x2="${(150 + Math.cos(a) * 82).toFixed(1)}" y2="${(140 + Math.sin(a) * 82).toFixed(1)}" stroke="${v.gold}" stroke-width="5" stroke-linecap="round"/>`; }).join('')}
+    ${[[44,70],[256,62],[70,196],[230,196]].map(([x, y], i) => diamond(x, y, i % 2 ? 4 : 6, v.gold)).join('')}
+    <path d="M18 240 q18 -12 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0" fill="none" stroke="${v.gold}" stroke-width="2.5" opacity=".6"/>`,
+
+  /** Adventure Isle : île, pont de corde et bouche de grotte */
+  isle: (g, v) => `
+    ${fan(150, 34, 118, 14, v.gold, .18)}
+    <path d="M18 196 Q60 150 104 164 Q128 118 164 140 Q206 120 240 158 Q268 166 282 196Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    <path d="M118 196 Q118 158 150 158 Q182 158 182 196Z" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
+    ${[0,1,2].map((i) => `<path d="M${132 + i * 18} 196 L${132 + i * 18} 176" stroke="${v.gold}" stroke-width="2" opacity=".6"/>`).join('')}
+    <path d="M26 112 q14 -26 34 -30 q-14 16 -14 32Z M26 112 q-16 -22 -4 -40 q12 14 14 34Z" fill="${v.gold}" opacity=".85"/>
+    <rect x="40" y="110" width="6" height="56" fill="${v.gold}"/>
+    <path d="M262 104 q-14 -24 -34 -28 q14 16 14 30Z M262 104 q16 -20 6 -38 q-12 14 -16 32Z" fill="${v.gold}" opacity=".85"/>
+    <rect x="256" y="102" width="6" height="56" fill="${v.gold}"/>
+    <path d="M40 142 Q150 188 258 136" fill="none" stroke="${v.gold}" stroke-width="2.5"/>
+    <path d="M40 122 Q150 168 258 116" fill="none" stroke="${v.gold}" stroke-width="2.5"/>
+    ${[0,1,2,3,4,5,6,7,8].map((i) => { const t = (i + 1) / 10; const x = 40 + 218 * t; const y1 = 122 + (168 - 122) * (4 * t * (1 - t)) - 6 * t; const y2 = y1 + 20; return `<line x1="${x.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${v.gold}" stroke-width="2"/>`; }).join('')}
+    <rect x="18" y="196" width="264" height="4" fill="${v.gold}"/>
+    ${[0,1,2,3,4,5,6,7,8,9].map((i) => `<path d="M${18 + i * 28} 216 q7 -9 14 0 t14 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".5"/>`).join('')}`,
+
+  /** Le Passage Enchanté d'Aladdin : lampe à huile et arcade */
+  lamp: (g, v) => `
+    ${fan(150, 44, 126, 20, v.gold, .24)}
+    <path d="M62 226 L62 136 Q62 76 150 76 Q238 76 238 136 L238 226" fill="none" stroke="${v.gold}" stroke-width="3.5"/>
+    <path d="M82 226 L82 140 Q82 96 150 96 Q218 96 218 140 L218 226" fill="none" stroke="${v.gold}" stroke-width="1.4" opacity=".6"/>
+    ${diamond(150, 68, 9, v.gold)}
+    <path d="M96 190 Q96 158 150 158 Q204 158 204 190 Q204 206 150 206 Q96 206 96 190Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    <path d="M204 176 L250 160 L246 188 L204 186Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    <path d="M96 180 q-32 2 -30 22 q2 16 22 12" fill="none" stroke="${v.gold}" stroke-width="5"/>
+    <path d="M132 158 Q150 140 168 158Z" fill="${v.gold}"/>
+    ${diamond(150, 148, 6, v.gold)}
+    ${[0,1,2,3].map((i) => `<path d="M${248 - i * 4} ${152 - i * 20} q10 -16 16 0" fill="none" stroke="${v.gold}" stroke-width="2.2" opacity="${(.85 - i * .18).toFixed(2)}"/>`).join('')}
+    <rect x="62" y="226" width="176" height="6" fill="${v.gold}"/>
+    ${[0,1,2,3,4,5].map((i) => `<rect x="${72 + i * 28}" y="214" width="12" height="12" fill="${v.gold}" opacity=".5"/>`).join('')}`
 };
 
 /**

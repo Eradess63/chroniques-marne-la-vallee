@@ -1016,15 +1016,14 @@
     {
       "id": "pirates-of-the-caribbean",
       "name": "Pirates of the Caribbean",
-      "tagline": "",
+      "tagline": "La seule version qui raconte l'histoire à l'endroit",
       "park": "dlp",
       "land": "Adventureland",
-      "motif": "mesa",
+      "motif": "chest",
       "posterLines": [
         "PIRATES OF THE",
         "CARIBBEAN"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Pirates of the Caribbean"
@@ -1037,47 +1036,95 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · refondue en juillet 2017"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Intamin · conception WED Enterprises · version parisienne supervisée par Tony Baxter",
+        "type": "Parcours scénique aquatique en intérieur",
+        "transport": "Bateaux sur canal · deux descentes",
+        "duration": "Environ 10 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Entre 22 et 24 passagers par bateau selon les sources · 40 à 50 bateaux",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": true,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Surface": "10 300 m²",
+          "Hauteur des descentes": "4,5 m puis 2,5 m",
+          "Effets sur la seconde descente": "72",
+          "Pièces dans la grotte": "plus de 30 000"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre avec le parc le 12 avril 1992. Contrairement aux autres parcs, Intamin en a construit l'installation. Elle est refondue en 2017 pour le vingt-cinquième anniversaire, après environ six mois de fermeture : la scène des enchères est réécrite, de nouveaux personnages apparaissent et la bande-son passe aux musiques de films. Elle a depuis connu deux fermetures d'entretien, en 2025 et à l'été 2026.",
+      "synopsis": "On embarque sous un fort criblé de boulets, et le bateau s'enfonce. L'ordre du récit est propre à Paris : on commence par l'attaque du fort, on traverse le pillage de la ville, et l'on finit dans la grotte, au milieu des squelettes et de l'or. Deux descentes marquent les bascules du récit.",
+      "secrets": [
+        "Paris est la seule version à dérouler l'histoire dans cet ordre. Ailleurs, on part de la grotte et l'on remonte le temps.",
+        "Cette inversion n'est pas un choix purement narratif : impossible de creuser à Paris comme ailleurs, à cause de la nappe phréatique. L'attraction est donc largement au-dessus du sol, d'où la façade plus haute et le double dénivelé.",
+        "La seconde descente concentre soixante-douze effets pyrotechniques en moins de quatre secondes.",
+        "Plus de trente mille pièces ont été collées une à une dans la grotte. Certaines sources avancent cinquante mille.",
+        "Le duel de bretteurs est propre à Paris. Depuis 2017, un homme y affronte une femme pirate, qui l'oblige parfois à esquiver sa lame.",
+        "La scène des enchères a été réécrite à Paris avant de l'être dans les parcs américains : ce sont désormais les villageois, et non les femmes, qui doivent céder leurs biens.",
+        "La plupart des costumes de la scène du puits datent d'avant 1900 et proviennent d'un antiquaire-costumier londonien.",
+        "La carte des Caraïbes affichée dans la file comporte une baie nommée d'après un Imagineer du projet.",
+        "Près du stand de boissons, la serrure du coffre et les poignées d'épées ont la forme de bouteilles de soda : le commanditaire s'est glissé dans le décor.",
+        "La rénovation de 2025 a procédé en archéologue : les cochons du village et plusieurs pommes, disparus au fil des ans, ont été recréés et replacés d'après les croquis d'origine.",
+        "Depuis le train du parc, on aperçoit la salle du trésor et un squelette.",
+        "Le décompte des animatroniques varie selon les sources, entre cent seize et cent dix-neuf."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Densité de décor exceptionnelle",
+          "Ordre narratif unique au monde",
+          "Aucune taille minimale"
+        ],
+        "cons": [
+          "File longue en journée",
+          "Deux descentes qui surprennent les plus jeunes"
+        ],
+        "text": "La meilleure attraction du parc pour qui aime regarder. Dix minutes qu'on peut refaire dix fois sans tout voir."
+      },
       "sources": [
-        "https://www.dlpguide.com/guides/disneylandpark/"
+        "https://www.dlpguide.com/guidebook/disneyland-park/adventureland/pirates-of-the-caribbean/",
+        "https://fr.wikipedia.org/wiki/Pirates_of_the_Caribbean",
+        "https://www.chroniquedisney.fr/dossier/2017-pirates-reouverture.htm"
       ]
     },
     {
       "id": "indiana-jones-temple-du-peril",
       "name": "Indiana Jones et le Temple du Péril",
-      "tagline": "",
+      "tagline": "Le premier looping d'un parc Disney",
       "park": "dlp",
       "land": "Adventureland",
-      "motif": "mesa",
+      "motif": "temple",
       "posterLines": [
         "INDIANA JONES",
         "TEMPLE DU PÉRIL"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Indiana Jones™ and the Temple of Peril",
@@ -1092,33 +1139,83 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1993-07-30",
+          "label": "30 juillet 1993 · inauguration officielle en novembre"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Intamin · sous-traitance Giovanola · conception Walt Disney Imagineering",
+        "type": "Montagnes russes en acier avec looping",
+        "transport": "Trains façon wagonnets de mine, lift à chaîne",
+        "duration": "Environ 1 min 15",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 140,
+          "label": "1,40 m"
         },
-        "capacity": "À confirmer",
+        "capacity": "7 trains de 12 passagers, 6 en circulation · environ 1 472 personnes par heure",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": true,
+          "singleRider": true,
+          "photoPass": false,
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Hauteur": "18 m",
+          "Longueur de voie": "566 à 600 m selon les sources",
+          "Vitesse": "58 km/h",
+          "Inversions": "1 looping, plus une hélice à 540°",
+          "Chute": "10 m"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction naît d'une urgence : en 1993, Big Thunder Mountain est le seul grand manège du parc et sature. Conçue comme un renfort de capacité, elle ouvre le 30 juillet 1993 et son succès la rend permanente. De 2000 à 2004, elle a fonctionné à l'envers, trains retournés. Une réhabilitation lourde en 2014 a démoli puis reconstruit une partie de la structure et de la voie. Une nouvelle fermeture de plusieurs mois est annoncée pour janvier 2027.",
+      "synopsis": "Un campement d'archéologues au pied d'un temple en ruine, et des wagonnets censés servir au chantier. Le convoi grimpe, passe au-dessus du temple, puis part hors de contrôle : un looping, une hélice, et le retour au camp en soixante-quinze secondes.",
+      "secrets": [
+        "C'est le premier manège d'un parc Disney à comporter une inversion complète.",
+        "La taille minimale, 1,40 m, est la plus élevée du parc, et l'une des plus élevées de tous les parcs Disney.",
+        "Il a été construit en moins d'un an, pour désengorger Big Thunder Mountain, et deux ans avant Space Mountain.",
+        "Le projet initial prévoyait un land complet, avec un second temple, un tigre animatronique et des statues monumentales. Les difficultés financières d'Euro Disney l'ont réduit.",
+        "Pendant la période à l'envers, de 2000 à 2004, certaines courbes ont été adoucies pour les passagers dos à la marche. Le retour au sens normal a été motivé par les plaintes sur l'inconfort.",
+        "Les trains sont passés de huit à douze places lors de cette transformation, pour réduire les files.",
+        "Le commanditaire historique s'est glissé dans le décor : des jerricans à son logo traînent dans la file, et les empreintes de tigre font écho à sa mascotte.",
+        "Le chapeau et le fouet du héros sont posés sur le lit de sa tente, dans la file. Une tarentule se serait échappée de sa cage, restée vide.",
+        "Ce fut la première attraction du parc équipée de bornes de réservation de passage, le 2 octobre 1999.",
+        "Les sources ne s'accordent ni sur la longueur de voie, donnée entre 566 et 600 mètres, ni sur le concepteur du tracé : trois noms différents circulent.",
+        "On ne croise jamais le héros pendant le parcours : il n'apparaît que dans le décor."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Court mais intense",
+          "File Single Rider efficace",
+          "Décor de temple très travaillé"
+        ],
+        "cons": [
+          "Secousses marquées, surtout à l'arrière",
+          "1,40 m exclut beaucoup d'enfants",
+          "Fermeture annoncée en 2027"
+        ],
+        "text": "Le manège le plus brutal du parc, et le plus franc : soixante-quinze secondes, un looping, pas de mise en scène superflue."
+      },
       "sources": [
-        "https://www.freizeitpark-welt.de/freizeitparks/disneyland_paris/attraktionen/"
+        "https://en.wikipedia.org/wiki/Indiana_Jones_and_the_Temple_of_Peril",
+        "https://rcdb.com/957.htm",
+        "https://www.chroniquedisney.fr/parc/1993-indiana-jones-temple-peril.htm"
       ]
     },
     {
@@ -2529,15 +2626,14 @@
     {
       "id": "cabane-des-robinson",
       "name": "La Cabane des Robinson",
-      "tagline": "",
+      "tagline": "Trois cent soixante et un mille feuilles posées à la main",
       "park": "dlp",
       "land": "Adventureland",
-      "motif": "mesa",
+      "motif": "treehouse",
       "posterLines": [
         "LA CABANE",
         "DES ROBINSON"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "La Cabane des Robinson"
@@ -2550,47 +2646,91 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · rouverte le 9 septembre 2016"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Visite à pied dans un arbre artificiel",
+        "transport": "Aucun · escaliers en colimaçon",
+        "duration": "Environ 10 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Flux libre",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": false
+        },
+        "extra": {
+          "Hauteur": "21 m selon deux sources, 27 m selon une troisième",
+          "Feuilles artificielles": "361 000",
+          "Fleurs": "19 000",
+          "Racines": "6,5 m au-dessus de l'eau"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'arbre ouvre avec le parc le 12 avril 1992. Il a été entièrement repris lors de la réhabilitation d'Adventure Isle, huit mois de travaux achevés le 9 septembre 2016 : entrée, escaliers, filets, éclairages, accessoires et roue à aubes ont été refaits ou remplacés.",
+      "synopsis": "On monte dans un arbre qui n'en est pas un, par des escaliers qui s'enroulent autour du tronc. Chambres, salon avec orgue, bibliothèque, poste d'observation : une famille naufragée s'est installée là avec les pièces de son navire. En dessous, un réseau de galeries leur sert de cellier.",
+      "secrets": [
+        "L'espèce de l'arbre est une invention : un latin de fantaisie qui signifie à peu près « grand arbre Disney en floraison perpétuelle ».",
+        "Trois cent soixante et un mille feuilles de vinyle ont été peintes et posées une à une, avec dix-neuf mille fleurs.",
+        "Les noix de coco ont été traitées à New York pour les empêcher de pourrir.",
+        "Deux dates fictives sont cachées dans le décor : l'épave est datée du 17 juillet 1805, soit cent cinquante ans jour pour jour avant l'ouverture du premier Disneyland, et la cabane est « achevée » le 16 octobre de la même année.",
+        "Un système hydraulique remonte l'eau depuis la roue à aubes jusqu'aux étages.",
+        "Sous l'arbre, le Ventre de la Terre est un réseau de galeries entre les racines, qui sert de garde-manger et profite de la fraîcheur naturelle. La version de Tokyo n'en a pas.",
+        "La musique jouée à l'orgue de barbarie a été composée pour le film de 1960.",
+        "Les sources divergent sur la hauteur : vingt et un mètres selon deux d'entre elles, vingt-sept selon une troisième.",
+        "La cabane n'est pas accessible en fauteuil : la visite se fait par des escaliers en colimaçon étroits."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Densité de détail remarquable",
+          "Aucune file",
+          "Point de vue sur tout Adventureland"
+        ],
+        "cons": [
+          "Escaliers nombreux et étroits",
+          "Inaccessible en fauteuil"
+        ],
+        "text": "Une attraction qu'on traverse sans y penser et qui mérite qu'on s'arrête. Le Ventre de la Terre, en dessous, est la partie que presque personne ne visite."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://www.chroniquedisney.fr/parc/1992-cabane-robinson.htm",
+        "https://fr.wikipedia.org/wiki/La_Cabane_des_Robinson"
       ]
     },
     {
       "id": "galion-des-pirates",
       "name": "Le Galion des Pirates",
-      "tagline": "",
+      "tagline": "Devenu décor faute de rouvrir",
       "park": "dlp",
       "land": "Adventureland",
-      "motif": "mesa",
+      "motif": "galleon",
       "posterLines": [
         "LE GALION",
         "DES PIRATES"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Pirate Galleon",
@@ -2598,53 +2738,87 @@
         ]
       },
       "localStatus": {
-        "status": null,
+        "status": "closed",
         "until": null,
-        "note": ""
+        "note": "Fermé pour une réhabilitation de longue durée, sans date annoncée."
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · fermé depuis plusieurs années"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering · Imagineer Chris Tietz",
+        "type": "Visite à pied à bord d'un navire",
+        "transport": "Aucun · ponts et coursives",
+        "duration": "Libre",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Inconnue",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": false,
+          "pmr": false
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le galion ouvre avec le parc le 12 avril 1992, amarré au pied du rocher d'Adventure Isle. Il a été repeint et ses voiles nettoyées lors de la réhabilitation de 2016. Depuis, il est fermé par intermittence puis durablement, sans explication officielle ni date de réouverture. La presse spécialisée relevait fin 2025 qu'il était devenu, de fait, un élément de décor.",
+      "synopsis": "Un navire de bois amarré dans une crique, accessible par une passerelle suspendue. À bord, les enfants pouvaient tenir la barre, pointer les canons et circuler entre les ponts. Aujourd'hui on le regarde depuis la rive, surtout au couchant, quand il se découpe sur le rocher.",
+      "secrets": [
+        "Il descend d'un navire-restaurant qui a existé en Californie avant d'être démoli au début des années 1980.",
+        "Il n'a aucun équivalent direct dans les autres parcs Disney.",
+        "Le restaurant qu'il abritait a fermé lors d'une réhabilitation en 2011. Sa terrasse était déjà devenue une aire de jeux en 1999.",
+        "Les hypothèses des visiteurs sur sa fermeture — bois glissant par temps humide — résistent mal : il est resté fermé pendant des mois d'été secs.",
+        "Le rocher au pied duquel il mouille mesure environ douze mètres de haut.",
+        "La plupart des chants de marins qui accompagnaient la zone ont été remplacés après 2017 par des musiques de films."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Silhouette superbe au couchant",
+          "Un des éléments d'origine les mieux conservés"
+        ],
+        "cons": [
+          "Fermé depuis des années",
+          "Aucune communication officielle"
+        ],
+        "text": "Fiche d'archive. Le navire est toujours là, intact et inaccessible : on peut le photographier, pas le visiter."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://julieears.com/attractions/le-galion-des-pirates/",
+        "https://insidethemagic.net/2025/11/disney-shutters-pirates-attraction-cj1/"
       ]
     },
     {
       "id": "pirates-beach",
       "name": "Pirates' Beach",
-      "tagline": "",
+      "tagline": "Un camp d'entraînement, prétexte à chercher un trésor",
       "park": "dlp",
       "land": "Adventureland",
-      "motif": "mesa",
+      "motif": "anchor",
       "posterLines": [
         "PIRATES'",
         "BEACH"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Pirates' Beach",
@@ -2658,33 +2832,70 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1999-12-19",
+          "label": "décembre 1999 (17 ou 19 selon les sources)"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Inconnu",
+        "type": "Aire de jeux",
+        "transport": "Aucun",
+        "duration": "Environ 15 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune · zonage par âge, 3-6 ans et 7-9 ans"
         },
-        "capacity": "À confirmer",
+        "capacity": "Inconnue",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": true
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'aire de jeux ouvre en décembre 1999, à la place de l'extension de terrasse d'un restaurant rapide. Deux de ses tables subsistent près de l'embarcadère. Elle a été nettoyée, repeinte et sa rampe d'accès modifiée pour les fauteuils lors de la réhabilitation de 2016.",
+      "synopsis": "Un ancien camp d'entraînement de pirates, abandonné après un naufrage. Deux zones séparées par un cordage et un grand mât : les plus grands à gauche, passerelles et pont suspendu ; les plus petits à droite, sous une voile, avec rampe et toboggan.",
+      "secrets": [
+        "Le récit maison veut que l'entraînement serve de couverture à la recherche d'un trésor enfoui.",
+        "Des coquillages encastrés dans la roche laissent entendre la mer quand on y colle l'oreille.",
+        "La zone des plus grands est construite en débris d'épave, avec une cloche de bord qui fonctionne et un mât en inox.",
+        "Côté petits, un portrait abîmé est percé d'un trou pour y passer la tête, et les murs portent un boulier à galets et une boussole.",
+        "Au sommet du mât central, une hune porte un filet de boulets de canon qui semble prêt à tomber.",
+        "C'est la troisième aire de jeux ouverte dans le complexe, après deux autres inaugurées en 1996.",
+        "Les sources ne s'accordent pas sur le jour d'ouverture : le 17 ou le 19 décembre 1999."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Deux zones d'âge bien séparées",
+          "Détails de décor soignés pour une aire de jeux",
+          "Aucune attente"
+        ],
+        "cons": [
+          "Espace exigu en forte affluence",
+          "Peu d'ombre"
+        ],
+        "text": "Une aire de jeux traitée comme une attraction, ce qui est rare. Les coquillages dans la roche valent qu'on s'arrête."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://www.chroniquedisney.fr/parc/1999-plagedespirates.htm",
+        "https://d23.com/a-to-z/la-plage-des-pirates/"
       ]
     },
     {
@@ -3471,6 +3682,193 @@
       "review": null,
       "sources": [
         "https://queue-times.com/parks/28/"
+      ]
+    },
+    {
+      "id": "adventure-isle",
+      "name": "Adventure Isle",
+      "tagline": "Deux îlots, deux langues, et des lieux qui n'existent que sur la carte",
+      "park": "dlp",
+      "land": "Adventureland",
+      "motif": "isle",
+      "posterLines": [
+        "ADVENTURE",
+        "ISLE"
+      ],
+      "queueTimes": {
+        "aliases": [
+          "Adventure Isle"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · rouverte le 9 septembre 2016"
+        },
+        "builder": "Walt Disney Imagineering · conception Chris Tietz · étude préparatoire Dan Goozee",
+        "type": "Parcours à pied sur une île artificielle",
+        "transport": "Aucun · ponts et grottes",
+        "duration": "Environ 20 à 30 minutes",
+        "minHeight": {
+          "cm": 0,
+          "label": "Aucune"
+        },
+        "capacity": "Flux libre",
+        "services": {
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": null,
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Îlots": "2",
+          "Ponts principaux": "4",
+          "Hauteur du rocher": "environ 12 m"
+        }
+      },
+      "history": "L'île ouvre avec le parc le 12 avril 1992, d'après un concept remontant à 1987. Elle rouvre le 9 septembre 2016 après huit mois de réhabilitation. Une nouvelle campagne de travaux couvrait la zone d'échafaudages au printemps 2025, et une chasse au trésor permanente y a été ajoutée le 23 août 2025.",
+      "synopsis": "Une île au milieu d'Adventureland, qu'on traverse à pied par quatre ponts. Au nord, les pirates : grottes, crique, rocher. Au sud, les naufragés et leur cabane. Entre les deux, un pont suspendu qui oscille un peu, exprès.",
+      "secrets": [
+        "L'île doit son existence à Big Thunder Mountain : celle-ci ayant pris la place centrale de Frontierland, il a fallu trouver ailleurs un emplacement pour une île à explorer.",
+        "Pour rendre la colline crédible, les Imagineers ont acheté de vrais rochers dans des dépôts partout en France, à la surprise des fournisseurs.",
+        "Les noms de lieux sont en anglais sur l'îlot nord et en français sur l'îlot sud, selon l'origine des personnages qui les occupent.",
+        "Plusieurs lieux de la carte n'existent pas physiquement sur l'île. Le point le plus éloigné reste inaccessible.",
+        "Certains ponts sont conçus pour sembler légèrement instables.",
+        "Les deux lanternes qui servent d'yeux au rocher suivent les passants du regard.",
+        "Le repaire souterrain porte le nom d'un personnage apparu bien plus tard au cinéma : la version de l'île est antérieure au film.",
+        "Un canot caché entre la cabane et le restaurant voisin fait référence à un film de 1952, avec deux passagers venus d'un tout autre dessin animé.",
+        "Les fontaines semblent alimentées par l'eau de la cabane, alors qu'elles tournent en circuit fermé.",
+        "La chasse au trésor de 2025 porte sur huit objets, dont un trousseau de clés qu'un chien aurait égaré."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
+      "images": [],
+      "review": {
+        "pros": [
+          "Exploration libre, sans file",
+          "Densité de détail rare pour une zone de passage",
+          "Gratuit en temps comme en attente"
+        ],
+        "cons": [
+          "Plusieurs grottes et ponts régulièrement fermés",
+          "Accessibilité partielle seulement"
+        ],
+        "text": "La zone la plus sous-estimée du parc. On la traverse en deux minutes ou on l'explore une demi-heure, et la différence tient à ce qu'on sait y chercher."
+      },
+      "sources": [
+        "https://www.chroniquedisney.fr/parc/1992-dlpadventure.htm",
+        "https://en.wikipedia.org/wiki/Adventure_Isle_(Disneyland_Paris)"
+      ]
+    },
+    {
+      "id": "passage-aladdin",
+      "name": "Le Passage Enchanté d'Aladdin",
+      "tagline": "Neuf vitrines, et un raccourci climatisé",
+      "park": "dlp",
+      "land": "Adventureland",
+      "motif": "lamp",
+      "posterLines": [
+        "LE PASSAGE",
+        "ENCHANTÉ"
+      ],
+      "queueTimes": {
+        "aliases": [
+          "Le Passage Enchanté d'Aladdin"
+        ]
+      },
+      "localStatus": {
+        "status": null,
+        "until": null,
+        "note": ""
+      },
+      "fiche": {
+        "opening": {
+          "iso": "1993-12-09",
+          "label": "9 décembre 1993"
+        },
+        "builder": "Walt Disney Imagineering",
+        "type": "Parcours scénique à pied, en vitrines",
+        "transport": "Aucun · de plain-pied",
+        "duration": "Environ 3 à 10 minutes selon le rythme",
+        "minHeight": {
+          "cm": 0,
+          "label": "Aucune"
+        },
+        "capacity": "Flux libre",
+        "services": {
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": null,
+          "pmr": true
+        }
+      },
+      "history": "L'attraction ouvre le 9 décembre 1993, pendant une période financièrement difficile pour Euro Disney. Elle fait partie des parcours à pied peu coûteux ouverts cette année-là pour étoffer l'offre, installée dans un bâtiment existant sans construction neuve. Elle ferme chaque janvier pour son entretien annuel.",
+      "synopsis": "Un couloir du bazar, bordé de neuf vitrines-dioramas qui racontent le conte dans l'ordre, de la poursuite dans les ruelles jusqu'au départ sur le tapis. Le parcours est de plain-pied, à l'abri, et traverse le bâtiment de part en part.",
+      "secrets": [
+        "Elle a pris la place d'un passage aux vitrines d'or et de bijoux, où un personnage apparaissait parfois.",
+        "Les neuf vitrines déroulent le récit dans l'ordre chronologique, ce qui est rare pour ce type de parcours.",
+        "Aucune justification scénaristique n'est donnée à leur présence dans un bazar : rien n'explique qui les aurait fabriquées.",
+        "Elle sert surtout de raccourci couvert et climatisé entre deux zones, et les équipes la recommandent les jours de pluie ou de forte chaleur.",
+        "La lampe est visible au fond de la gorge du tigre, dans la vitrine de la caverne.",
+        "Des personnages peints saluent les visiteurs à l'entrée et à la sortie.",
+        "Les dômes du bazar portent des girouettes en forme de personnages du recueil des Mille et Une Nuits.",
+        "Les sources divergent sur la durée, donnée entre trois et dix minutes, et une source ne compte que six vitrines au lieu de neuf."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
+      "images": [],
+      "review": {
+        "pros": [
+          "Jamais de file",
+          "À l'abri et climatisé",
+          "Vitrines très détaillées"
+        ],
+        "cons": [
+          "Très court",
+          "Souvent traversé sans être regardé"
+        ],
+        "text": "Moins une attraction qu'un couloir qu'on a décoré avec soin. À faire au moment où la chaleur tombe sur Adventureland."
+      },
+      "sources": [
+        "https://d23.com/a-to-z/le-passage-enchante-daladdin/",
+        "https://www.chroniquedisney.fr/parc/1993-passagealaddin.htm"
       ]
     }
   ]
