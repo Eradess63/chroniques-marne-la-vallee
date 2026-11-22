@@ -7026,17 +7026,21 @@ function montrerVue(vue) {
   const liste = $('#vue-liste'), fiche = $('#fiche');
   if (vue === 'fiche' && fiche.hidden) defilementListe = window.scrollY;
 
+  const versFiche = vue === 'fiche';
+  const cible = versFiche ? 0 : defilementListe;
   const bascule = () => {
-    const versFiche = vue === 'fiche';
     liste.hidden = versFiche;
     fiche.hidden = !versFiche;
     document.body.classList.toggle('vue-fiche', versFiche);
-    window.scrollTo({ top: versFiche ? 0 : defilementListe, behavior: 'instant' });
+    window.scrollTo({ top: cible, behavior: 'instant' });
   };
 
   // Transition native là où le navigateur la propose, bascule nette ailleurs.
   if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.startViewTransition(bascule);
+    const t = document.startViewTransition(bascule);
+    // Le navigateur repositionne parfois la page après la bascule : on repasse
+    // derrière lui une fois la transition jouée.
+    t.updateCallbackDone.then(() => window.scrollTo({ top: cible, behavior: 'instant' })).catch(() => {});
   } else {
     bascule();
   }
@@ -7189,6 +7193,10 @@ async function init() {
     $('#grid').innerHTML = `<p class="empty">Impossible de charger les attractions (${esc(err.message)}). Servez le site via un serveur web local plutôt qu'en ouvrant le fichier directement.</p>`;
     return;
   }
+  // Sans cela le navigateur restaure lui-même une position qui n'est plus la
+  // bonne, puisque la liste et la fiche partagent la même page.
+  try { history.scrollRestoration = 'manual'; } catch {}
+
   renderFilters();
   bindEvents();
   // rendu immédiat (statuts « Chargement… »), puis mise à jour en direct sans bloquer l'affichage
