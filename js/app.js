@@ -171,7 +171,7 @@ function attenteHTML(st, grand) {
 
   return `<div class="attente${grand ? ' attente--grand' : ''} ribbon--${st.kind}">
     ${corps}${echelle}
-    ${grand ? '' : `<span class="attente__legende">${w !== null ? "d'attente" : esc(st.label)}</span>`}
+    ${!grand && w !== null ? `<span class="attente__legende">d'attente</span>` : ''}
   </div>`;
 }
 
