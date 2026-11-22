@@ -2,13 +2,25 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- Installation sur l'écran d'accueil iOS : plein écran, barre d'état fondue
+     dans le bandeau, icône en laiton. Les deux balises « capable » coexistent
+     parce qu'iOS lit encore la variante Apple. -->
+<meta name="theme-color" content="#1C0F0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chroniques">
+<link rel="manifest" href="app/manifeste.webmanifest">
+<link rel="apple-touch-icon" href="app/icone-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="app/icone-192.png">
 <title>Chroniques de Marne-la-Vallée</title>
 <meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202611221843">
+<link rel="stylesheet" href="css/style.css?v=202611221851">
 </head>
 <body>
 
@@ -42,7 +54,12 @@
         <span class="filter-label" id="lbl-state">État</span>
         <div class="seg" id="filter-state"></div>
       </div>
+      <div class="filter-group" role="group" aria-labelledby="lbl-parcours">
+        <span class="filter-label" id="lbl-parcours">Carnet</span>
+        <div class="seg" id="filter-parcours"></div>
+      </div>
     </div>
+    <p class="bilan" id="parcours-bilan" hidden></p>
     <div class="filter-group" role="group" aria-labelledby="lbl-land">
       <span class="filter-label" id="lbl-land">Land</span>
       <div class="chips" id="filter-land"></div>
@@ -62,6 +79,13 @@
 <dialog id="fiche" class="fiche" aria-labelledby="fiche-title"></dialog>
 <dialog id="lightbox" class="lightbox" aria-label="Galerie"></dialog>
 
-<script type="module" src="js/app.js?v=202611221843"></script>
+<script type="module" src="js/app.js?v=202611221851"></script>
+<script>
+  /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
+     ouvert depuis un fichier local, le site fonctionne sans lui. */
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+</script>
 </body>
 </html>

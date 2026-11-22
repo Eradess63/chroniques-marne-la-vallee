@@ -2,7 +2,19 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- Installation sur l'écran d'accueil iOS : plein écran, barre d'état fondue
+     dans le bandeau, icône en laiton. Les deux balises « capable » coexistent
+     parce qu'iOS lit encore la variante Apple. -->
+<meta name="theme-color" content="#1C0F0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chroniques">
+<link rel="manifest" href="app/manifeste.webmanifest">
+<link rel="apple-touch-icon" href="app/icone-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="app/icone-192.png">
 <title>Chroniques de Marne-la-Vallée</title>
 <meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -472,6 +484,82 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 .lightbox__img .illu { max-height: min(74vh, 620px); }
 .lightbox__img .illu svg { height: auto; }
 
+/* ===========================================================================
+   Installée sur l'écran d'accueil
+   En plein écran, iOS ne réserve plus la place de la barre d'état ni celle de
+   la barre d'accueil : le contenu passerait sous l'encoche et sous le trait du
+   bas. Les marges sûres règlent les deux.
+   =========================================================================== */
+
+@supports (padding: env(safe-area-inset-top)) {
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  .fiche, .lightbox { padding-top: max(env(safe-area-inset-top), 18px); padding-bottom: max(env(safe-area-inset-bottom), 18px); }
+}
+
+/* En mode autonome, le tapotement ne doit ni surligner ni sélectionner. */
+@media (display-mode: standalone) {
+  body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+  .card__btn, .chip, .thumb { -webkit-touch-callout: none; }
+}
+
+/* ===========================================================================
+   Mon parcours
+   L'épingle se pose sur le visuel, sans ouvrir la fiche. Une attraction faite
+   garde sa place dans la grille mais s'efface un peu : on veut voir ce qui
+   reste, pas perdre ce qu'on a fait.
+   =========================================================================== */
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.card { position: relative; }
+.epingle {
+  position: absolute; z-index: 3; top: 18px; right: 18px;
+  display: grid; place-items: center; width: 36px; height: 36px; padding: 0;
+  border: 1px solid var(--cuivre); border-radius: 50%; cursor: pointer;
+  background: rgba(25, 13, 7, .82); color: var(--encre-faible);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+  transition: color .2s, border-color .2s, transform .15s, background .2s;
+}
+.epingle svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; }
+.epingle:hover, .epingle:focus-visible { color: var(--laiton-clair); border-color: var(--laiton); transform: scale(1.08); }
+.epingle--on { color: var(--laiton-clair); border-color: var(--laiton); background: rgba(200, 153, 63, .22); }
+.epingle--on svg { fill: currentColor; }
+
+/* Dans la fiche l'épingle rejoint la ligne des boutons, sans se superposer. */
+.epingle--plat { position: static; width: 38px; height: 38px; }
+
+.card__fait {
+  position: absolute; z-index: 3; top: 20px; left: 20px;
+  padding: 3px 10px; border: 1px solid var(--vert-cadran); border-radius: 2px;
+  background: rgba(25, 13, 7, .85); color: var(--vert-cadran);
+  font-family: var(--font-plaque); font-size: .52rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+}
+.card--fait .card__art { opacity: .62; }
+.card--fait .card__btn { color: var(--encre-faible); }
+
+.carnet { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.btn-carnet {
+  padding: 10px 18px; cursor: pointer;
+  border: 1px solid var(--cuivre); border-radius: 3px;
+  background: linear-gradient(180deg, rgba(200, 153, 63, .1), rgba(0, 0, 0, .25));
+  color: var(--laiton-clair);
+  font-family: var(--font-plaque); font-size: .6rem; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.btn-carnet:hover, .btn-carnet:focus-visible { border-color: var(--laiton); background: rgba(200, 153, 63, .2); }
+.btn-carnet--on { color: var(--vert-cadran); border-color: var(--vert-cadran); background: rgba(111, 168, 122, .14); }
+
+.bilan { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: 16px 0 0;
+  font-size: .82rem; color: var(--encre-faible); }
+.bilan b { color: var(--laiton-clair); font-family: var(--font-display); font-size: 1.05rem; font-weight: 900; }
+.bilan__vider { padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--font-plaque); font-size: .56rem; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--encre-faible); text-decoration: underline;
+  text-underline-offset: 4px; text-decoration-color: var(--cuivre); }
+.bilan__vider:hover { color: var(--rouge-cadran); }
+
 </style>
 </head>
 <body>
@@ -506,7 +594,12 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
         <span class="filter-label" id="lbl-state">État</span>
         <div class="seg" id="filter-state"></div>
       </div>
+      <div class="filter-group" role="group" aria-labelledby="lbl-parcours">
+        <span class="filter-label" id="lbl-parcours">Carnet</span>
+        <div class="seg" id="filter-parcours"></div>
+      </div>
     </div>
+    <p class="bilan" id="parcours-bilan" hidden></p>
     <div class="filter-group" role="group" aria-labelledby="lbl-land">
       <span class="filter-label" id="lbl-land">Land</span>
       <div class="chips" id="filter-land"></div>
@@ -6324,7 +6417,64 @@ function addReview(id, review) {
   }
 }
 
+/**
+ * Mon parcours : les attractions épinglées et celles déjà faites.
+ *
+ * Tout tient dans le navigateur. Rien n'est envoyé nulle part, et rien n'est
+ * partagé entre deux appareils : c'est le carnet de celui qui est dans le parc,
+ * pas un compte. Le stockage local peut être refusé (navigation privée, réglage
+ * strict) — dans ce cas on garde tout en mémoire pour la durée de la visite
+ * plutôt que de planter.
+ */
+
+const CLE = 'chroniques:parcours';
+let memoire = null;
+
+function lire() {
+  if (memoire) return memoire;
+  memoire = { epingles: [], faits: [] };
+  try {
+    const brut = localStorage.getItem(CLE);
+    if (brut) {
+      const o = JSON.parse(brut);
+      if (Array.isArray(o.epingles)) memoire.epingles = o.epingles;
+      if (Array.isArray(o.faits)) memoire.faits = o.faits;
+    }
+  } catch { /* stockage indisponible : la mémoire suffira */ }
+  return memoire;
+}
+
+function ecrire() {
+  try { localStorage.setItem(CLE, JSON.stringify(memoire)); } catch { /* idem */ }
+}
+
+function bascule(liste, id) {
+  const i = liste.indexOf(id);
+  if (i === -1) liste.push(id); else liste.splice(i, 1);
+  ecrire();
+  return i === -1;
+}
+
+const estEpingle = (id) => lire().epingles.includes(id);
+const estFait = (id) => lire().faits.includes(id);
+const basculeEpingle = (id) => bascule(lire().epingles, id);
+const basculeFait = (id) => bascule(lire().faits, id);
+const epingles = () => [...lire().epingles];
+
+/** Combien d'épinglées, et combien déjà faites parmi elles. */
+function bilan() {
+  const p = lire();
+  return { epingles: p.epingles.length, faits: p.epingles.filter((id) => p.faits.includes(id)).length };
+}
+
+/** Vide le carnet — proposé seulement depuis le bandeau du parcours. */
+function videParcours() {
+  memoire = { epingles: [], faits: [] };
+  ecrire();
+}
+
 /** Point d'entrée : données, filtres, grille, fiche détaillée, galerie, avis. */
+
 
 
 
@@ -6342,7 +6492,7 @@ const state = {
   updatedAt: null,
   failures: [],
   age: null,
-  filters: { park: 'all', land: 'all', state: 'all', q: '' },
+  filters: { park: 'all', land: 'all', state: 'all', parcours: 'all', q: '' },
   openId: null
 };
 
@@ -6350,6 +6500,12 @@ const STATE_OPTIONS = [
   { id: 'all', label: 'Toutes' },
   { id: 'open', label: 'Ouvertes' },
   { id: 'closed', label: 'Fermées / En rénovation' }
+];
+
+const PARCOURS_OPTIONS = [
+  { id: 'all', label: 'Toutes' },
+  { id: 'epingles', label: 'Mon parcours' },
+  { id: 'reste', label: 'Reste à faire' }
 ];
 
 /* ---------- Utilitaires ---------- */
@@ -6376,6 +6532,8 @@ function matches(a) {
   const kind = statusOf(a).kind;
   if (f.state === 'open' && kind !== 'open') return false;
   if (f.state === 'closed' && kind !== 'closed' && kind !== 'refurb') return false;
+  if (f.parcours === 'epingles' && !estEpingle(a.id)) return false;
+  if (f.parcours === 'reste' && (!estEpingle(a.id) || estFait(a.id))) return false;
   if (f.q && !fold(a.name).includes(fold(f.q)) && !fold(a.tagline).includes(fold(f.q))) return false;
   return true;
 }
@@ -6415,9 +6573,37 @@ function renderFilters() {
   if (f.land !== 'all' && !lands.includes(f.land)) f.land = 'all';
   $('#filter-land').innerHTML = chip('land', 'all', 'Tous', f.land === 'all') + lands.map((l) => chip('land', l, l, f.land === l)).join('');
   $('#filter-state').innerHTML = STATE_OPTIONS.map((o) => chip('state', o.id, o.label, f.state === o.id, 'seg__btn')).join('');
+  $('#filter-parcours').innerHTML = PARCOURS_OPTIONS.map((o) => chip('parcours', o.id, o.label, f.parcours === o.id, 'seg__btn')).join('');
+  renderBilan();
+}
+
+/** Le compteur du carnet, affiché seulement quand il y a quelque chose dedans. */
+function renderBilan() {
+  const el = $('#parcours-bilan');
+  if (!el) return;
+  const b = bilan();
+  el.hidden = b.epingles === 0;
+  if (b.epingles === 0) return;
+  el.innerHTML = `<span class="bilan__texte"><b>${b.faits}</b> sur <b>${b.epingles}</b> attraction${b.epingles > 1 ? 's' : ''} épinglée${b.epingles > 1 ? 's' : ''} ${b.faits > 1 ? 'faites' : 'faite'}</span>
+    <button type="button" class="bilan__vider" data-vider-parcours>Vider le carnet</button>`;
 }
 
 /* ---------- Grille ---------- */
+
+/** L'épingle, posée sur le visuel. Un seul geste, visible sans ouvrir la fiche. */
+function epinglerBtn(a, epingle) {
+  return `<button type="button" class="epingle${epingle ? ' epingle--on' : ''}" data-epingler="${esc(a.id)}"
+    aria-pressed="${epingle}" title="${epingle ? 'Retirer de mon parcours' : 'Ajouter à mon parcours'}">
+    <span class="sr-only">${epingle ? 'Retirer' : 'Ajouter'} ${esc(a.name)} ${epingle ? 'de' : 'à'} mon parcours</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.5l6-.8z"/></svg>
+  </button>`;
+}
+
+function faitBtn(a) {
+  const fait = estFait(a.id);
+  return `<button type="button" class="btn-carnet${fait ? ' btn-carnet--on' : ''}" data-fait="${esc(a.id)}" aria-pressed="${fait}">
+    ${fait ? '✓ Déjà faite' : 'Marquer comme faite'}</button>`;
+}
 function ribbonHTML(st) {
   const files = [];
   if (typeof st.singleRider === 'number') files.push(`<span class="file file--sr">SR<b>${st.singleRider}<small>min</small></b></span>`);
@@ -6438,8 +6624,11 @@ function renderGrid() {
   $('#grid').innerHTML = list.length
     ? list.map((a, i) => {
         const st = statusOf(a);
-        return `<article class="card" style="--i:${i}" data-etat="${st.kind}">
+        const epingle = estEpingle(a.id), fait = estFait(a.id);
+        return `<article class="card${fait ? ' card--fait' : ''}" style="--i:${i}" data-etat="${st.kind}">
           <div class="card__art${st.kind === 'closed' || st.kind === 'refurb' ? ' card__art--fanee' : ''}" aria-hidden="true">${visuel(a)}</div>
+          ${epinglerBtn(a, epingle)}
+          ${fait ? '<span class="card__fait" aria-hidden="true">Fait</span>' : ''}
           <div class="card__body">
             <h2 class="card__title"><button type="button" class="card__btn" data-open="${esc(a.id)}">${esc(a.name)}</button></h2>
             <p class="card__park">${esc(parkName(a.park))}</p>
@@ -6672,6 +6861,8 @@ function openFiche(id) {
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>
         <p class="fiche__tagline">${esc(a.tagline)}</p>
         <div id="fiche-live">${liveBlock(a)}</div>
+        <div class="carnet">${epinglerBtn(a, estEpingle(a.id))
+          .replace('class="epingle', 'class="epingle epingle--plat')}${faitBtn(a)}</div>
         <p class="live__meta" id="fiche-meta"></p>
       </div>
     </div>
@@ -6767,6 +6958,14 @@ function showLightbox(id, index) {
   if (!box.open) box.showModal();
 }
 
+/** La fiche ouverte doit refléter le carnet sans être reconstruite entièrement. */
+function rafraichirCarnetFiche() {
+  const a = state.attractions.find((x) => x.id === state.openId);
+  const zone = $('#fiche .carnet');
+  if (!a || !zone) return;
+  zone.innerHTML = epinglerBtn(a, estEpingle(a.id)).replace('class="epingle', 'class="epingle epingle--plat') + faitBtn(a);
+}
+
 /* ---------- Événements ---------- */
 function bindEvents() {
   document.addEventListener('click', (e) => {
@@ -6778,6 +6977,11 @@ function bindEvents() {
       renderGrid();
       return;
     }
+    const ep = t.closest('[data-epingler]');
+    if (ep) { basculeEpingle(ep.dataset.epingler); renderFilters(); renderGrid(); if (state.openId) rafraichirCarnetFiche(); return; }
+    const fa = t.closest('[data-fait]');
+    if (fa) { basculeFait(fa.dataset.fait); renderFilters(); renderGrid(); rafraichirCarnetFiche(); return; }
+    if (t.closest('[data-vider-parcours]')) { videParcours(); renderFilters(); renderGrid(); return; }
     const card = t.closest('[data-open]');
     if (card) return openFiche(card.dataset.open);
     if (t.closest('#refresh')) return refreshLive();
@@ -6872,6 +7076,13 @@ async function init() {
 init();
 
 })();
+</script>
+<script>
+  /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
+     ouvert depuis un fichier local, le site fonctionne sans lui. */
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
 </script>
 </body>
 </html>

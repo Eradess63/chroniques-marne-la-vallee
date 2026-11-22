@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Icône de l'app : un cadran d'instrument en laiton sur fond d'acajou,
+       sans lettre ni texte, pour rester lisible à 60 pixels. -->
+  <defs>
+    <linearGradient id="bois" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3A2214"/><stop offset="1" stop-color="#190D07"/>
+    </linearGradient>
+    <linearGradient id="laiton" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F0D9A0"/><stop offset=".45" stop-color="#C8993F"/>
+      <stop offset=".7" stop-color="#9A5F2E"/><stop offset="1" stop-color="#E6C77E"/>
+    </linearGradient>
+    <radialGradient id="verre" cx=".38" cy=".3" r=".8">
+      <stop offset="0" stop-color="#24322C"/><stop offset="1" stop-color="#0E1512"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bois)"/>
+  <g opacity=".16">
+    <path d="M28 0v512M84 0v512M140 0v512M196 0v512M252 0v512M308 0v512M364 0v512M420 0v512M476 0v512"
+          stroke="#C8993F" stroke-width="2"/>
+  </g>
+
+  <circle cx="256" cy="256" r="196" fill="url(#laiton)"/>
+  <circle cx="256" cy="256" r="196" fill="none" stroke="#5E3A18" stroke-width="5"/>
+  <circle cx="256" cy="256" r="160" fill="url(#verre)"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#E6C77E" stroke-width="3" opacity=".65"/>
+
+  <!-- Rivets du cerclage -->
+  <g fill="#F0D9A0" stroke="#5E3A18" stroke-width="2.5">
+    <circle cx="256" cy="78" r="13"/><circle cx="434" cy="256" r="13"/>
+    <circle cx="256" cy="434" r="13"/><circle cx="78" cy="256" r="13"/>
+  </g>
+
+  <!-- Graduations du cadran, par quarts d'heure sur une demi-course -->
+  <g stroke="#E6C77E" stroke-linecap="round">
+    <path d="M136 256 L166 256" stroke-width="9"/>
+    <path d="M161 180 L186 198" stroke-width="5" opacity=".7"/>
+    <path d="M213 136 L224 165" stroke-width="9"/>
+    <path d="M299 136 L288 165" stroke-width="5" opacity=".7"/>
+    <path d="M351 180 L326 198" stroke-width="9"/>
+    <path d="M376 256 L346 256" stroke-width="5" opacity=".7"/>
+  </g>
+
+  <!-- Éclat sur le verre -->
+  <path d="M136 220 Q196 120 320 112 Q210 164 168 262Z" fill="#E6C77E" opacity=".12"/>
+
+  <!-- Aiguille -->
+  <path d="M249 268 L256 124 L263 268Z" fill="#6FA87A"/>
+  <circle cx="256" cy="268" r="26" fill="url(#laiton)" stroke="#5E3A18" stroke-width="4"/>
+  <circle cx="256" cy="268" r="10" fill="#190D07"/>
+</svg>

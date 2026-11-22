@@ -33,7 +33,7 @@ def mod(name):
     return s
 
 
-js = '\n'.join(mod(n) for n in ['config.js', 'api.js', 'posters.js', 'reviews.js', 'app.js'])
+js = '\n'.join(mod(n) for n in ['config.js', 'api.js', 'posters.js', 'reviews.js', 'parcours.js', 'app.js'])
 css = (root / 'css' / 'style.css').read_text(encoding='utf-8')
 data = (root / 'data' / 'attractions.json').read_text(encoding='utf-8').replace('</', '<\\/')
 
@@ -62,7 +62,23 @@ html = re.sub(r'<script type="module" src="js/app\.js(?:\?v=\d+)?"></script>',
 
 assert '<style>' in html and 'app-data' in html, 'le repli a manqué sa cible'
 
+# --- Le service worker porte le marqueur comme clé de cache ---------------
+# Changer ce nom suffit à périmer tout ce qu'un visiteur avait gardé en local,
+# sans quoi une installation sur l'écran d'accueil servirait l'ancienne version
+# indéfiniment.
+import shutil
+sw = (root / 'sw.js').read_text(encoding='utf-8')
+sw_date = re.sub(r"const VERSION = '[^']*';", f"const VERSION = '{marque}';", sw, count=1)
+if sw_date != sw:
+    (root / 'sw.js').write_text(sw_date, encoding='utf-8')
+
 (root / 'dist').mkdir(exist_ok=True)
+
+# Le fichier unique n'est unique que pour la page : le service worker, le
+# manifeste et les icônes doivent rester des fichiers à part, c'est ainsi
+# qu'iOS les réclame.
+(root / 'dist' / 'sw.js').write_text(sw_date, encoding='utf-8')
+shutil.copytree(root / 'app', root / 'dist' / 'app', dirs_exist_ok=True)
 (root / 'dist' / 'index.html').write_text(html, encoding='utf-8')
 (root / '.check').mkdir(exist_ok=True)
 (root / '.check' / 'bundle.js').write_text('(function(){\n' + js + '\n})();', encoding='utf-8')

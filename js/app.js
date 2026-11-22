@@ -3,6 +3,7 @@ import { CONFIG } from './config.js';
 import { loadWaitTimes } from './api.js';
 import { posterSVG } from './posters.js';
 import { loadReviews, addReview } from './reviews.js';
+import { estEpingle, estFait, basculeEpingle, basculeFait, bilan, videParcours } from './parcours.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -17,7 +18,7 @@ const state = {
   updatedAt: null,
   failures: [],
   age: null,
-  filters: { park: 'all', land: 'all', state: 'all', q: '' },
+  filters: { park: 'all', land: 'all', state: 'all', parcours: 'all', q: '' },
   openId: null
 };
 
@@ -25,6 +26,12 @@ const STATE_OPTIONS = [
   { id: 'all', label: 'Toutes' },
   { id: 'open', label: 'Ouvertes' },
   { id: 'closed', label: 'Fermées / En rénovation' }
+];
+
+const PARCOURS_OPTIONS = [
+  { id: 'all', label: 'Toutes' },
+  { id: 'epingles', label: 'Mon parcours' },
+  { id: 'reste', label: 'Reste à faire' }
 ];
 
 /* ---------- Utilitaires ---------- */
@@ -51,6 +58,8 @@ function matches(a) {
   const kind = statusOf(a).kind;
   if (f.state === 'open' && kind !== 'open') return false;
   if (f.state === 'closed' && kind !== 'closed' && kind !== 'refurb') return false;
+  if (f.parcours === 'epingles' && !estEpingle(a.id)) return false;
+  if (f.parcours === 'reste' && (!estEpingle(a.id) || estFait(a.id))) return false;
   if (f.q && !fold(a.name).includes(fold(f.q)) && !fold(a.tagline).includes(fold(f.q))) return false;
   return true;
 }
@@ -90,9 +99,37 @@ function renderFilters() {
   if (f.land !== 'all' && !lands.includes(f.land)) f.land = 'all';
   $('#filter-land').innerHTML = chip('land', 'all', 'Tous', f.land === 'all') + lands.map((l) => chip('land', l, l, f.land === l)).join('');
   $('#filter-state').innerHTML = STATE_OPTIONS.map((o) => chip('state', o.id, o.label, f.state === o.id, 'seg__btn')).join('');
+  $('#filter-parcours').innerHTML = PARCOURS_OPTIONS.map((o) => chip('parcours', o.id, o.label, f.parcours === o.id, 'seg__btn')).join('');
+  renderBilan();
+}
+
+/** Le compteur du carnet, affiché seulement quand il y a quelque chose dedans. */
+function renderBilan() {
+  const el = $('#parcours-bilan');
+  if (!el) return;
+  const b = bilan();
+  el.hidden = b.epingles === 0;
+  if (b.epingles === 0) return;
+  el.innerHTML = `<span class="bilan__texte"><b>${b.faits}</b> sur <b>${b.epingles}</b> attraction${b.epingles > 1 ? 's' : ''} épinglée${b.epingles > 1 ? 's' : ''} ${b.faits > 1 ? 'faites' : 'faite'}</span>
+    <button type="button" class="bilan__vider" data-vider-parcours>Vider le carnet</button>`;
 }
 
 /* ---------- Grille ---------- */
+
+/** L'épingle, posée sur le visuel. Un seul geste, visible sans ouvrir la fiche. */
+function epinglerBtn(a, epingle) {
+  return `<button type="button" class="epingle${epingle ? ' epingle--on' : ''}" data-epingler="${esc(a.id)}"
+    aria-pressed="${epingle}" title="${epingle ? 'Retirer de mon parcours' : 'Ajouter à mon parcours'}">
+    <span class="sr-only">${epingle ? 'Retirer' : 'Ajouter'} ${esc(a.name)} ${epingle ? 'de' : 'à'} mon parcours</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.5l6-.8z"/></svg>
+  </button>`;
+}
+
+function faitBtn(a) {
+  const fait = estFait(a.id);
+  return `<button type="button" class="btn-carnet${fait ? ' btn-carnet--on' : ''}" data-fait="${esc(a.id)}" aria-pressed="${fait}">
+    ${fait ? '✓ Déjà faite' : 'Marquer comme faite'}</button>`;
+}
 function ribbonHTML(st) {
   const files = [];
   if (typeof st.singleRider === 'number') files.push(`<span class="file file--sr">SR<b>${st.singleRider}<small>min</small></b></span>`);
@@ -113,8 +150,11 @@ function renderGrid() {
   $('#grid').innerHTML = list.length
     ? list.map((a, i) => {
         const st = statusOf(a);
-        return `<article class="card" style="--i:${i}" data-etat="${st.kind}">
+        const epingle = estEpingle(a.id), fait = estFait(a.id);
+        return `<article class="card${fait ? ' card--fait' : ''}" style="--i:${i}" data-etat="${st.kind}">
           <div class="card__art${st.kind === 'closed' || st.kind === 'refurb' ? ' card__art--fanee' : ''}" aria-hidden="true">${visuel(a)}</div>
+          ${epinglerBtn(a, epingle)}
+          ${fait ? '<span class="card__fait" aria-hidden="true">Fait</span>' : ''}
           <div class="card__body">
             <h2 class="card__title"><button type="button" class="card__btn" data-open="${esc(a.id)}">${esc(a.name)}</button></h2>
             <p class="card__park">${esc(parkName(a.park))}</p>
@@ -347,6 +387,8 @@ function openFiche(id) {
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>
         <p class="fiche__tagline">${esc(a.tagline)}</p>
         <div id="fiche-live">${liveBlock(a)}</div>
+        <div class="carnet">${epinglerBtn(a, estEpingle(a.id))
+          .replace('class="epingle', 'class="epingle epingle--plat')}${faitBtn(a)}</div>
         <p class="live__meta" id="fiche-meta"></p>
       </div>
     </div>
@@ -442,6 +484,14 @@ function showLightbox(id, index) {
   if (!box.open) box.showModal();
 }
 
+/** La fiche ouverte doit refléter le carnet sans être reconstruite entièrement. */
+function rafraichirCarnetFiche() {
+  const a = state.attractions.find((x) => x.id === state.openId);
+  const zone = $('#fiche .carnet');
+  if (!a || !zone) return;
+  zone.innerHTML = epinglerBtn(a, estEpingle(a.id)).replace('class="epingle', 'class="epingle epingle--plat') + faitBtn(a);
+}
+
 /* ---------- Événements ---------- */
 function bindEvents() {
   document.addEventListener('click', (e) => {
@@ -453,6 +503,11 @@ function bindEvents() {
       renderGrid();
       return;
     }
+    const ep = t.closest('[data-epingler]');
+    if (ep) { basculeEpingle(ep.dataset.epingler); renderFilters(); renderGrid(); if (state.openId) rafraichirCarnetFiche(); return; }
+    const fa = t.closest('[data-fait]');
+    if (fa) { basculeFait(fa.dataset.fait); renderFilters(); renderGrid(); rafraichirCarnetFiche(); return; }
+    if (t.closest('[data-vider-parcours]')) { videParcours(); renderFilters(); renderGrid(); return; }
     const card = t.closest('[data-open]');
     if (card) return openFiche(card.dataset.open);
     if (t.closest('#refresh')) return refreshLive();

@@ -460,3 +460,79 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 
 .lightbox__img .illu { max-height: min(74vh, 620px); }
 .lightbox__img .illu svg { height: auto; }
+
+/* ===========================================================================
+   Installée sur l'écran d'accueil
+   En plein écran, iOS ne réserve plus la place de la barre d'état ni celle de
+   la barre d'accueil : le contenu passerait sous l'encoche et sous le trait du
+   bas. Les marges sûres règlent les deux.
+   =========================================================================== */
+
+@supports (padding: env(safe-area-inset-top)) {
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  .fiche, .lightbox { padding-top: max(env(safe-area-inset-top), 18px); padding-bottom: max(env(safe-area-inset-bottom), 18px); }
+}
+
+/* En mode autonome, le tapotement ne doit ni surligner ni sélectionner. */
+@media (display-mode: standalone) {
+  body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+  .card__btn, .chip, .thumb { -webkit-touch-callout: none; }
+}
+
+/* ===========================================================================
+   Mon parcours
+   L'épingle se pose sur le visuel, sans ouvrir la fiche. Une attraction faite
+   garde sa place dans la grille mais s'efface un peu : on veut voir ce qui
+   reste, pas perdre ce qu'on a fait.
+   =========================================================================== */
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.card { position: relative; }
+.epingle {
+  position: absolute; z-index: 3; top: 18px; right: 18px;
+  display: grid; place-items: center; width: 36px; height: 36px; padding: 0;
+  border: 1px solid var(--cuivre); border-radius: 50%; cursor: pointer;
+  background: rgba(25, 13, 7, .82); color: var(--encre-faible);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+  transition: color .2s, border-color .2s, transform .15s, background .2s;
+}
+.epingle svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; }
+.epingle:hover, .epingle:focus-visible { color: var(--laiton-clair); border-color: var(--laiton); transform: scale(1.08); }
+.epingle--on { color: var(--laiton-clair); border-color: var(--laiton); background: rgba(200, 153, 63, .22); }
+.epingle--on svg { fill: currentColor; }
+
+/* Dans la fiche l'épingle rejoint la ligne des boutons, sans se superposer. */
+.epingle--plat { position: static; width: 38px; height: 38px; }
+
+.card__fait {
+  position: absolute; z-index: 3; top: 20px; left: 20px;
+  padding: 3px 10px; border: 1px solid var(--vert-cadran); border-radius: 2px;
+  background: rgba(25, 13, 7, .85); color: var(--vert-cadran);
+  font-family: var(--font-plaque); font-size: .52rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+}
+.card--fait .card__art { opacity: .62; }
+.card--fait .card__btn { color: var(--encre-faible); }
+
+.carnet { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.btn-carnet {
+  padding: 10px 18px; cursor: pointer;
+  border: 1px solid var(--cuivre); border-radius: 3px;
+  background: linear-gradient(180deg, rgba(200, 153, 63, .1), rgba(0, 0, 0, .25));
+  color: var(--laiton-clair);
+  font-family: var(--font-plaque); font-size: .6rem; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.btn-carnet:hover, .btn-carnet:focus-visible { border-color: var(--laiton); background: rgba(200, 153, 63, .2); }
+.btn-carnet--on { color: var(--vert-cadran); border-color: var(--vert-cadran); background: rgba(111, 168, 122, .14); }
+
+.bilan { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: 16px 0 0;
+  font-size: .82rem; color: var(--encre-faible); }
+.bilan b { color: var(--laiton-clair); font-family: var(--font-display); font-size: 1.05rem; font-weight: 900; }
+.bilan__vider { padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--font-plaque); font-size: .56rem; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--encre-faible); text-decoration: underline;
+  text-underline-offset: 4px; text-decoration-color: var(--cuivre); }
+.bilan__vider:hover { color: var(--rouge-cadran); }
