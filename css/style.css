@@ -173,11 +173,27 @@ main { max-width: 1300px; margin: 0 auto; padding: 0 16px 52px; }
 .ribbon--down    .ribbon__libelle { color: var(--ambre); }
 .ribbon--unknown .ribbon__libelle { color: var(--gris-cadran); }
 
-/* ---------- Cadran à aiguille ---------- */
-.gauge { flex: none; width: 96px; height: 65px; }
-.gauge svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.gauge .aiguille { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 1.1s cubic-bezier(.2, 1.3, .4, 1); }
-.gauge--grand { width: 150px; height: 102px; }
+/* ---------- Afficheur d'attente ----------
+   Le chiffre occupe toute la place qu'il mérite ; l'échelle graduée se
+   contente de le situer sur une règle de deux heures. */
+.attente { flex: none; display: grid; justify-items: center; gap: 3px; width: 86px; color: var(--gris-cadran); }
+.attente__val { font-family: var(--font-display); font-size: 1.9rem; font-weight: 900; line-height: 1;
+  color: var(--laiton-clair); font-variant-numeric: tabular-nums; }
+.attente__val small { font-family: var(--font-plaque); font-size: .5rem; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--encre-faible); margin-left: 3px; }
+.attente__val--nul { color: var(--gris-cadran); }
+.attente__regle { width: 100%; height: 10px; overflow: visible; }
+.attente__legende { font-family: var(--font-plaque); font-size: .5rem; font-weight: 600; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--encre-faible); text-align: center; line-height: 1.3; }
+.attente .curseur { transition: transform .9s cubic-bezier(.2, 1.1, .4, 1); }
+
+.attente--open    { color: var(--vert-cadran); }
+.attente--closed  { color: var(--rouge-cadran); }
+.attente--refurb, .attente--down { color: var(--ambre); }
+
+.attente--grand { width: 140px; gap: 5px; }
+.attente--grand .attente__val { font-size: 3.4rem; }
+.attente--grand .attente__val small { font-size: .72rem; }
 
 /* ---------- Fiche ---------- */
 dialog { padding: 0; color: var(--encre); }
@@ -322,7 +338,8 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
   .card__body { padding: 4px 12px 10px; }
   .card__btn { font-size: .82rem; }
   .ribbon { flex-wrap: wrap; gap: 6px; padding: 9px 12px 10px; }
-  .gauge { width: 62px; height: 42px; }
+  .attente { width: 74px; }
+  .attente__val { font-size: 1.6rem; }
   .sign { padding: 28px 18px 24px; }
   .controls { padding: 22px 16px 20px; }
   .filter-group, .seg { width: 100%; }
@@ -415,7 +432,7 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 
 /* Un temps d'attente qui vient de changer : la valeur s'éclaire une seconde. */
 @keyframes releve { 0% { color: var(--laiton-clair); text-shadow: 0 0 12px var(--laiton); } 100% { color: inherit; text-shadow: none; } }
-.vient-de-changer .gauge text { animation: releve 1.6s ease-out; }
+.vient-de-changer .attente__val { animation: releve 1.6s ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
   .card, .card__art::after,
@@ -423,6 +440,6 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
   .a-hand-h, .a-hand-m, .a-smoke, .a-flicker, .a-ping,
   .ribbon--open .lampe, .ribbon--down .lampe,
   .live__status.ribbon--open::before, .live__status.ribbon--down::before,
-  .vient-de-changer .gauge text { animation: none !important; }
-  .gauge .aiguille { transition: none !important; }
+  .vient-de-changer .attente__val { animation: none !important; }
+  .attente .curseur { transition: none !important; }
 }
