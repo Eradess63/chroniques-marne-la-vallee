@@ -2,7 +2,7 @@
 import { CONFIG } from './config.js';
 import { loadWaitTimes } from './api.js';
 import { posterSVG } from './posters.js';
-import { loadReviews, addReview, average } from './reviews.js';
+import { loadReviews, addReview } from './reviews.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -160,11 +160,6 @@ function serviceBadge(key, label, value) {
   return `<span class="${cls}">${ICONS[key]}${esc(text)}</span>`;
 }
 
-function starsHTML(score) {
-  const full = Math.round(score);
-  return `<span class="stars" role="img" aria-label="${score} sur 5">${'★'.repeat(full)}<span class="off">${'★'.repeat(5 - full)}</span></span>`;
-}
-
 function liveBlock(a) {
   const st = statusOf(a);
   const wait = st.kind === 'open' ? `<div class="live__wait">${st.wait} min<small>d'attente</small></div>` : '';
@@ -187,39 +182,45 @@ function renderFicheStatus() {
 
 function reviewsHTML(a) {
   const mine = loadReviews(a.id);
-  const avg = average(mine);
-  const editorial = a.review
-    ? `<div class="chronicle">
+  const v = a.visitors;
+
+  // Synthèse rédigée à partir des avis publics en ligne : aucun avis n'est recopié.
+  const visiteurs = v ? `
+    <div class="chronicle">
+      <h3>Ce qu'en disent les visiteurs</h3>
+      <p>${esc(v.summary)}</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Ce qui revient en bien</h4><ul>${v.praise.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+        <div class="cons"><h4>Ce qui revient en mal</h4><ul>${v.gripes.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+      </div>
+      ${v.tip ? `<p class="tip"><strong>À retenir</strong> ${esc(v.tip)}</p>` : ''}
+      <p class="note">Synthèse des avis publics en ligne, rédigée pour ce site. Aucun avis n'est reproduit.</p>
+    </div>` : '';
+
+  const chroniqueur = a.review ? `
+    <div class="chronicle">
       <h3>L'avis du chroniqueur</h3>
-      <div class="score-line">${starsHTML(a.review.score)}<b>${a.review.score}/5</b></div>
       <p>${esc(a.review.text)}</p>
       <div class="pros-cons">
-        <div class="pros"><h4>Points forts</h4><ul>${a.review.pros.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>
-        <div class="cons"><h4>Points faibles</h4><ul>${a.review.cons.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>
+        <div class="pros"><h4>Points forts</h4><ul>${a.review.pros.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+        <div class="cons"><h4>Points faibles</h4><ul>${a.review.cons.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
       </div>
-      <p class="note">Avis éditorial rédigé pour ce site.</p>
-    </div>`
-    : `<div class="chronicle"><h3>L'avis du chroniqueur</h3><p>Pas encore rédigé pour cette attraction.</p></div>`;
+    </div>` : '';
+
   return `
-    ${editorial}
+    ${visiteurs}
+    ${chroniqueur}
     <div class="visitors">
-      <h3>L'avis des visiteurs</h3>
-      <div class="score-line">${avg ? `${starsHTML(avg)}<b>${avg.toFixed(1)}/5</b> <small>(${mine.length})</small>` : '<span>Aucun avis pour le moment.</span>'}</div>
+      <h3>Votre commentaire</h3>
       <form class="form" id="review-form" data-id="${esc(a.id)}">
-        <fieldset>
-          <legend>Votre note</legend>
-          <div class="rate">
-            ${[5, 4, 3, 2, 1].map((n) => `<input type="radio" name="score" id="rate-${n}" value="${n}" required><label for="rate-${n}" title="${n} sur 5"><span class="sr-only">${n} sur 5</span>★</label>`).join('')}
-          </div>
-        </fieldset>
         <div><label for="rv-name">Votre prénom</label><input type="text" id="rv-name" name="name" maxlength="40" required></div>
         <div><label for="rv-text">Votre commentaire</label><textarea id="rv-text" name="text" maxlength="600" required></textarea></div>
-        <button type="submit" class="btn">Publier mon avis</button>
+        <button type="submit" class="btn">Publier</button>
         <p class="form__msg" id="rv-msg" role="status"></p>
       </form>
-      <ul class="review-list">
-        ${mine.map((r) => `<li>${starsHTML(r.score)} <strong>${esc(r.name)}</strong> <small>${new Date(r.date).toLocaleDateString('fr-FR')}</small><p>${esc(r.text)}</p></li>`).join('')}
-      </ul>
+      ${mine.length ? `<ul class="review-list">
+        ${mine.map((r) => `<li><strong>${esc(r.name)}</strong> <small>${new Date(r.date).toLocaleDateString('fr-FR')}</small><p>${esc(r.text)}</p></li>`).join('')}
+      </ul>` : '<p class="note">Aucun commentaire enregistré dans ce navigateur.</p>'}
     </div>`;
 }
 
@@ -390,8 +391,8 @@ function bindEvents() {
     if (!form) return;
     e.preventDefault();
     const data = new FormData(form);
-    const review = { score: Number(data.get('score')), name: String(data.get('name')).trim(), text: String(data.get('text')).trim(), date: new Date().toISOString() };
-    if (!review.score || !review.name || !review.text) return;
+    const review = { name: String(data.get('name')).trim(), text: String(data.get('text')).trim(), date: new Date().toISOString() };
+    if (!review.name || !review.text) return;
     const saved = addReview(form.dataset.id, review);
     const a = state.attractions.find((x) => x.id === form.dataset.id);
     $('#reviews').innerHTML = reviewsHTML(a);

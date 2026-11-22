@@ -100,7 +100,6 @@
       ],
       "images": [],
       "review": {
-        "score": 4.5,
         "pros": [
           "Décor spectaculaire et île unique au monde",
           "Parcours rythmé, accessible dès 1,02 m",
@@ -120,7 +119,21 @@
       "posterLines": [
         "BIG THUNDER",
         "MOUNTAIN"
-      ]
+      ],
+      "visitors": {
+        "summary": "L'attraction fait l'unanimité comme incontournable du parc, et revient sans cesse dans les conseils de première heure. Les visiteurs la décrivent comme assez secouante pour les adultes sans écarter les enfants, ce qui explique une file qui ne désemplit pas de la journée.",
+        "praise": [
+          "La file elle-même, soignée et couverte sur la majeure partie, ce qui compte sous le soleil comme sous la pluie",
+          "Le passage en tunnel sous la rivière pour atteindre l'île, que beaucoup découvrent sans l'avoir anticipé",
+          "Un équilibre rare entre sensations et accessibilité familiale"
+        ],
+        "gripes": [
+          "Une attente qui reste élevée du matin au soir, sans creux réel",
+          "Des pannes signalées, parfois après une heure et demie de queue",
+          "Quelques visiteurs la jugent surcotée face à Indiana Jones"
+        ],
+        "tip": "Y aller dès l'ouverture ou passer par le Premier Access : les retours évoquent une dizaine de minutes au lieu de quatre-vingt-dix."
+      }
     },
     {
       "id": "phantom-manor",
@@ -192,7 +205,6 @@
       ],
       "images": [],
       "review": {
-        "score": 5,
         "pros": [
           "Histoire tragique et cohérente avec tout Frontierland",
           "Décors d'une densité rare",
@@ -212,7 +224,21 @@
       "posterLines": [
         "PHANTOM",
         "MANOR"
-      ]
+      ],
+      "visitors": {
+        "summary": "C'est la mise en scène qui domine les retours, bien plus que la peur. Beaucoup la trouvent moins effrayante qu'attendu et la recommandent à tous les âges, et les habitués des autres parcs soulignent ce que la version parisienne a de singulier.",
+        "praise": [
+          "La narration et le niveau de détail du décor",
+          "L'histoire de la mariée, qui distingue nettement Paris de la version californienne",
+          "La position en haut de la colline, qui lui donne une présence que ses cousines n'ont pas",
+          "Le double sous-titrage français et anglais"
+        ],
+        "gripes": [
+          "Affluence forte aux heures de pointe",
+          "Le parcours reste sombre pour les plus jeunes"
+        ],
+        "tip": "L'attente varie énormément dans la journée, bien plus que sur les autres grandes attractions. En fin de soirée, l'entrée se fait souvent sans attendre."
+      }
     },
     {
       "id": "star-wars-hyperspace-mountain",
@@ -282,7 +308,6 @@
       ],
       "images": [],
       "review": {
-        "score": 4.5,
         "pros": [
           "Lancement impressionnant",
           "Seule version avec inversions",
@@ -302,7 +327,22 @@
       "posterLines": [
         "HYPERSPACE",
         "MOUNTAIN"
-      ]
+      ],
+      "visitors": {
+        "summary": "C'est l'attraction la plus souvent citée comme la plus intense du parc. Les retours insistent sur le lancement et sur l'obscurité totale, qui empêche d'anticiper les virages et les retournements.",
+        "praise": [
+          "Le lancement, décrit comme spectaculaire sans être brutal",
+          "Les trois retournements dans le noir complet",
+          "Le confort des sièges, meilleur que ne le laisse craindre la violence du parcours",
+          "La file d'attente, très travaillée"
+        ],
+        "gripes": [
+          "Une thématisation jugée plus faible à bord qu'en file",
+          "La superposition de l'univers Star Wars sur le décor d'origine, qui détonne pour certains",
+          "La taille minimale de 1,20 m, qui écarte les plus jeunes"
+        ],
+        "tip": "La file Single Rider fonctionne, mais plusieurs visiteurs signalent qu'elle accueille aussi les accès payants et qu'elle peut donc être lente. Elle redevient très efficace en soirée."
+      }
     },
     {
       "id": "tower-of-terror",
@@ -372,7 +412,6 @@
       ],
       "images": [],
       "review": {
-        "score": 4.5,
         "pros": [
           "Pré-show et décors remarquables",
           "Trois séquences de chute différentes",
@@ -463,7 +502,6 @@
       ],
       "images": [],
       "review": {
-        "score": 4,
         "pros": [
           "Mise en scène très immersive",
           "Accessible à tous, sans taille minimale",
@@ -482,7 +520,21 @@
       ],
       "posterLines": [
         "RATATOUILLE"
-      ]
+      ],
+      "visitors": {
+        "summary": "L'effet de rétrécissement est ce qui marque le plus : les visiteurs disent se sentir réellement à hauteur de rongeur, et relèvent des détails que les parcours en images seuls ne produisent pas.",
+        "praise": [
+          "La place et le décor du land, souvent cités comme les plus réussis du parc",
+          "Les odeurs de cuisine diffusées pendant le parcours, discrètes mais efficaces",
+          "Les effets d'eau, présents sans être gênants",
+          "Un rythme soutenu sans être épuisant"
+        ],
+        "gripes": [
+          "La file extérieure, longue et monotone, sans grand-chose à regarder",
+          "Le contraste brutal entre cette file et l'intérieur du bâtiment"
+        ],
+        "tip": "Sous vingt minutes d'attente, les retours sont unanimement enthousiastes. Au-delà, l'avis dépend beaucoup de la tolérance à la file extérieure."
+      }
     },
     {
       "id": "frozen-ever-after",
@@ -550,7 +602,6 @@
       ],
       "images": [],
       "review": {
-        "score": 4,
         "pros": [
           "Décor de village nordique soigné",
           "Plaît à toute la famille",
@@ -1724,7 +1775,6 @@
       ],
       "images": [],
       "review": {
-        "score": 4,
         "pros": [
           "Vue unique sur le parc depuis la butte",
           "Repos bienvenu au milieu d'une journée de marche",
@@ -1741,7 +1791,21 @@
         "https://d23.com/a-to-z/euro-disneyland-railroad/",
         "https://www.dlpguide.com/guidebook/disneyland-park/main-street-usa/disneyland-railroad-station/",
         "https://www.techno-science.net/fr/definitions/disneyland-paris-railroad"
-      ]
+      ],
+      "visitors": {
+        "summary": "Les retours sont nettement partagés, et le clivage est net : ceux qui le prennent comme un moyen de traverser le parc en sont satisfaits, ceux qui l'abordent comme une attraction à part entière le trouvent décevant.",
+        "praise": [
+          "Une vraie locomotive à vapeur, avec un personnel souvent salué pour son humour",
+          "Pratique pour passer d'un bout du parc à l'autre sans marcher",
+          "Le tunnel entre Main Street et Frontierland, seul passage scénographié du trajet"
+        ],
+        "gripes": [
+          "Le trajet traverse surtout des zones boisées, avec peu à voir",
+          "Des attentes longues et des pannes signalées, parfois après plus d'une heure",
+          "Un embarquement lent, et aucun banc dans la file"
+        ],
+        "tip": "À prendre quand la file est courte, et pour se déplacer. Le prendre pour la vue expose à la déception."
+      }
     },
     {
       "id": "main-street-vehicles",
@@ -1815,7 +1879,6 @@
       ],
       "images": [],
       "review": {
-        "score": 3.5,
         "pros": [
           "Décor de Main Street vu d'en haut",
           "Chevaux de trait bien soignés",
@@ -1832,7 +1895,20 @@
         "https://dlpguide.com/guidebook/disneyland-park/main-street-usa/horse-drawn-streetcars/",
         "https://en.wikipedia.org/wiki/Main_Street_Vehicles",
         "https://d23.com/a-to-z/horse-drawn-streetcars/"
-      ]
+      ],
+      "visitors": {
+        "summary": "Peu d'avis en ligne, et surtout des remarques de passage : les véhicules sont vus et photographiés bien plus souvent qu'ils ne sont empruntés. Plusieurs visiteurs disent ne pas avoir trouvé où monter.",
+        "praise": [
+          "Des répliques soignées, qui participent beaucoup au décor de la rue",
+          "Un trajet court et sans attente quand le service fonctionne"
+        ],
+        "gripes": [
+          "Les points d'embarquement sont difficiles à repérer",
+          "Le service est irrégulier dans la journée",
+          "Des retours signalent une offre très limitée en fauteuils roulants"
+        ],
+        "tip": "Les arrêts sont à Town Square et à Central Plaza, aux deux extrémités de la rue. En dehors de ces deux points, les véhicules ne s'arrêtent pas."
+      }
     },
     {
       "id": "peter-pans-flight",
@@ -2440,7 +2516,6 @@
       ],
       "images": [],
       "review": {
-        "score": 4,
         "pros": [
           "Vue sur Big Thunder impossible à obtenir autrement",
           "Calme absolu au milieu du parc",
@@ -2457,7 +2532,22 @@
         "https://www.dlpguide.com/guidebook/disneyland-park/frontierland/thunder-mesa-riverboat-landing/",
         "https://wdwnt.com/2025/05/all-references-to-mark-twain-riverboat-removed-from-disneyland-paris-website-14-years-after/",
         "https://magic-tips.app/fr/decouvrir/disneyland-paris/attractions/thunder-mesa-riverboat-landing"
-      ]
+      ],
+      "visitors": {
+        "summary": "Les visiteurs en parlent comme d'une parenthèse : le moment où l'on s'assoit enfin, après les files et les montagnes russes. Ceux qui en attendent une attraction au sens classique en ressortent déçus, ceux qui cherchent une respiration la recommandent sans réserve.",
+        "praise": [
+          "Le calme, très apprécié après les attractions à sensations",
+          "Le choix entre le pont couvert et le pont supérieur à ciel ouvert",
+          "Les vues sur la montagne, les geysers et le manoir depuis l'eau",
+          "Le bateau illuminé à la nuit tombée, régulièrement cité comme un sommet de la journée"
+        ],
+        "gripes": [
+          "Des départs espacés, qui obligent à caler son horaire",
+          "Peu d'animation à proprement parler : c'est le décor et le bateau qui font l'attraction",
+          "À sacrifier en priorité si la journée est courte"
+        ],
+        "tip": "Monter sur le pont supérieur, et viser le crépuscule."
+      }
     },
     {
       "id": "river-rogue-keelboats",
@@ -2531,7 +2621,6 @@
       ],
       "images": [],
       "review": {
-        "score": 3.5,
         "pros": [
           "Commentaire vivant, jamais deux fois pareil",
           "Point de vue bas, au ras de l'eau",

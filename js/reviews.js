@@ -22,8 +22,3 @@ export function addReview(id, review) {
     return false;
   }
 }
-
-export function average(list) {
-  if (!list.length) return null;
-  return list.reduce((sum, r) => sum + r.score, 0) / list.length;
-}
