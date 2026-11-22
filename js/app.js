@@ -82,7 +82,7 @@ function ribbonHTML(st) {
   if (st.premier?.prix) files.push(`<span class="file file--pa">PA<b>${esc(st.premier.prix)}</b></span>`);
   return `<div class="ribbon ribbon--${st.kind}">
     <div class="ribbon__etat"><span class="ribbon__libelle"><i class="lampe" aria-hidden="true"></i>${esc(st.label)}</span>${files.length ? `<div class="ribbon__files">${files.join('')}</div>` : ''}</div>
-    ${gaugeSVG(st, false)}
+    ${attenteHTML(st, false)}
   </div>`;
 }
 
@@ -144,41 +144,34 @@ function renderLivebar() {
 }
 
 /**
- * Cadran à aiguille. L'aiguille balaie un demi-cercle : à gauche l'attraction
- * vient d'ouvrir, à droite la file dépasse deux heures. Au-delà de 120 min
- * l'aiguille bute en fin de course, et le chiffre exact reste lisible dessous.
+ * Afficheur d'attente. Le chiffre prime : c'est la seule chose qu'on lit
+ * vraiment dans une file. L'échelle graduée dessous ne fait que situer ce
+ * chiffre — un coup d'œil suffit pour voir si 50 min, ici, c'est beaucoup.
  */
-function gaugeSVG(st, grand) {
-  const COUL = { open: 'var(--vert-cadran)', closed: 'var(--rouge-cadran)',
-                 refurb: 'var(--ambre)', down: 'var(--ambre)', unknown: 'var(--gris-cadran)' };
-  const teinte = COUL[st.kind] || COUL.unknown;
+function attenteHTML(st, grand) {
   const w = st.kind === 'open' && typeof st.wait === 'number' ? st.wait : null;
-  const angle = w === null ? -90 : (Math.min(w, 120) / 120) * 180 - 90;
 
-  // Graduations tous les quarts d'heure, plus marquées toutes les demi-heures
+  // Curseur sur une règle de deux heures ; au-delà, il bute en fin de course.
+  const pos = w === null ? null : Math.min(w, 120) / 120 * 100;
   let grads = '';
-  for (let m = 0; m <= 120; m += 15) {
-    const a = Math.PI - (m / 120) * Math.PI;
-    const gros = m % 30 === 0;
-    const r1 = gros ? 28 : 31, r2 = 37;
-    grads += `<line x1="${(50 + Math.cos(a) * r1).toFixed(1)}" y1="${(50 - Math.sin(a) * r1).toFixed(1)}" x2="${(50 + Math.cos(a) * r2).toFixed(1)}" y2="${(50 - Math.sin(a) * r2).toFixed(1)}" stroke="var(--laiton)" stroke-width="${gros ? 1.8 : 1}" opacity="${gros ? .95 : .55}"/>`;
+  for (let m = 15; m < 120; m += 15) {
+    const x = m / 120 * 100, gros = m % 30 === 0;
+    grads += `<line x1="${x}" y1="${gros ? 1 : 2.5}" x2="${x}" y2="6" stroke="var(--laiton)" stroke-width=".8" opacity="${gros ? .8 : .4}"/>`;
   }
+  const echelle = pos === null ? '' : `<svg class="attente__regle" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+    <line x1="0" y1="6" x2="100" y2="6" stroke="var(--cuivre)" stroke-width="1.4"/>
+    <line x1="0" y1="6" x2="${pos.toFixed(1)}" y2="6" stroke="currentColor" stroke-width="2.6"/>
+    ${grads}
+    <polygon class="curseur" points="-4,0 4,0 0,6" transform="translate(${pos.toFixed(1)} 0)" fill="currentColor"/>
+  </svg>`;
 
-  const valeur = st.kind === 'open'
-    ? (typeof st.wait === 'number' ? `${st.wait}<tspan font-size="8"> min</tspan>` : '—')
-    : '—';
+  const corps = w !== null
+    ? `<span class="attente__val">${w}<small>min</small></span>`
+    : `<span class="attente__val attente__val--nul">—</span>`;
 
-  return `<div class="gauge${grand ? ' gauge--grand' : ''}" role="img" aria-label="${esc(st.label)}${w !== null ? `, ${w} minutes d'attente` : ''}">
-    <svg viewBox="0 0 100 68">
-      <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--cuivre)" stroke-width="5"/>
-      <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--laiton)" stroke-width="1.4"/>
-      <path d="M16 50 A34 34 0 0 1 84 50 Z" fill="var(--verre)"/>
-      ${grads}
-      <path class="aiguille" d="M48.6 50 L50 15 L51.4 50 Z" fill="${teinte}" style="transform:rotate(${angle.toFixed(1)}deg)"/>
-      <circle cx="50" cy="50" r="4.6" fill="var(--laiton)"/>
-      <circle cx="50" cy="50" r="2" fill="var(--acajou-fonce)"/>
-      <text x="50" y="65" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="16" fill="var(--laiton-clair)">${valeur}</text>
-    </svg>
+  return `<div class="attente${grand ? ' attente--grand' : ''} ribbon--${st.kind}">
+    ${corps}${echelle}
+    ${grand ? '' : `<span class="attente__legende">${w !== null ? "d'attente" : esc(st.label)}</span>`}
   </div>`;
 }
 
@@ -244,7 +237,7 @@ function liveBlock(a) {
       <span class="file2__note">Épuisé ou non proposé aujourd'hui</span></div>`);
   }
   return `<div class="live">
-    <div class="live__principal">${gaugeSVG(st, true)}<div class="live__status ribbon--${st.kind}"><span class="ribbon__libelle"><i class="lampe" aria-hidden="true"></i>${esc(st.label)}</span></div></div>
+    <div class="live__principal">${attenteHTML(st, true)}<div class="live__status ribbon--${st.kind}"><span class="ribbon__libelle"><i class="lampe" aria-hidden="true"></i>${esc(st.label)}</span></div></div>
     ${cadrans.length ? `<div class="live__files">${cadrans.join('')}</div>` : ''}
   </div>`;
 }
