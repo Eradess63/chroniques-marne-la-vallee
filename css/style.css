@@ -174,10 +174,10 @@ main { max-width: 1300px; margin: 0 auto; padding: 0 16px 52px; }
 .ribbon--unknown .ribbon__libelle { color: var(--gris-cadran); }
 
 /* ---------- Cadran à aiguille ---------- */
-.gauge { flex: none; width: 76px; height: 50px; }
+.gauge { flex: none; width: 96px; height: 65px; }
 .gauge svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .gauge .aiguille { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 1.1s cubic-bezier(.2, 1.3, .4, 1); }
-.gauge--grand { width: 128px; height: 84px; }
+.gauge--grand { width: 150px; height: 102px; }
 
 /* ---------- Fiche ---------- */
 dialog { padding: 0; color: var(--encre); }

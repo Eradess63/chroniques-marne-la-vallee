@@ -1156,11 +1156,11 @@ function gaugeSVG(st, grand) {
   }
 
   const valeur = st.kind === 'open'
-    ? (typeof st.wait === 'number' ? `${st.wait}<tspan font-size="7"> min</tspan>` : '—')
+    ? (typeof st.wait === 'number' ? `${st.wait}<tspan font-size="8"> min</tspan>` : '—')
     : '—';
 
   return `<div class="gauge${grand ? ' gauge--grand' : ''}" role="img" aria-label="${esc(st.label)}${w !== null ? `, ${w} minutes d'attente` : ''}">
-    <svg viewBox="0 0 100 62">
+    <svg viewBox="0 0 100 68">
       <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--cuivre)" stroke-width="5"/>
       <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--laiton)" stroke-width="1.4"/>
       <path d="M16 50 A34 34 0 0 1 84 50 Z" fill="var(--verre)"/>
@@ -1168,7 +1168,7 @@ function gaugeSVG(st, grand) {
       <path class="aiguille" d="M48.6 50 L50 15 L51.4 50 Z" fill="${teinte}" style="transform:rotate(${angle.toFixed(1)}deg)"/>
       <circle cx="50" cy="50" r="4.6" fill="var(--laiton)"/>
       <circle cx="50" cy="50" r="2" fill="var(--acajou-fonce)"/>
-      <text x="50" y="60" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="13" fill="var(--laiton-clair)">${valeur}</text>
+      <text x="50" y="65" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="16" fill="var(--laiton-clair)">${valeur}</text>
     </svg>
   </div>`;
 }
