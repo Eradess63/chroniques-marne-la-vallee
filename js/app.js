@@ -458,6 +458,16 @@ function openFiche(id) {
   try { if (location.hash !== '#' + id) location.hash = id; } catch {}
 }
 
+/**
+ * Place la page sans animation. `scrollTo` passerait par le défilement doux
+ * déclaré sur html, qu'une bascule de vue interrompt à mi-course — on écrit
+ * donc la position directement.
+ */
+function positionner(y) {
+  document.documentElement.scrollTop = y;
+  document.body.scrollTop = y;
+}
+
 /* Position dans la liste, pour y revenir là où on l'avait quittée. */
 let defilementListe = 0;
 
@@ -476,7 +486,7 @@ function montrerVue(vue) {
     liste.hidden = versFiche;
     fiche.hidden = !versFiche;
     document.body.classList.toggle('vue-fiche', versFiche);
-    window.scrollTo({ top: cible, behavior: 'instant' });
+    positionner(cible);
   };
 
   // Transition native là où le navigateur la propose, bascule nette ailleurs.
@@ -484,7 +494,7 @@ function montrerVue(vue) {
     const t = document.startViewTransition(bascule);
     // Le navigateur repositionne parfois la page après la bascule : on repasse
     // derrière lui une fois la transition jouée.
-    t.updateCallbackDone.then(() => window.scrollTo({ top: cible, behavior: 'instant' })).catch(() => {});
+    t.updateCallbackDone.then(() => positionner(cible)).catch(() => {});
   } else {
     bascule();
   }
