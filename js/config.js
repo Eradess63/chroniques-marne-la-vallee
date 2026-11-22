@@ -1,50 +1,29 @@
 /**
  * Configuration centrale.
- * Modifiez WORKER_URL après avoir déployé worker/queue-times-proxy.js.
  */
 export const CONFIG = {
-  /** Fichier de données des attractions */
+  /** Données éditoriales des attractions */
   DATA_URL: 'data/attractions.json',
 
   /**
-   * Relevé déposé par le workflow GitHub Actions, servi par le même domaine
-   * que la page : ni CORS, ni proxy. C'est la source la plus fiable.
+   * API ThemeParks.wiki — publique, sans authentification, et surtout
+   * ouverte au CORS : la page l'appelle directement depuis n'importe quel
+   * hébergement, sans proxy ni relevé intermédiaire.
    */
-  SNAPSHOT_URL: 'data/wait-times.json',
+  API: 'https://api.themeparks.wiki/v1',
 
-  /** Endpoint officiel Queue-Times (id 4 = Parc Disneyland, id 28 = Disney Adventure World) */
-  QUEUE_TIMES_URL: (id) => `https://queue-times.com/parks/${id}/queue_times.json`,
+  /** Identifiants des deux parcs chez ThemeParks.wiki */
+  PARKS: {
+    dlp: 'dae968d5-630d-4719-8b06-3d107e944401',
+    daw: 'ca888437-ebb4-4d50-aed2-d227f7096968'
+  },
 
-  /** URL de votre Cloudflare Worker (laisser vide pour ne pas l'utiliser). Ex : 'https://qt-proxy.moncompte.workers.dev' */
-  WORKER_URL: '',
-
-  /**
-   * Proxies CORS publics, essayés après le Worker et l'appel direct.
-   * Queue-Times n'envoie aucun en-tête CORS : sans proxy, aucun navigateur ne peut l'appeler.
-   * Ces services sont limités en débit — pour un usage fiable, déployez le Worker.
-   */
-  PUBLIC_PROXIES: [
-    {
-      url: (u) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-      unwrap: (data) => (typeof data?.contents === 'string' ? JSON.parse(data.contents) : data)
-    }
-  ],
-
-  /**
-   * Délais par route (ms). Le proxy public doit lui-même aller chercher la page
-   * en amont : il lui faut nettement plus de temps qu'un appel direct.
-   */
-  TIMEOUT_MS: { snapshot: 8000, worker: 8000, direct: 5000, proxy: 30000 },
-
-  /**
-   * Pause entre les deux parcs (ms). Les proxies publics limitent le débit :
-   * deux appels simultanés suffisent à se faire éconduire.
-   */
-  STAGGER_MS: 600,
+  /** Délai maximal par requête (ms) */
+  TIMEOUT_MS: 12000,
 
   /** Intervalle d'actualisation automatique (ms) */
   REFRESH_MS: 5 * 60 * 1000,
 
-  /** Mettre à false pour désactiver l'appel réseau (aucune donnée affichée) */
+  /** Mettre à false pour couper tout appel réseau */
   LIVE_ENABLED: true
 };

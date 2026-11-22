@@ -37,9 +37,10 @@ function statusOf(a) {
   const live = state.live.get(a.id);
   if (local.status === 'refurb') return { kind: 'refurb', label: local.until ? `En rénovation jusqu'au ${fmtDate(local.until)}` : 'En rénovation', wait: null };
   if (local.status === 'closed') return { kind: 'closed', label: 'Fermée', wait: null };
-  if (!live) return { kind: 'unknown', label: state.mode === 'loading' ? 'Chargement…' : 'Statut indisponible', wait: null };
-  if (live.open) return { kind: 'open', label: 'Ouverte', wait: live.wait };
-  return { kind: 'closed', label: 'Fermée', wait: null };
+  if (!live) return { kind: 'unknown', label: state.mode === 'loading' ? 'Relevé en cours…' : 'Statut indisponible', wait: null };
+  const LIB = { open: 'Ouverte', closed: 'Fermée', refurb: 'En rénovation', down: 'Interrompue', unknown: 'Statut indisponible' };
+  return { kind: live.kind, label: LIB[live.kind] || LIB.unknown, wait: live.kind === 'open' ? live.wait : null,
+           singleRider: live.singleRider, premier: live.premier };
 }
 
 function matches(a) {
@@ -53,7 +54,7 @@ function matches(a) {
   return true;
 }
 
-const poster = (a, variant = 'poster') => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, alt: `Affiche vintage de ${a.name}` });
+const poster = (a, variant = 'poster', fade = false) => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, fade, alt: `Planche gravée de ${a.name}` });
 
 /* ---------- Filtres ---------- */
 function landsForFilter() {
@@ -76,26 +77,51 @@ function renderFilters() {
 
 /* ---------- Grille ---------- */
 function ribbonHTML(st) {
-  const wait = st.kind === 'open' ? `<span class="ribbon__wait">${st.wait} min</span>` : '';
-  return `<div class="ribbon ribbon--${st.kind}"><span>${esc(st.label)}</span>${wait}</div>`;
+  const files = [];
+  if (typeof st.singleRider === 'number') files.push(`<span class="file file--sr">SR<b>${st.singleRider}<small>min</small></b></span>`);
+  if (st.premier?.prix) files.push(`<span class="file file--pa">PA<b>${esc(st.premier.prix)}</b></span>`);
+  return `<div class="ribbon ribbon--${st.kind}">
+    <div class="ribbon__etat"><span class="ribbon__libelle"><i class="lampe" aria-hidden="true"></i>${esc(st.label)}</span>${files.length ? `<div class="ribbon__files">${files.join('')}</div>` : ''}</div>
+    ${gaugeSVG(st, false)}
+  </div>`;
 }
+
+let dernieresAttentes = new Map();
 
 function renderGrid() {
   const list = state.attractions.filter(matches);
   $('#count').textContent = `${list.length} attraction${list.length > 1 ? 's' : ''} affichée${list.length > 1 ? 's' : ''} sur ${state.attractions.length}`;
+  const avant = dernieresAttentes;
+  dernieresAttentes = new Map(list.map((a) => [a.id, statusOf(a).wait]));
   $('#grid').innerHTML = list.length
-    ? list.map((a) => {
+    ? list.map((a, i) => {
         const st = statusOf(a);
-        return `<article class="card">
-          <div class="card__art" aria-hidden="true">${poster(a)}</div>
+        return `<article class="card" style="--i:${i}" data-etat="${st.kind}">
+          <div class="card__art" aria-hidden="true">${poster(a, 'poster', st.kind === 'closed' || st.kind === 'refurb')}</div>
           <div class="card__body">
             <h2 class="card__title"><button type="button" class="card__btn" data-open="${esc(a.id)}">${esc(a.name)}</button></h2>
             <p class="card__park">${esc(parkName(a.park))}</p>
+            ${a.stub ? '<span class="card__encours">Fiche en cours</span>' : ''}
           </div>
           ${ribbonHTML(st)}
         </article>`;
       }).join('')
     : '<p class="empty">Aucune attraction ne correspond à ces critères. Modifiez les filtres ou la recherche.</p>';
+  signalerChangements(avant);
+}
+
+/** Souligne brièvement les durées qui viennent de bouger */
+function signalerChangements(avant) {
+  if (!avant.size) return;
+  document.querySelectorAll('.card').forEach((carte) => {
+    const id = carte.querySelector('[data-open]')?.dataset.open;
+    const t = carte.querySelector('.ribbon__wait');
+    if (!t || !id || !avant.has(id)) return;
+    if (avant.get(id) !== dernieresAttentes.get(id)) {
+      t.classList.add('vient-de-changer');
+      t.addEventListener('animationend', () => t.classList.remove('vient-de-changer'), { once: true });
+    }
+  });
 }
 
 function renderLivebar() {
@@ -115,6 +141,45 @@ function renderLivebar() {
     unavailable: `Temps d'attente indisponibles.${detail}`
   }[state.mode];
   bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh">Actualiser</button>`;
+}
+
+/**
+ * Cadran à aiguille. L'aiguille balaie un demi-cercle : à gauche l'attraction
+ * vient d'ouvrir, à droite la file dépasse deux heures. Au-delà de 120 min
+ * l'aiguille bute en fin de course, et le chiffre exact reste lisible dessous.
+ */
+function gaugeSVG(st, grand) {
+  const COUL = { open: 'var(--vert-cadran)', closed: 'var(--rouge-cadran)',
+                 refurb: 'var(--ambre)', down: 'var(--ambre)', unknown: 'var(--gris-cadran)' };
+  const teinte = COUL[st.kind] || COUL.unknown;
+  const w = st.kind === 'open' && typeof st.wait === 'number' ? st.wait : null;
+  const angle = w === null ? -90 : (Math.min(w, 120) / 120) * 180 - 90;
+
+  // Graduations tous les quarts d'heure, plus marquées toutes les demi-heures
+  let grads = '';
+  for (let m = 0; m <= 120; m += 15) {
+    const a = Math.PI - (m / 120) * Math.PI;
+    const gros = m % 30 === 0;
+    const r1 = gros ? 28 : 31, r2 = 37;
+    grads += `<line x1="${(50 + Math.cos(a) * r1).toFixed(1)}" y1="${(50 - Math.sin(a) * r1).toFixed(1)}" x2="${(50 + Math.cos(a) * r2).toFixed(1)}" y2="${(50 - Math.sin(a) * r2).toFixed(1)}" stroke="var(--laiton)" stroke-width="${gros ? 1.8 : 1}" opacity="${gros ? .95 : .55}"/>`;
+  }
+
+  const valeur = st.kind === 'open'
+    ? (typeof st.wait === 'number' ? `${st.wait}<tspan font-size="7"> min</tspan>` : '—')
+    : '—';
+
+  return `<div class="gauge${grand ? ' gauge--grand' : ''}" role="img" aria-label="${esc(st.label)}${w !== null ? `, ${w} minutes d'attente` : ''}">
+    <svg viewBox="0 0 100 62">
+      <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--cuivre)" stroke-width="5"/>
+      <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--laiton)" stroke-width="1.4"/>
+      <path d="M16 50 A34 34 0 0 1 84 50 Z" fill="var(--verre)"/>
+      ${grads}
+      <path class="aiguille" d="M48.6 50 L50 15 L51.4 50 Z" fill="${teinte}" style="transform:rotate(${angle.toFixed(1)}deg)"/>
+      <circle cx="50" cy="50" r="4.6" fill="var(--laiton)"/>
+      <circle cx="50" cy="50" r="2" fill="var(--acajou-fonce)"/>
+      <text x="50" y="60" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="13" fill="var(--laiton-clair)">${valeur}</text>
+    </svg>
+  </div>`;
 }
 
 /** « il y a 4 minutes », « il y a 2 heures » */
@@ -162,8 +227,26 @@ function serviceBadge(key, label, value) {
 
 function liveBlock(a) {
   const st = statusOf(a);
-  const wait = st.kind === 'open' ? `<div class="live__wait">${st.wait} min<small>d'attente</small></div>` : '';
-  return `<div class="live"><div class="live__status ribbon--${st.kind}">${esc(st.label)}</div>${wait}</div>`;
+  const h = (iso) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  const cadrans = [];
+  if (typeof st.singleRider === 'number') {
+    cadrans.push(`<div class="file2"><span class="file2__nom">Single Rider</span><span class="file2__val">${st.singleRider}<small> min</small></span>
+      <span class="file2__note">File isolée, un siège à la fois</span></div>`);
+  } else if (st.kind === 'open') {
+    cadrans.push(`<div class="file2 file2--vide"><span class="file2__nom">Single Rider</span><span class="file2__val">—</span>
+      <span class="file2__note">Non relevée en ce moment</span></div>`);
+  }
+  if (st.premier?.prix) {
+    cadrans.push(`<div class="file2"><span class="file2__nom">Premier Access</span><span class="file2__val">${esc(st.premier.prix)}</span>
+      <span class="file2__note">${st.premier.debut ? `Retour entre ${h(st.premier.debut)} et ${h(st.premier.fin)}` : 'Créneau de retour non communiqué'}</span></div>`);
+  } else if (st.kind === 'open') {
+    cadrans.push(`<div class="file2 file2--vide"><span class="file2__nom">Premier Access</span><span class="file2__val">—</span>
+      <span class="file2__note">Épuisé ou non proposé aujourd'hui</span></div>`);
+  }
+  return `<div class="live">
+    <div class="live__principal">${gaugeSVG(st, true)}<div class="live__status ribbon--${st.kind}"><span class="ribbon__libelle"><i class="lampe" aria-hidden="true"></i>${esc(st.label)}</span></div></div>
+    ${cadrans.length ? `<div class="live__files">${cadrans.join('')}</div>` : ''}
+  </div>`;
 }
 
 function renderFicheStatus() {
@@ -246,7 +329,7 @@ function openFiche(id) {
   dlg.innerHTML = `
     <button type="button" class="fiche__close" data-close>Fermer ✕</button>
     <div class="fiche__head">
-      <div class="fiche__art" role="img" aria-label="Affiche vintage de ${esc(a.name)}">${poster(a)}</div>
+      <div class="fiche__art" role="img" aria-label="Planche gravée de ${esc(a.name)}">${poster(a, 'poster', statusOf(a).kind === 'closed' || statusOf(a).kind === 'refurb')}</div>
       <div>
         <p class="fiche__kicker"><span class="tag tag--land">${esc(a.land)}</span><span class="tag tag--park">${esc(parkName(a.park))}</span></p>
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>

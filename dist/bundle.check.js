@@ -1,75 +1,52 @@
 (function(){
 /**
  * Configuration centrale.
- * Modifiez WORKER_URL après avoir déployé worker/queue-times-proxy.js.
  */
 const CONFIG = {
-  /** Fichier de données des attractions */
+  /** Données éditoriales des attractions */
   DATA_URL: 'data/attractions.json',
 
   /**
-   * Relevé déposé par le workflow GitHub Actions, servi par le même domaine
-   * que la page : ni CORS, ni proxy. C'est la source la plus fiable.
+   * API ThemeParks.wiki — publique, sans authentification, et surtout
+   * ouverte au CORS : la page l'appelle directement depuis n'importe quel
+   * hébergement, sans proxy ni relevé intermédiaire.
    */
-  SNAPSHOT_URL: 'data/wait-times.json',
+  API: 'https://api.themeparks.wiki/v1',
 
-  /** Endpoint officiel Queue-Times (id 4 = Parc Disneyland, id 28 = Disney Adventure World) */
-  QUEUE_TIMES_URL: (id) => `https://queue-times.com/parks/${id}/queue_times.json`,
+  /** Identifiants des deux parcs chez ThemeParks.wiki */
+  PARKS: {
+    dlp: 'dae968d5-630d-4719-8b06-3d107e944401',
+    daw: 'ca888437-ebb4-4d50-aed2-d227f7096968'
+  },
 
-  /** URL de votre Cloudflare Worker (laisser vide pour ne pas l'utiliser). Ex : 'https://qt-proxy.moncompte.workers.dev' */
-  WORKER_URL: '',
-
-  /**
-   * Proxies CORS publics, essayés après le Worker et l'appel direct.
-   * Queue-Times n'envoie aucun en-tête CORS : sans proxy, aucun navigateur ne peut l'appeler.
-   * Ces services sont limités en débit — pour un usage fiable, déployez le Worker.
-   */
-  PUBLIC_PROXIES: [
-    {
-      url: (u) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-      unwrap: (data) => (typeof data?.contents === 'string' ? JSON.parse(data.contents) : data)
-    }
-  ],
-
-  /**
-   * Délais par route (ms). Le proxy public doit lui-même aller chercher la page
-   * en amont : il lui faut nettement plus de temps qu'un appel direct.
-   */
-  TIMEOUT_MS: { snapshot: 8000, worker: 8000, direct: 5000, proxy: 30000 },
-
-  /**
-   * Pause entre les deux parcs (ms). Les proxies publics limitent le débit :
-   * deux appels simultanés suffisent à se faire éconduire.
-   */
-  STAGGER_MS: 600,
+  /** Délai maximal par requête (ms) */
+  TIMEOUT_MS: 12000,
 
   /** Intervalle d'actualisation automatique (ms) */
   REFRESH_MS: 5 * 60 * 1000,
 
-  /** Mettre à false pour désactiver l'appel réseau (aucune donnée affichée) */
+  /** Mettre à false pour couper tout appel réseau */
   LIVE_ENABLED: true
 };
 
 /**
- * Temps d'attente Queue-Times.
+ * Temps d'attente, via l'API publique ThemeParks.wiki.
  *
- * Queue-Times n'envoie aucun en-tête CORS : un navigateur ne peut pas l'appeler
- * directement. Il faut un intermédiaire. Routes, de la plus fiable à la moins sûre :
- *   1. le Worker personnalisé, s'il est configuré — direct et frais ;
- *   2. le relevé déposé par GitHub Actions, servi par le même domaine — sûr, jusqu'à 10 min d'âge ;
- *   3. l'appel direct, au cas où l'API ajouterait les en-têtes un jour ;
- *   4. un proxy public — dépanne, mais se bloque souvent.
- * Dernier recours : le dernier relevé réussi, gardé dans le navigateur.
- * Rien n'est inventé, et l'âge de la donnée est toujours remonté à l'interface.
+ * Elle autorise le CORS : la page l'interroge directement, sans proxy ni
+ * relevé intermédiaire. Elle fournit aussi ce que Queue-Times ne donnait
+ * pas — le statut réel d'exploitation, l'attente Single Rider, et le prix
+ * et le créneau de retour du Premier Access.
+ *
+ * Rien n'est inventé : sans réponse, l'attraction reste sans statut.
  */
 
-const norm = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+const norm = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 const CACHE_KEY = 'chroniques-dernier-releve';
 
-async function fetchJson(url, timeout) {
+async function fetchJson(url) {
   const ctl = new AbortController();
-  const timer = setTimeout(() => ctl.abort(), timeout);
+  const timer = setTimeout(() => ctl.abort(), CONFIG.TIMEOUT_MS);
   try {
     const res = await fetch(url, { signal: ctl.signal, headers: { Accept: 'application/json' } });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -79,167 +56,109 @@ async function fetchJson(url, timeout) {
   }
 }
 
-const valid = (j) => j && (j.lands || j.rides);
-
-/* ---------- Relevé déposé par GitHub Actions ---------- */
-
-let snapshotPromise = null;
-/** Un seul téléchargement sert les deux parcs. */
-function loadSnapshot() {
-  if (!snapshotPromise) {
-    snapshotPromise = fetchJson(CONFIG.SNAPSHOT_URL, CONFIG.TIMEOUT_MS.snapshot)
-      .then((j) => (j && j.parks ? j : null))
-      .catch(() => null);
-  }
-  return snapshotPromise;
-}
-
-/* ---------- Cache navigateur ---------- */
+/* ---------- Cache navigateur, dernier recours ---------- */
 
 function readCache() {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
+  try { const raw = localStorage.getItem(CACHE_KEY); return raw ? JSON.parse(raw) : null; }
+  catch { return null; }
 }
-
-function writeCache(parkId, json) {
+function writeCache(parkId, liveData) {
   try {
     const all = readCache() || { parks: {} };
-    all.parks[parkId] = json;
+    all.parks[parkId] = liveData;
     all.releve = new Date().toISOString();
     localStorage.setItem(CACHE_KEY, JSON.stringify(all));
-  } catch { /* stockage indisponible : on continue sans */ }
+  } catch { /* stockage indisponible */ }
 }
-
-/* ---------- Interrogation d'un parc ---------- */
-
-async function fetchPark(queueTimesId) {
-  const target = CONFIG.QUEUE_TIMES_URL(queueTimesId);
-  const t = CONFIG.TIMEOUT_MS;
-  const tried = [];
-
-  // 1. Worker personnalisé
-  if (CONFIG.WORKER_URL) {
-    try {
-      const json = await fetchJson(`${CONFIG.WORKER_URL}?park=${queueTimesId}`, t.worker);
-      if (!valid(json)) throw new Error('format inattendu');
-      return { json, via: 'worker', age: null };
-    } catch (err) { tried.push(`worker : ${describe(err, t.worker)}`); }
-  }
-
-  // 2. Relevé GitHub Actions
-  const snap = await loadSnapshot();
-  const fromSnap = snap?.parks?.[String(queueTimesId)];
-  if (valid(fromSnap)) return { json: fromSnap, via: 'relevé', age: snap.releve };
-
-  // 3. Appel direct
-  try {
-    const json = await fetchJson(target, t.direct);
-    if (!valid(json)) throw new Error('format inattendu');
-    return { json, via: 'direct', age: null };
-  } catch (err) { tried.push(`direct : ${describe(err, t.direct)}`); }
-
-  // 4. Proxies publics, deux essais chacun
-  for (let i = 0; i < CONFIG.PUBLIC_PROXIES.length; i++) {
-    const p = CONFIG.PUBLIC_PROXIES[i];
-    for (let n = 1; n <= 2; n++) {
-      try {
-        const raw = await fetchJson(p.url(target), t.proxy);
-        const json = p.unwrap ? p.unwrap(raw) : raw;
-        if (!valid(json)) throw new Error('format inattendu');
-        return { json, via: 'proxy ' + (i + 1), age: null };
-      } catch (err) {
-        if (n === 2) tried.push(`proxy ${i + 1} : ${describe(err, t.proxy)}`);
-        else await pause(CONFIG.STAGGER_MS);
-      }
-    }
-  }
-
-  // 5. Dernier relevé gardé dans ce navigateur
-  const cache = readCache();
-  const fromCache = cache?.parks?.[String(queueTimesId)];
-  if (valid(fromCache)) return { json: fromCache, via: 'cache', age: cache.releve };
-
-  throw new Error(tried.join(' · '));
-}
-
-const describe = (err, timeout) =>
-  err.name === 'AbortError' ? `délai dépassé (${timeout / 1000} s)` : err.message;
 
 /* ---------- Association attraction ↔ ligne de l'API ---------- */
 
-function flattenRides(json) {
-  const out = [];
-  (json.lands || []).forEach((land) => (land.rides || []).forEach((r) => out.push(r)));
-  (json.rides || []).forEach((r) => out.push(r));
-  return out;
-}
-
-/** Ne retient jamais une file « Single Rider » si la file principale existe. */
-function findRide(rides, aliases) {
+/** Ne retient jamais une file « Single Rider » séparée si la principale existe. */
+function findEntry(entries, aliases) {
   const wanted = aliases.map(norm);
-  const named = rides
-    .map((r) => ({ r, n: norm(r.name) }))
+  const named = entries
+    .map((e) => ({ e, n: norm(e.name) }))
     .sort((a, b) => Number(a.n.includes('single rider')) - Number(b.n.includes('single rider')));
   return (
-    named.find((x) => wanted.includes(x.n))?.r ||
-    named.find((x) => wanted.some((w) => x.n.startsWith(w)))?.r ||
-    named.find((x) => wanted.some((w) => x.n.includes(w) || w.includes(x.n)))?.r ||
+    named.find((x) => wanted.includes(x.n))?.e ||
+    named.find((x) => wanted.some((w) => x.n.startsWith(w)))?.e ||
+    named.find((x) => wanted.some((w) => x.n.includes(w) || w.includes(x.n)))?.e ||
     null
   );
+}
+
+/** Traduit le statut de l'API en l'un des quatre états du site. */
+function kindOf(status) {
+  switch (status) {
+    case 'OPERATING': return 'open';
+    case 'REFURBISHMENT': return 'refurb';
+    case 'DOWN': return 'down';
+    case 'CLOSED': return 'closed';
+    default: return 'unknown';
+  }
+}
+
+function readEntry(e) {
+  const q = e.queue || {};
+  const standby = q.STANDBY?.waitTime;
+  const prt = q.PAID_RETURN_TIME;
+  return {
+    kind: kindOf(e.status),
+    wait: typeof standby === 'number' ? standby : null,
+    singleRider: typeof q.SINGLE_RIDER?.waitTime === 'number' ? q.SINGLE_RIDER.waitTime : null,
+    premier: prt && prt.state === 'AVAILABLE'
+      ? { prix: prt.price?.formatted || null, debut: prt.returnStart || null, fin: prt.returnEnd || null }
+      : null,
+    updated: e.lastUpdated || null,
+    source: 'live'
+  };
 }
 
 /**
  * Retourne { entries, mode, via, age, failures }
  * mode : 'live' | 'partial' | 'unavailable'
- * age  : date ISO du relevé quand la donnée n'est pas en direct, sinon null
  */
 async function loadWaitTimes(parks, attractions) {
   const entries = new Map();
   const failures = [];
-  const sources = new Set();
-  let ages = [];
   let livePark = 0;
+  let ages = [];
+  let via = 'ThemeParks.wiki';
 
   if (CONFIG.LIVE_ENABLED === false) return { entries, mode: 'unavailable', via: '', age: null, failures };
 
-  snapshotPromise = null; // un relevé frais à chaque actualisation
+  // Les deux parcs en parallèle : l'API n'impose pas de limite de débit stricte.
+  const res = await Promise.allSettled(parks.map((p) =>
+    fetchJson(`${CONFIG.API}/entity/${CONFIG.PARKS[p.id]}/live`)));
 
-  // Les parcs sont interrogés l'un après l'autre : en parallèle, les proxies
-  // publics refusent le second appel.
-  for (let i = 0; i < parks.length; i++) {
-    if (i > 0) await pause(CONFIG.STAGGER_MS);
-    try {
-      const res = await fetchPark(parks[i].queueTimesId);
-      livePark++;
-      sources.add(res.via);
-      if (res.age) ages.push(res.age);
-      const rides = flattenRides(res.json);
-      attractions
-        .filter((a) => a.park === parks[i].id)
-        .forEach((a) => {
-          const ride = findRide(rides, a.queueTimes?.aliases || [a.name]);
-          if (ride) {
-            entries.set(a.id, {
-              open: !!ride.is_open,
-              wait: ride.is_open ? Number(ride.wait_time) || 0 : null,
-              source: res.via
-            });
-          }
-        });
-      if (res.via === 'worker' || res.via === 'direct' || res.via.startsWith('proxy')) {
-        writeCache(parks[i].queueTimesId, res.json);
+  res.forEach((r, i) => {
+    const park = parks[i];
+    let liveData = null;
+
+    if (r.status === 'fulfilled' && Array.isArray(r.value?.liveData)) {
+      liveData = r.value.liveData;
+      writeCache(park.id, liveData);
+    } else {
+      const cache = readCache();
+      if (Array.isArray(cache?.parks?.[park.id])) {
+        liveData = cache.parks[park.id];
+        if (cache.releve) ages.push(cache.releve);
+        via = 'cache';
+      } else {
+        failures.push(`${park.name} — ${r.reason?.message || 'pas de réponse'}`);
+        return;
       }
-    } catch (err) {
-      failures.push(`${parks[i].name} — ${err.message}`);
     }
-  }
+
+    livePark++;
+    attractions.filter((a) => a.park === park.id).forEach((a) => {
+      const hit = findEntry(liveData, a.queueTimes?.aliases || [a.name]);
+      if (hit) entries.set(a.id, readEntry(hit));
+    });
+  });
 
   const mode = livePark === 0 ? 'unavailable' : livePark < parks.length ? 'partial' : 'live';
-  // La donnée la plus ancienne décide de l'âge affiché.
-  const age = ages.length ? ages.sort()[0] : null;
-  return { entries, mode, via: [...sources].join(' + '), age, failures };
+  return { entries, mode, via, age: ages.length ? ages.sort()[0] : null, failures };
 }
 
 /**
@@ -294,11 +213,30 @@ const GROUND = {
 
 /* Variantes : la planche change de registre, pas de style. */
 const VARIANT = {
-  poster:    { gold: '#E3C77E', rule: '#C9A227', ink: '#F3ECDC', rays: .16, grid: 0 },
-  night:     { gold: '#F0DFA8', rule: '#D4AF37', ink: '#F7F1E2', rays: .05, grid: 0, dim: .55 },
-  blueprint: { gold: '#BFD9E4', rule: '#9FC3D2', ink: '#E8F2F6', rays: 0, grid: .18, mono: '#0C2A38' },
-  ticket:    { gold: '#E3C77E', rule: '#C9A227', ink: '#F3ECDC', rays: .1, grid: 0, stub: true }
+  poster:    { gold: '#E6C77E', rule: '#C8993F', ink: '#EDE0C4', rays: .14, grid: 0 },
+  night:     { gold: '#F0DCA6', rule: '#C8993F', ink: '#F2E8D2', rays: .05, grid: 0, dim: .55 },
+  blueprint: { gold: '#C6D8CE', rule: '#9AB0A4', ink: '#E6EFE8', rays: 0, grid: .18, mono: '#16201C' },
+  ticket:    { gold: '#E6C77E', rule: '#C8993F', ink: '#EDE0C4', rays: .1, grid: 0, stub: true }
 };
+
+/**
+ * Les fonds gardent la teinte propre à chaque motif, mais sont ramenés vers
+ * l'acajou et le verre fumé du cabinet : les quarante planches se lisent alors
+ * comme une même collection d'instruments, et non comme quarante affiches.
+ */
+const CABINET = { a: '#1C0F0A', b: '#16201C' };
+const melange = (hex, vers, part) => {
+  const n = (h, i) => parseInt(h.slice(1 + i * 2, 3 + i * 2), 16);
+  return '#' + [0, 1, 2].map((i) => Math.round(n(hex, i) * (1 - part) + n(vers, i) * part)
+    .toString(16).padStart(2, '0')).join('');
+};
+for (const k of Object.keys(GROUND)) {
+  GROUND[k] = {
+    a: melange(GROUND[k].a, CABINET.a, .42),
+    b: melange(GROUND[k].b, CABINET.b, .3),
+    accent: GROUND[k].accent
+  };
+}
 
 const escSvg = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -422,7 +360,7 @@ const MOTIFS = {
     }
     return `
     <circle cx="150" cy="108" r="78" fill="none" stroke="${v.gold}" stroke-width="1"/>
-    <g stroke="${v.gold}" stroke-width="3" stroke-linecap="round">${flake}</g>
+    <g class="a-turn" style="transform-origin:150px 108px" stroke="${v.gold}" stroke-width="3" stroke-linecap="round">${flake}</g>
     ${diamond(150, 108, 7, v.gold)}
     ${steps(150, 226, 200, 76, 4, g.accent)}
     ${steps(150, 226, 108, 46, 3, v.gold)}
@@ -450,7 +388,7 @@ const MOTIFS = {
     <circle cx="170" cy="196" r="22" fill="none" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="170" cy="196" r="6" fill="${v.gold}"/>
     <circle cx="238" cy="200" r="14" fill="none" stroke="${v.gold}" stroke-width="2.5"/>
-    ${[0,1,2,3,4].map((i) => `<ellipse cx="${98 - i * 4}" cy="${96 - i * 19}" rx="${15 + i * 5}" ry="${9 + i * 3}" fill="${v.gold}" opacity="${(.5 - i * .08).toFixed(2)}"/>`).join('')}`,
+    ${[0,1,2,3,4].map((i) => `<ellipse class="a-smoke" style="animation-delay:${(i * .34).toFixed(2)}s" cx="${98 - i * 4}" cy="${96 - i * 19}" rx="${15 + i * 5}" ry="${9 + i * 3}" fill="${v.gold}" opacity="${(.5 - i * .08).toFixed(2)}"/>`).join('')}`,
 
   /** Main Street : omnibus à impériale et rails de tramway */
   tram: (g, v) => `
@@ -483,8 +421,8 @@ const MOTIFS = {
     <rect x="162" y="40" width="10" height="52" fill="${v.gold}"/>
     <rect x="122" y="34" width="22" height="8" fill="${v.gold}"/>
     <rect x="156" y="34" width="22" height="8" fill="${v.gold}"/>
-    <circle cx="56" cy="178" r="30" fill="none" stroke="${v.gold}" stroke-width="3"/>
-    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="56" y1="178" x2="${(56 + Math.cos(a) * 30).toFixed(1)}" y2="${(178 + Math.sin(a) * 30).toFixed(1)}" stroke="${v.gold}" stroke-width="2.5"/>`; }).join('')}
+    <g class="a-wheel" style="transform-origin:56px 178px"><circle cx="56" cy="178" r="30" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="56" y1="178" x2="${(56 + Math.cos(a) * 30).toFixed(1)}" y2="${(178 + Math.sin(a) * 30).toFixed(1)}" stroke="${v.gold}" stroke-width="2.5"/>`; }).join('')}</g>
     <circle cx="56" cy="178" r="7" fill="${v.gold}"/>
     ${[0,1,2,3,4,5,6,7,8,9].map((i) => `<path d="M${18 + i * 28} 232 q7 -8 14 0 t14 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".55"/>`).join('')}`,
 
@@ -553,7 +491,7 @@ const MOTIFS = {
     <rect x="112" y="92" width="76" height="52" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
     <circle cx="150" cy="118" r="30" fill="${g.a}" stroke="${v.gold}" stroke-width="2.5"/>
     ${[0,1,2,3,4,5,6,7,8,9,10,11].map((i) => { const a = i * Math.PI / 6; return `<line x1="${(150 + Math.cos(a) * 24).toFixed(1)}" y1="${(118 + Math.sin(a) * 24).toFixed(1)}" x2="${(150 + Math.cos(a) * 28).toFixed(1)}" y2="${(118 + Math.sin(a) * 28).toFixed(1)}" stroke="${v.gold}" stroke-width="${i % 3 ? 1.5 : 2.5}"/>`; }).join('')}
-    <path d="M150 118 L150 100 M150 118 L168 126" stroke="${v.gold}" stroke-width="3.5" stroke-linecap="round"/>
+    <path class="a-hand-h" style="transform-origin:150px 118px" d="M150 118 L150 100" stroke="${v.gold}" stroke-width="3.5" stroke-linecap="round"/><path class="a-hand-m" style="transform-origin:150px 118px" d="M150 118 L168 126" stroke="${v.gold}" stroke-width="3.5" stroke-linecap="round"/>
     <path d="M124 92 L150 58 L176 92Z" fill="${v.gold}"/>
     <rect x="18" y="52" width="264" height="2.5" fill="${v.gold}" opacity=".6"/>
     <path d="M196 54 L196 78" stroke="${v.gold}" stroke-width="2"/>
@@ -614,8 +552,8 @@ const MOTIFS = {
   /** Le Carrousel de Lancelot : cheval de manège et lance */
   carousel: (g, v) => `
     ${fan(150, 34, 126, 18, v.gold, .24)}
-    <path d="M44 86 L150 34 L256 86Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
-    ${[0,1,2,3,4,5,6].map((i) => `<path d="M${54 + i * 32} 86 L150 34" stroke="${v.gold}" stroke-width="1.4" opacity=".6"/>`).join('')}
+    <g class="a-canopy" style="transform-origin:150px 60px"><path d="M44 86 L150 34 L256 86Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    ${[0,1,2,3,4,5,6].map((i) => `<path d="M${54 + i * 32} 86 L150 34" stroke="${v.gold}" stroke-width="1.4" opacity=".6"/>`).join('')}</g>
     <rect x="40" y="86" width="220" height="8" fill="${v.gold}"/>
     ${diamond(150, 28, 8, v.gold)}
     <rect x="146" y="94" width="8" height="120" fill="${v.gold}"/>
@@ -633,7 +571,7 @@ const MOTIFS = {
     <circle cx="150" cy="112" r="70" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="150" cy="112" r="58" fill="${g.a}" stroke="${v.gold}" stroke-width="1.5"/>
     ${[0,1,2,3,4,5,6,7,8,9,10,11].map((i) => { const a = i * Math.PI / 6; return `<line x1="${(150 + Math.cos(a) * 44).toFixed(1)}" y1="${(112 + Math.sin(a) * 44).toFixed(1)}" x2="${(150 + Math.cos(a) * 54).toFixed(1)}" y2="${(112 + Math.sin(a) * 54).toFixed(1)}" stroke="${v.gold}" stroke-width="${i % 3 ? 1.6 : 3}"/>`; }).join('')}
-    <path d="M150 112 L150 74 M150 112 L182 128" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/>
+    <g style="transform-origin:150px 112px"><path class="a-hand-h" style="transform-origin:150px 112px" d="M150 112 L150 74" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/><path class="a-hand-m" style="transform-origin:150px 112px" d="M150 112 L182 128" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/></g>
     ${diamond(150, 112, 6, v.gold)}
     <rect x="142" y="26" width="16" height="18" rx="4" fill="${v.gold}"/>
     <circle cx="150" cy="22" r="11" fill="none" stroke="${v.gold}" stroke-width="3.5"/>`,
@@ -684,7 +622,7 @@ const MOTIFS = {
     ${[0,1,2,3,4,5,6].map((i) => `<path d="M${152 + i * 14} 136 L${159 + i * 14} 126 L${166 + i * 14} 136Z" fill="${g.accent}"/>`).join('')}
     <circle cx="170" cy="192" r="14" fill="none" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="222" cy="192" r="14" fill="none" stroke="${v.gold}" stroke-width="3"/>
-    ${[0,1,2,3].map((i) => `<ellipse cx="${74 - i * 5}" cy="${100 - i * 20}" rx="${12 + i * 5}" ry="${7 + i * 3}" fill="${v.gold}" opacity="${(.45 - i * .09).toFixed(2)}"/>`).join('')}`,
+    ${[0,1,2,3].map((i) => `<ellipse class="a-smoke" style="animation-delay:${(i * .4).toFixed(2)}s" cx="${74 - i * 5}" cy="${100 - i * 20}" rx="${12 + i * 5}" ry="${7 + i * 3}" fill="${v.gold}" opacity="${(.45 - i * .09).toFixed(2)}"/>`).join('')}`,
 
   /** Meet Mickey Mouse : marquise de théâtre et cordon de velours */
   marquee: (g, v) => `
@@ -749,8 +687,8 @@ const MOTIFS = {
     ${fan(150, 232, 180, 18, v.gold, .2)}
     <circle cx="150" cy="112" r="82" fill="none" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="150" cy="112" r="62" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
-    <circle cx="150" cy="112" r="42" fill="none" stroke="${v.gold}" stroke-width="2"/>
-    <circle cx="150" cy="112" r="22" fill="${v.gold}"/>
+    <circle class="a-ping" cx="150" cy="112" r="42" fill="none" stroke="${v.gold}" stroke-width="2"/>
+    <circle class="a-ping" style="animation-delay:.6s" cx="150" cy="112" r="22" fill="${v.gold}"/>
     ${[0,1,2,3].map((i) => { const a = i * Math.PI / 2 + Math.PI / 4; return `<line x1="${(150 + Math.cos(a) * 82).toFixed(1)}" y1="${(112 + Math.sin(a) * 82).toFixed(1)}" x2="${(150 + Math.cos(a) * 104).toFixed(1)}" y2="${(112 + Math.sin(a) * 104).toFixed(1)}" stroke="${v.gold}" stroke-width="3"/>`; }).join('')}
     <path d="M44 232 L140 124" stroke="${v.gold}" stroke-width="4" opacity=".9"/>
     <path d="M44 232 L140 124" stroke="${g.a}" stroke-width="1.4" stroke-dasharray="5 7"/>
@@ -762,7 +700,7 @@ const MOTIFS = {
     ${fan(150, 124, 136, 20, v.gold, .18)}
     <circle cx="150" cy="124" r="26" fill="${v.gold}"/>
     <circle cx="150" cy="124" r="34" fill="none" stroke="${v.gold}" stroke-width="1.5" opacity=".7"/>
-    ${[[96,16,-22],[122,12,14],[148,9,-8]].map(([rx, ry, rot]) => `<ellipse cx="150" cy="124" rx="${rx}" ry="${ry}" fill="none" stroke="${v.gold}" stroke-width="2.5" transform="rotate(${rot} 150 124)"/>`).join('')}
+    ${[[96,16,-22,0],[122,12,14,1],[148,9,-8,2]].map(([rx, ry, rot, i]) => `<g class="a-orbit a-orbit--${i}" style="transform-origin:150px 124px"><ellipse cx="150" cy="124" rx="${rx}" ry="${ry}" fill="none" stroke="${v.gold}" stroke-width="2.5" transform="rotate(${rot} 150 124)"/></g>`).join('')}
     <circle cx="246" cy="98" r="13" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
     <circle cx="58" cy="146" r="10" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
     <circle cx="192" cy="186" r="8" fill="${v.gold}"/>
@@ -797,7 +735,7 @@ const MOTIFS = {
 
   /** Welcome to Starport : balise d'atterrissage et portique */
   beacon: (g, v) => `
-    ${[0,1,2,3,4].map((i) => `<ellipse cx="150" cy="206" rx="${40 + i * 28}" ry="${10 + i * 7}" fill="none" stroke="${v.gold}" stroke-width="${(2.6 - i * .4).toFixed(1)}" opacity="${(.9 - i * .16).toFixed(2)}"/>`).join('')}
+    ${[0,1,2,3,4].map((i) => `<ellipse class="a-ping" style="animation-delay:${(i * .5).toFixed(2)}s" cx="150" cy="206" rx="${40 + i * 28}" ry="${10 + i * 7}" fill="none" stroke="${v.gold}" stroke-width="${(2.6 - i * .4).toFixed(1)}" opacity="${(.9 - i * .16).toFixed(2)}"/>`).join('')}
     <path d="M110 206 L132 92 L168 92 L190 206Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
     <path d="M132 92 L150 50 L168 92Z" fill="${v.gold}"/>
     ${[0,1,2].map((i) => `<rect x="${130 - i * 2}" y="${118 + i * 26}" width="${40 + i * 4}" height="9" fill="${v.gold}" opacity="${(.9 - i * .16).toFixed(2)}"/>`).join('')}
@@ -856,7 +794,7 @@ const MOTIFS = {
     ${[0,1,2,3,4,5].map((i) => `<rect x="${50 + i * 14}" y="${206 + (i % 2) * 2}" width="8" height="4" fill="${v.gold}" opacity=".6"/>`).join('')}
     <rect x="232" y="128" width="9" height="96" fill="${v.gold}"/>
     <path d="M226 128 q10 -30 20 0Z" fill="${v.gold}"/>
-    ${[0,1,2].map((i) => `<path d="M${230 + i * 3} ${118 - i * 12} q6 -12 10 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity="${(.8 - i * .22).toFixed(2)}"/>`).join('')}
+    ${[0,1,2].map((i) => `<path class="a-smoke" style="animation-delay:${(i * .3).toFixed(2)}s" d="M${230 + i * 3} ${118 - i * 12} q6 -12 10 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity="${(.8 - i * .22).toFixed(2)}"/>`).join('')}
     <rect x="18" y="224" width="264" height="4" fill="${v.gold}"/>`,
 
   /** La Cabane des Robinson : arbre-maison et roue à aubes */
@@ -871,8 +809,8 @@ const MOTIFS = {
     <rect x="106" y="142" width="14" height="18" fill="${v.gold}"/>
     <rect x="166" y="166" width="46" height="30" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
     <path d="M160 166 L189 144 L218 166Z" fill="${v.gold}"/>
-    <circle cx="238" cy="206" r="26" fill="none" stroke="${v.gold}" stroke-width="3"/>
-    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="238" y1="206" x2="${(238 + Math.cos(a) * 26).toFixed(1)}" y2="${(206 + Math.sin(a) * 26).toFixed(1)}" stroke="${v.gold}" stroke-width="2.2"/>`; }).join('')}
+    <g class="a-wheel" style="transform-origin:238px 206px"><circle cx="238" cy="206" r="26" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="238" y1="206" x2="${(238 + Math.cos(a) * 26).toFixed(1)}" y2="${(206 + Math.sin(a) * 26).toFixed(1)}" stroke="${v.gold}" stroke-width="2.2"/>`; }).join('')}</g>
     <rect x="18" y="226" width="264" height="4" fill="${v.gold}"/>`,
 
   /** Le Galion des Pirates : coque, mâts et voiles carrées */
@@ -930,7 +868,7 @@ const MOTIFS = {
     <path d="M96 190 Q96 158 150 158 Q204 158 204 190 Q204 206 150 206 Q96 206 96 190Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
     <path d="M204 176 L250 160 L246 188 L204 186Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
     <path d="M96 180 q-32 2 -30 22 q2 16 22 12" fill="none" stroke="${v.gold}" stroke-width="5"/>
-    <path d="M132 158 Q150 140 168 158Z" fill="${v.gold}"/>
+    <path class="a-flicker" style="transform-origin:150px 158px" d="M132 158 Q150 140 168 158Z" fill="${v.gold}"/>
     ${diamond(150, 148, 6, v.gold)}
     ${[0,1,2,3].map((i) => `<path d="M${248 - i * 4} ${152 - i * 20} q10 -16 16 0" fill="none" stroke="${v.gold}" stroke-width="2.2" opacity="${(.85 - i * .18).toFixed(2)}"/>`).join('')}
     <rect x="62" y="226" width="176" height="6" fill="${v.gold}"/>
@@ -986,13 +924,18 @@ function posterSVG(motif, variant = 'poster', opts = {}) {
        <text x="150" y="320" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="9" letter-spacing="5" fill="${v.gold}" opacity=".85">ADMIT ONE</text></g>`
     : '';
 
-  return `<svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Affiche Art déco')}">
-  <defs>
+  /* Une attraction fermée garde son motif, mais le laiton s'est terni. */
+  const fade = opts.fade
+    ? `<filter id="${uid}f"><feColorMatrix type="saturate" values="0.14"/></filter>`
+    : '';
+
+  return `<svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Planche gravée')}"${opts.fade ? ` filter="url(#${uid}f)" opacity=".74"` : ''}>
+  <defs>${fade}
     <linearGradient id="${uid}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${g.b}"/><stop offset="1" stop-color="${g.a}"/></linearGradient>
     <clipPath id="${uid}c"><rect x="18" y="60" width="264" height="240"/></clipPath>
   </defs>
 
-  <rect width="300" height="420" fill="#0B1C26"/>
+  <rect width="300" height="420" fill="#1C0F0A"/>
 
   <!-- Bandeau du land -->
   <text x="150" y="33" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="${land.length > 18 ? 9 : 10.5}" letter-spacing="${land.length > 18 ? 3 : 4.5}" fill="${v.gold}">${land}</text>
@@ -1085,9 +1028,10 @@ function statusOf(a) {
   const live = state.live.get(a.id);
   if (local.status === 'refurb') return { kind: 'refurb', label: local.until ? `En rénovation jusqu'au ${fmtDate(local.until)}` : 'En rénovation', wait: null };
   if (local.status === 'closed') return { kind: 'closed', label: 'Fermée', wait: null };
-  if (!live) return { kind: 'unknown', label: state.mode === 'loading' ? 'Chargement…' : 'Statut indisponible', wait: null };
-  if (live.open) return { kind: 'open', label: 'Ouverte', wait: live.wait };
-  return { kind: 'closed', label: 'Fermée', wait: null };
+  if (!live) return { kind: 'unknown', label: state.mode === 'loading' ? 'Relevé en cours…' : 'Statut indisponible', wait: null };
+  const LIB = { open: 'Ouverte', closed: 'Fermée', refurb: 'En rénovation', down: 'Interrompue', unknown: 'Statut indisponible' };
+  return { kind: live.kind, label: LIB[live.kind] || LIB.unknown, wait: live.kind === 'open' ? live.wait : null,
+           singleRider: live.singleRider, premier: live.premier };
 }
 
 function matches(a) {
@@ -1101,7 +1045,7 @@ function matches(a) {
   return true;
 }
 
-const poster = (a, variant = 'poster') => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, alt: `Affiche vintage de ${a.name}` });
+const poster = (a, variant = 'poster', fade = false) => posterSVG(a.motif, variant, { label: a.land, lines: a.posterLines, tag: a.tagline, fade, alt: `Planche gravée de ${a.name}` });
 
 /* ---------- Filtres ---------- */
 function landsForFilter() {
@@ -1124,26 +1068,51 @@ function renderFilters() {
 
 /* ---------- Grille ---------- */
 function ribbonHTML(st) {
-  const wait = st.kind === 'open' ? `<span class="ribbon__wait">${st.wait} min</span>` : '';
-  return `<div class="ribbon ribbon--${st.kind}"><span>${esc(st.label)}</span>${wait}</div>`;
+  const files = [];
+  if (typeof st.singleRider === 'number') files.push(`<span class="file file--sr">SR<b>${st.singleRider}<small>min</small></b></span>`);
+  if (st.premier?.prix) files.push(`<span class="file file--pa">PA<b>${esc(st.premier.prix)}</b></span>`);
+  return `<div class="ribbon ribbon--${st.kind}">
+    <div class="ribbon__etat"><span class="ribbon__libelle"><i class="lampe" aria-hidden="true"></i>${esc(st.label)}</span>${files.length ? `<div class="ribbon__files">${files.join('')}</div>` : ''}</div>
+    ${gaugeSVG(st, false)}
+  </div>`;
 }
+
+let dernieresAttentes = new Map();
 
 function renderGrid() {
   const list = state.attractions.filter(matches);
   $('#count').textContent = `${list.length} attraction${list.length > 1 ? 's' : ''} affichée${list.length > 1 ? 's' : ''} sur ${state.attractions.length}`;
+  const avant = dernieresAttentes;
+  dernieresAttentes = new Map(list.map((a) => [a.id, statusOf(a).wait]));
   $('#grid').innerHTML = list.length
-    ? list.map((a) => {
+    ? list.map((a, i) => {
         const st = statusOf(a);
-        return `<article class="card">
-          <div class="card__art" aria-hidden="true">${poster(a)}</div>
+        return `<article class="card" style="--i:${i}" data-etat="${st.kind}">
+          <div class="card__art" aria-hidden="true">${poster(a, 'poster', st.kind === 'closed' || st.kind === 'refurb')}</div>
           <div class="card__body">
             <h2 class="card__title"><button type="button" class="card__btn" data-open="${esc(a.id)}">${esc(a.name)}</button></h2>
             <p class="card__park">${esc(parkName(a.park))}</p>
+            ${a.stub ? '<span class="card__encours">Fiche en cours</span>' : ''}
           </div>
           ${ribbonHTML(st)}
         </article>`;
       }).join('')
     : '<p class="empty">Aucune attraction ne correspond à ces critères. Modifiez les filtres ou la recherche.</p>';
+  signalerChangements(avant);
+}
+
+/** Souligne brièvement les durées qui viennent de bouger */
+function signalerChangements(avant) {
+  if (!avant.size) return;
+  document.querySelectorAll('.card').forEach((carte) => {
+    const id = carte.querySelector('[data-open]')?.dataset.open;
+    const t = carte.querySelector('.ribbon__wait');
+    if (!t || !id || !avant.has(id)) return;
+    if (avant.get(id) !== dernieresAttentes.get(id)) {
+      t.classList.add('vient-de-changer');
+      t.addEventListener('animationend', () => t.classList.remove('vient-de-changer'), { once: true });
+    }
+  });
 }
 
 function renderLivebar() {
@@ -1163,6 +1132,45 @@ function renderLivebar() {
     unavailable: `Temps d'attente indisponibles.${detail}`
   }[state.mode];
   bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh">Actualiser</button>`;
+}
+
+/**
+ * Cadran à aiguille. L'aiguille balaie un demi-cercle : à gauche l'attraction
+ * vient d'ouvrir, à droite la file dépasse deux heures. Au-delà de 120 min
+ * l'aiguille bute en fin de course, et le chiffre exact reste lisible dessous.
+ */
+function gaugeSVG(st, grand) {
+  const COUL = { open: 'var(--vert-cadran)', closed: 'var(--rouge-cadran)',
+                 refurb: 'var(--ambre)', down: 'var(--ambre)', unknown: 'var(--gris-cadran)' };
+  const teinte = COUL[st.kind] || COUL.unknown;
+  const w = st.kind === 'open' && typeof st.wait === 'number' ? st.wait : null;
+  const angle = w === null ? -90 : (Math.min(w, 120) / 120) * 180 - 90;
+
+  // Graduations tous les quarts d'heure, plus marquées toutes les demi-heures
+  let grads = '';
+  for (let m = 0; m <= 120; m += 15) {
+    const a = Math.PI - (m / 120) * Math.PI;
+    const gros = m % 30 === 0;
+    const r1 = gros ? 28 : 31, r2 = 37;
+    grads += `<line x1="${(50 + Math.cos(a) * r1).toFixed(1)}" y1="${(50 - Math.sin(a) * r1).toFixed(1)}" x2="${(50 + Math.cos(a) * r2).toFixed(1)}" y2="${(50 - Math.sin(a) * r2).toFixed(1)}" stroke="var(--laiton)" stroke-width="${gros ? 1.8 : 1}" opacity="${gros ? .95 : .55}"/>`;
+  }
+
+  const valeur = st.kind === 'open'
+    ? (typeof st.wait === 'number' ? `${st.wait}<tspan font-size="7"> min</tspan>` : '—')
+    : '—';
+
+  return `<div class="gauge${grand ? ' gauge--grand' : ''}" role="img" aria-label="${esc(st.label)}${w !== null ? `, ${w} minutes d'attente` : ''}">
+    <svg viewBox="0 0 100 62">
+      <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--cuivre)" stroke-width="5"/>
+      <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="var(--laiton)" stroke-width="1.4"/>
+      <path d="M16 50 A34 34 0 0 1 84 50 Z" fill="var(--verre)"/>
+      ${grads}
+      <path class="aiguille" d="M48.6 50 L50 15 L51.4 50 Z" fill="${teinte}" style="transform:rotate(${angle.toFixed(1)}deg)"/>
+      <circle cx="50" cy="50" r="4.6" fill="var(--laiton)"/>
+      <circle cx="50" cy="50" r="2" fill="var(--acajou-fonce)"/>
+      <text x="50" y="60" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="13" fill="var(--laiton-clair)">${valeur}</text>
+    </svg>
+  </div>`;
 }
 
 /** « il y a 4 minutes », « il y a 2 heures » */
@@ -1210,8 +1218,26 @@ function serviceBadge(key, label, value) {
 
 function liveBlock(a) {
   const st = statusOf(a);
-  const wait = st.kind === 'open' ? `<div class="live__wait">${st.wait} min<small>d'attente</small></div>` : '';
-  return `<div class="live"><div class="live__status ribbon--${st.kind}">${esc(st.label)}</div>${wait}</div>`;
+  const h = (iso) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  const cadrans = [];
+  if (typeof st.singleRider === 'number') {
+    cadrans.push(`<div class="file2"><span class="file2__nom">Single Rider</span><span class="file2__val">${st.singleRider}<small> min</small></span>
+      <span class="file2__note">File isolée, un siège à la fois</span></div>`);
+  } else if (st.kind === 'open') {
+    cadrans.push(`<div class="file2 file2--vide"><span class="file2__nom">Single Rider</span><span class="file2__val">—</span>
+      <span class="file2__note">Non relevée en ce moment</span></div>`);
+  }
+  if (st.premier?.prix) {
+    cadrans.push(`<div class="file2"><span class="file2__nom">Premier Access</span><span class="file2__val">${esc(st.premier.prix)}</span>
+      <span class="file2__note">${st.premier.debut ? `Retour entre ${h(st.premier.debut)} et ${h(st.premier.fin)}` : 'Créneau de retour non communiqué'}</span></div>`);
+  } else if (st.kind === 'open') {
+    cadrans.push(`<div class="file2 file2--vide"><span class="file2__nom">Premier Access</span><span class="file2__val">—</span>
+      <span class="file2__note">Épuisé ou non proposé aujourd'hui</span></div>`);
+  }
+  return `<div class="live">
+    <div class="live__principal">${gaugeSVG(st, true)}<div class="live__status ribbon--${st.kind}"><span class="ribbon__libelle"><i class="lampe" aria-hidden="true"></i>${esc(st.label)}</span></div></div>
+    ${cadrans.length ? `<div class="live__files">${cadrans.join('')}</div>` : ''}
+  </div>`;
 }
 
 function renderFicheStatus() {
@@ -1294,7 +1320,7 @@ function openFiche(id) {
   dlg.innerHTML = `
     <button type="button" class="fiche__close" data-close>Fermer ✕</button>
     <div class="fiche__head">
-      <div class="fiche__art" role="img" aria-label="Affiche vintage de ${esc(a.name)}">${poster(a)}</div>
+      <div class="fiche__art" role="img" aria-label="Planche gravée de ${esc(a.name)}">${poster(a, 'poster', statusOf(a).kind === 'closed' || statusOf(a).kind === 'refurb')}</div>
       <div>
         <p class="fiche__kicker"><span class="tag tag--land">${esc(a.land)}</span><span class="tag tag--park">${esc(parkName(a.park))}</span></p>
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>

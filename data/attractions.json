@@ -640,7 +640,7 @@
     {
       "id": "its-a-small-world",
       "name": "It's a Small World",
-      "tagline": "",
+      "tagline": "Toutes les scènes tiennent dans une seule salle",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "globe",
@@ -648,7 +648,6 @@
         "IT'S A",
         "SMALL WORLD"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "it's a small world",
@@ -663,33 +662,77 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · rouverte le 5 mai 2023"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Intamin · direction artistique Mary Blair · costumes Alice Davis · musique Robert et Richard Sherman",
+        "type": "Parcours scénique aquatique sur canal",
+        "transport": "Bateaux guidés sur voie d'eau",
+        "duration": "Environ 9 à 10 minutes selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "22 passagers par bateau · 24 bateaux",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": true,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": true
+        },
+        "extra": {
+          "Personnages animés": "281",
+          "Jouets animés": "48",
+          "Accessoires animés": "247"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre avec le parc le 12 avril 1992. Son post-show, propre à Paris, ferme en août 2010 et sa salle devient le Princess Pavilion. Elle ferme à son tour en novembre 2021 pour dix-huit mois de travaux et rouvre le 5 mai 2023, après remplacement des éclairages, de l'hydraulique et des systèmes de commande, et désamiantage de la climatisation et de la charpente.",
+      "synopsis": "Un bateau glisse sur un canal, de continent en continent, au milieu de centaines de figurines qui chantent le même air dans toutes les langues. À l'extérieur, une horloge mécanique fait défiler un cortège de marionnettes tous les quarts d'heure.",
+      "secrets": [
+        "Toutes les scènes tiennent dans une seule salle, séparées par des arches. Partout ailleurs, elles occupent des salles distinctes.",
+        "Le cadran de la tour est coupé en deux : à gauche un soleil éveillé, à droite une lune endormie.",
+        "Paris est la première version au monde à comporter une scène d'Amérique du Nord et une section du Moyen-Orient distincte, avec des figurines chantant en arabe et en hébreu.",
+        "Le final est chanté en trois langues : anglais, français et allemand.",
+        "Une version de la chanson a été enregistrée spécialement pour Paris avec des chœurs d'enfants de toute l'Europe.",
+        "Un post-show exclusif présentait des scènes holographiques dans des monuments. Il a fonctionné de 1992 à 2010.",
+        "L'attraction compte deux cent quatre-vingt-une figurines animées, quarante-huit jouets et deux cent quarante-sept accessoires mobiles.",
+        "En mai 2023, trois figurines en fauteuil roulant ont été ajoutées : une première pour l'attraction, dans tous les parcs.",
+        "Le bateau est accessible en fauteuil sans transfert, ce qui est rare dans le parc."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Accessible en fauteuil sans transfert",
+          "Aucune taille minimale",
+          "L'horloge extérieure vaut l'arrêt à elle seule"
+        ],
+        "cons": [
+          "La chanson, qui ne quitte plus personne",
+          "File longue malgré le débit"
+        ],
+        "text": "Un classique qu'on croit connaître. La salle unique et les trois langues du final en font pourtant une version à part."
+      },
       "sources": [
-        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/its-a-small-world/",
+        "https://wdwnt.com/2023/05/dolls-in-wheelchairs-debut-on-its-a-small-world-in-disneyland-paris"
       ]
     },
     {
@@ -910,7 +953,7 @@
     {
       "id": "alices-curious-labyrinth",
       "name": "Alice's Curious Labyrinth",
-      "tagline": "",
+      "tagline": "Le tracé dessine une silhouette de chat",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "pocketwatch",
@@ -918,7 +961,6 @@
         "ALICE'S CURIOUS",
         "LABYRINTH"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Alice's Curious Labyrinth"
@@ -931,39 +973,84 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Labyrinthe de haies à pied",
+        "transport": "Aucun · deux sections, dont une plus difficile",
+        "duration": "Environ 15 à 20 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Flux libre",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Longueur du parcours": "366 m",
+          "Scènes": "10",
+          "Personnages": "22",
+          "Fontaines": "12",
+          "Statues": "24"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le labyrinthe ouvre avec le parc le 12 avril 1992. Un petit toboggan en colimaçon existait sur le balcon principal du château ; il a été retiré en moins d'un an.",
+      "synopsis": "Trois cent soixante-six mètres de haies, en deux sections : un parcours facile, puis un labyrinthe à huit impasses. Au centre, un donjon volontairement de travers, d'où la vue porte sur tout Fantasyland.",
+      "secrets": [
+        "Le tracé du labyrinthe dessine la silhouette d'un chat, visible seulement d'en haut.",
+        "Les haies ont été cultivées dans une pépinière du nord de la France, acheminées par plus de vingt camions, et remontées sur place grâce à un système de numérotation par pièce.",
+        "Le parcours mesure trois cent soixante-six mètres et compte dix scènes, vingt-deux personnages, douze fontaines et vingt-quatre statues.",
+        "Un toboggan en colimaçon partait du balcon principal du donjon. Il a fermé en moins d'un an.",
+        "Le donjon évite délibérément la symétrie : escaliers de guingois, archères déformées, d'après les illustrations originales du livre.",
+        "Des jets d'eau jaillissent des parterres, et des panneaux trompeurs indiquent de fausses directions.",
+        "Aucun autre parc Disney n'a d'équivalent à échelle piétonne.",
+        "Il ouvre souvent en horaires réduits et ferme en général avant la nuit, parfois dès quinze heures."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Vue à 360° depuis la terrasse",
+          "Exploration libre, attente quasi nulle",
+          "Unique dans tous les parcs"
+        ],
+        "cons": [
+          "Horaires réduits",
+          "Étages du donjon inaccessibles en fauteuil"
+        ],
+        "text": "On y entre pour cinq minutes, on y reste vingt. La vue depuis le sommet est la meilleure du parc après le train."
+      },
       "sources": [
-        "https://themeparkinsider.com/reviews/disneyland_paris/"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/alices-curious-labyrinth/",
+        "https://en.wikipedia.org/wiki/Alice%27s_Curious_Labyrinth"
       ]
     },
     {
       "id": "la-taniere-du-dragon",
       "name": "La Tanière du Dragon",
-      "tagline": "",
+      "tagline": "Vingt-sept mètres de la tête à la queue",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "dragon",
@@ -971,7 +1058,6 @@
         "LA TANIÈRE",
         "DU DRAGON"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "La Tanière du Dragon"
@@ -984,33 +1070,75 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · rénovée en 2023"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering · conception Terri Hardin",
+        "type": "Visite à pied dans une grotte",
+        "transport": "Aucun · trois entrées, sans file",
+        "duration": "Quelques minutes, libre",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Flux libre",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": false,
+          "pmr": true
+        },
+        "extra": {
+          "Longueur": "27 m selon trois sources, 22 m selon une autre",
+          "Poids": "environ 2 tonnes"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "La grotte ouvre avec le parc le 12 avril 1992, sous le château. Ses projecteurs et ses systèmes de commande ont été remplacés en juillet 2022, puis l'ensemble a été rénové lors d'une fermeture en 2023.",
+      "synopsis": "Sous le château, une caverne en demi-obscurité où dort un dragon enchaîné. Naseaux fumants, queue qui bat dans l'eau, paupières qui se soulèvent : il n'est pas tout à fait endormi. Trois entrées, aucune file.",
+      "secrets": [
+        "Le dragon mesure vingt-sept mètres de la tête à la queue selon la plupart des sources, vingt-deux selon une autre, pour environ deux tonnes.",
+        "À l'ouverture du parc, il a été présenté comme le plus grand animatronique jamais construit.",
+        "Aucun autre parc Disney n'a de tanière sous son château : l'attraction est unique.",
+        "Terri Hardin, seule Imagineer créditée de sa création, a mené le projet dès 1987.",
+        "Elle voulait y placer un squelette de dragon plutôt qu'un dragon vivant. L'idée a été refusée.",
+        "La rénovation de 2023 l'a repeint avec une peinture visible seulement sous lumière noire, ce qui accentue son air furieux.",
+        "Les lampes qui éclairent la caverne ont elles-mêmes la forme de dragons.",
+        "Le flash est interdit, ce qui explique le nombre de photos ratées."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Aucune file, jamais",
+          "Animatronique impressionnant",
+          "Unique dans tous les parcs"
+        ],
+        "cons": [
+          "Très sombre, et effrayante pour les petits",
+          "Visite de deux minutes si on ne s'arrête pas"
+        ],
+        "text": "Des centaines de milliers de visiteurs passent au-dessus sans savoir qu'elle existe. C'est la meilleure raison d'y descendre."
+      },
       "sources": [
-        "https://themeparkinsider.com/reviews/disneyland-paris"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/la-taniere-du-dragon/",
+        "https://en.wikipedia.org/wiki/La_Tani%C3%A8re_du_Dragon"
       ]
     },
     {
@@ -2254,7 +2382,7 @@
     {
       "id": "peter-pans-flight",
       "name": "Peter Pan's Flight",
-      "tagline": "",
+      "tagline": "Un rail au plafond, unique dans tous les parcs Disney",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "clocktower",
@@ -2262,7 +2390,6 @@
         "PETER PAN'S",
         "FLIGHT"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Peter Pan's Flight",
@@ -2276,46 +2403,83 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · rénovée en juillet 2016"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Parcours scénique suspendu",
+        "transport": "Galions suspendus à un rail au plafond",
+        "duration": "Environ 2 min 30 à 3 min selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "5 passagers par galion · 16 galions · 11 scènes",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": true,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre avec le parc le 12 avril 1992. Sa file est refondue en juillet 2004, avec des portillons hydrauliques qui permettent de charger deux véhicules à la fois. Elle ferme plus de six mois pour une réhabilitation lourde et rouvre en juillet 2016 : éclairages refaits, décors repeints, nouveaux effets de projection.",
+      "synopsis": "Le galion décolle de la chambre d'enfants, passe par la fenêtre et survole Londres de nuit, puis l'île. Le rail est au plafond : rien ne porte le véhicule par en dessous, ce qui donne l'impression de voler plutôt que de rouler.",
+      "secrets": [
+        "Le système de rail est unique dans tous les parcs Disney. Un projet de parcours sous-marin devait le réutiliser ; il a finalement été construit ailleurs avec une autre technique.",
+        "C'est la seule version à asseoir les passagers sur deux rangs par galion. La Californie n'a allongé ses bateaux qu'en 2009.",
+        "Le dessin suit la version de 1955 plutôt que celles des années 1970 et 1980 : il n'y a pas de tapis mobile à l'embarquement.",
+        "Les phares des voitures de Londres sont réalisés en fibres optiques microscopiques, et une partie des peintures réagit à la lumière noire.",
+        "Pendant les essais, l'attraction est tombée en panne avec des Imagineers à bord, suspendus à environ deux mètres quarante : l'échelle de secours n'était pas encore installée.",
+        "La version parisienne est la plus longue de toutes, d'environ trente secondes.",
+        "Les girouettes de la façade représentent un navire et un crocodile.",
+        "En cas d'évacuation, il faut pouvoir descendre une échelle : c'est une condition d'accès pour les visiteurs en fauteuil."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Sensation de vol réelle",
+          "Décor de Londres en perspective forcée",
+          "La plus longue version au monde"
+        ],
+        "cons": [
+          "File très longue toute la journée",
+          "Évacuation exigeante en cas de panne"
+        ],
+        "text": "Le plus beau survol des parcs Disney, et la file la plus décourageante du land. À faire à l'ouverture, sans hésiter."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/peter-pans-flight/",
+        "https://en.wikipedia.org/wiki/Peter_Pan%27s_Flight"
       ]
     },
     {
       "id": "dumbo",
       "name": "Dumbo the Flying Elephant",
-      "tagline": "",
+      "tagline": "Le deuxième jeu commandé, à dix-huit mois de l'ouverture",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "bigtop",
       "posterLines": [
         "DUMBO"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Dumbo the Flying Elephant"
@@ -2328,39 +2492,78 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Zamperla · conception Walt Disney Imagineering",
+        "type": "Carrousel aérien",
+        "transport": "Nacelles à hauteur commandée par le passager, au levier",
+        "duration": "Environ 1 min 30",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "2 passagers par nacelle · 16 nacelles, soit 32 par cycle",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Hauteur de vol": "de 1,5 m à 7 m"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le manège ouvre avec le parc le 12 avril 1992, mais pas avec le matériel prévu : le premier jeu commandé a été détourné vers la Californie en 1990, après des défaillances qui y avaient fermé l'attraction. Un second jeu a dû être commandé pour Paris à dix-huit mois seulement de l'ouverture.",
+      "synopsis": "Seize nacelles tournent autour d'un mât, et chaque passager commande sa hauteur au levier. Le vol se fait entre un mètre cinquante et sept mètres, assez haut pour dominer Fantasyland.",
+      "secrets": [
+        "Le jeu installé à Paris est le deuxième commandé : le premier est parti en Californie en urgence.",
+        "Le manège d'origine, en 1955, n'a pas ouvert avec son parc : les véhicules étaient trop lourds pour décoller.",
+        "La version de 1955 avait des oreilles articulées censées battre. Les mécanismes sont tombés en panne presque aussitôt, et l'articulation a été supprimée à la reconstruction de 1983.",
+        "Les premières études s'appuyaient sur une séquence d'hallucination du film. Walt Disney a refusé une attraction fondée là-dessus.",
+        "L'embarquement prioritaire est possible pour les enfants entre 1,20 m et 1,55 m, et pour les plus petits accompagnés.",
+        "La meilleure vue sur le land s'obtient depuis le siège de droite, côté extérieur."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Vue dégagée sur Fantasyland",
+          "Commande de hauteur réelle",
+          "Aucune taille minimale"
+        ],
+        "cons": [
+          "Débit faible, donc file longue",
+          "Nacelles surélevées, transfert obligatoire"
+        ],
+        "text": "Le manège le plus photographié du land et l'un des plus lents à faire avancer sa file. À prendre tôt ou pas du tout."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/dumbo-the-flying-elephant/",
+        "https://www.freizeitpark-welt.de/freizeitparks/disneyland_paris/attraktionen/dumbo-the-flying-elephant-r183"
       ]
     },
     {
       "id": "voyages-de-pinocchio",
       "name": "Les Voyages de Pinocchio",
-      "tagline": "",
+      "tagline": "Raccourcie par la réglementation française",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "marionette",
@@ -2368,7 +2571,6 @@
         "LES VOYAGES",
         "DE PINOCCHIO"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Les Voyages de Pinocchio"
@@ -2381,46 +2583,81 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Parcours scénique en intérieur",
+        "transport": "Véhicules sur rail, avec un effet de dérapage dans les virages",
+        "duration": "Environ 2 à 5 minutes selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "6 passagers par véhicule · 18 véhicules · 12 scènes",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre avec le parc le 12 avril 1992, neuf ans après ses jumelles de Californie et de Tokyo.",
+      "synopsis": "Les véhicules s'enfoncent dans un atelier de menuiserie tyrolien, puis dans une fête foraine criarde, un abîme gris-vert et la gueule d'une baleine. Le système de rail donne une sensation de dérapage dans les virages qui n'existe pas ailleurs.",
+      "secrets": [
+        "La version parisienne est plus courte que celles de Tokyo et de Californie. La réglementation française imposait des murs en béton épais là où les autres parcs utilisent des cloisons légères, pour une emprise de bâtiment identique.",
+        "C'est la première attraction Disney à avoir utilisé un effet dit holographique : les garçons tiennent un miroir devant leur visage et se retournent transformés.",
+        "La disparition de la fée repose sur un procédé de théâtre du XIXᵉ siècle, et laisse au sol une poussière en fibre optique.",
+        "Le quai d'embarquement est traité en atelier de menuiserie, avec automates miniatures, carillons à balancier et outils patinés.",
+        "Une partie des peintures réagit à la lumière noire : étincelles, yeux des créatures marines, dents de la baleine.",
+        "Les sources divergent fortement sur la durée, donnée entre deux et cinq minutes."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Effets plus ambitieux que ses voisines",
+          "Atelier d'embarquement très soigné",
+          "Rarement saturée"
+        ],
+        "cons": [
+          "Courte",
+          "Scènes sombres pour les plus jeunes"
+        ],
+        "text": "La plus sous-estimée des trois attractions de conte du land, et celle dont les effets ont le mieux vieilli."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/les-voyages-de-pinocchio/",
+        "https://en.wikipedia.org/wiki/Pinocchio%27s_Daring_Journey"
       ]
     },
     {
       "id": "blanche-neige",
       "name": "Blanche-Neige et les Sept Nains",
-      "tagline": "",
+      "tagline": "Paris a gardé la version qui fait peur",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "apple",
       "posterLines": [
         "BLANCHE-NEIGE"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Blanche-Neige et les Sept Nains®",
@@ -2434,39 +2671,77 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · rouverte le 28 juillet 2026"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Mack Rides · conception Walt Disney Imagineering",
+        "type": "Parcours scénique en intérieur",
+        "transport": "Wagonnets de mine en bois sculpté",
+        "duration": "Environ 2 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "6 passagers par véhicule · 10 véhicules · 9 scènes",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre avec le parc le 12 avril 1992. Contrairement à la Californie, qui a adouci sa version en 2021, Paris a conservé le parcours d'origine. Une rénovation de quatre à cinq mois s'est achevée le 28 juillet 2026 : façade refaite, nouvelle figurine et fresques mises à jour.",
+      "synopsis": "Les wagonnets traversent le château, la forêt et la mine, poursuivis par une silhouette qui revient à chaque détour. Le final, modifié depuis l'ouverture, se termine désormais sur un réveil plutôt que sur une chute.",
+      "secrets": [
+        "La Reine apparaît périodiquement à une fenêtre du premier étage de la façade, au-dessus des visiteurs, en soulevant un rideau.",
+        "Dans la file, toucher la pomme gravée sur le livre d'alchimie déclenche un rire sinistre.",
+        "Le final a été modifié : il s'achevait à l'origine brutalement sur le rocher, il montre maintenant le réveil et le départ.",
+        "La nouvelle figurine installée en 2026 est en résine, peinte à la main dans des ateliers de Seine-et-Marne.",
+        "La fresque finale montre à nouveau le prince et son cheval, retirés de la scène physique — un choix qui a fait polémique dans la presse française à la réouverture.",
+        "C'est l'une des dernières versions au monde à conserver le parcours effrayant d'origine.",
+        "Sa flotte de dix véhicules est la plus réduite des parcours scéniques du land."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Version d'origine, de plus en plus rare",
+          "Façade et fenêtre de la Reine",
+          "Courte, donc file qui avance"
+        ],
+        "cons": [
+          "Vraiment effrayante pour les petits",
+          "Deux minutes à peine"
+        ],
+        "text": "Prévenez les enfants : contrairement à ses cousines, celle-ci n'a pas été adoucie. C'est tout son intérêt."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/blanche-neige-et-les-sept-nains/",
+        "https://coasterpedia.net/wiki/Blanche-Neige_et_les_Sept_Nains",
+        "https://www.laughingplace.com/disney-parks/snow-white-refurb-at-disneyland-paris/"
       ]
     },
     {
       "id": "mad-hatters-tea-cups",
       "name": "Mad Hatter's Tea Cups",
-      "tagline": "",
+      "tagline": "La seule version au monde sous verrière",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "teacup",
@@ -2474,7 +2749,6 @@
         "MAD HATTER'S",
         "TEA CUPS"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Mad Hatter's Tea Cups",
@@ -2488,39 +2762,78 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Manège de tasses tournantes",
+        "transport": "Triple rotation · volant central actionné par les passagers",
+        "duration": "Environ 2 à 3 minutes selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Jusqu'à 4 passagers par tasse · 18 tasses, soit 72 par cycle",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Diamètre d'une tasse": "1,8 m"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le manège ouvre avec le parc le 12 avril 1992. Contrairement à l'original californien, resté à ciel ouvert et immobilisé par le mauvais temps, Paris l'a doté dès l'origine d'une verrière.",
+      "synopsis": "Dix-huit tasses tournent sur elles-mêmes, sur un plateau qui tourne, sur un plateau qui tourne. Le volant central permet d'en rajouter autant qu'on le supporte. Le tout sous une verrière en forme de pétales, entouré de jardins.",
+      "secrets": [
+        "C'est la seule version au monde dotée d'une verrière en forme de pétales et de jardins d'agrément autour.",
+        "Chaque tasse mesure un mètre quatre-vingts de diamètre.",
+        "Les lampions japonais colorés reprennent des idées des plans du début des années 1950, restées sans suite à l'époque.",
+        "Ces mêmes plans prévoyaient une table à dîner au centre du manège. Elle n'a jamais été construite, nulle part.",
+        "L'original de 1955 a été déplacé et redessiné en 1983, lors d'une refonte complète de son land.",
+        "La verrière change tout par mauvais temps : là où l'original s'arrête, Paris continue de tourner.",
+        "De nuit, les lampions s'allument et l'expérience n'a plus grand-chose à voir."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Fonctionne par tous les temps",
+          "Débit élevé",
+          "Très belle de nuit"
+        ],
+        "cons": [
+          "Déconseillée aux sensibles au mal des transports",
+          "Places étroites"
+        ],
+        "text": "Le manège le plus banal des parcs Disney, sauvé ici par sa verrière et ses jardins. À faire à la tombée du jour."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/mad-hatters-tea-cups/"
       ]
     },
     {
       "id": "carrousel-de-lancelot",
       "name": "Le Carrousel de Lancelot",
-      "tagline": "",
+      "tagline": "Seize armures différentes, soixante-dix couleurs uniques",
       "park": "dlp",
       "land": "Fantasyland",
       "motif": "carousel",
@@ -2528,7 +2841,6 @@
         "LE CARROUSEL",
         "DE LANCELOT"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Le Carrousel de Lancelot"
@@ -2541,33 +2853,72 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Concept1900 · conception Walt Disney Imagineering",
+        "type": "Carrousel traditionnel",
+        "transport": "Trois rangs de montures et deux chars assis",
+        "duration": "Environ 2 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "86 montures et 2 chars",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Fresques sous le fronton": "16"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le carrousel ouvre avec le parc le 12 avril 1992, dans la cour du château. Son dessin puise dans les ateliers de carrousels du XIXᵉ siècle.",
+      "synopsis": "Quatre-vingt-six montures sur trois rangs, sous une toiture conique violette rayée d'or, avec un orgue qui joue des airs de films. Deux chars assis permettent d'embarquer sans monter en selle.",
+      "secrets": [
+        "Les seize montures du rang extérieur portent chacune une armure différente, dont le lustre doré vient d'une feuille d'or.",
+        "Les soixante-dix montures des rangs intérieurs ont chacune une couleur unique, disposées dans l'ordre de l'arc-en-ciel.",
+        "C'est le premier carrousel Disney équipé de deux chars assis, précisément pour que les visiteurs ne pouvant monter à cheval puissent embarquer.",
+        "Seize fresques sous le fronton racontent les exploits du héros.",
+        "Une épée plantée dans un rocher se trouve juste à côté, dans la cour : les visiteurs peuvent essayer de la retirer.",
+        "C'est le deuxième plus grand carrousel de tous les parcs Disney."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Deux chars assis pour embarquer sans monter",
+          "Détail des armures remarquable",
+          "Au pied du château"
+        ],
+        "cons": [
+          "Transfert obligatoire depuis un fauteuil",
+          "Très fréquenté en milieu de journée"
+        ],
+        "text": "Un carrousel qu'on regarde autant qu'on y monte. Les armures du rang extérieur méritent un tour à pied avant de faire la file."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://dlpguide.com/guidebook/disneyland-park/fantasyland/le-carrousel-de-lancelot/",
+        "https://en.wikipedia.org/wiki/Le_Carrousel_de_Lancelot"
       ]
     },
     {

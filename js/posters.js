@@ -50,11 +50,30 @@ const GROUND = {
 
 /* Variantes : la planche change de registre, pas de style. */
 const VARIANT = {
-  poster:    { gold: '#E3C77E', rule: '#C9A227', ink: '#F3ECDC', rays: .16, grid: 0 },
-  night:     { gold: '#F0DFA8', rule: '#D4AF37', ink: '#F7F1E2', rays: .05, grid: 0, dim: .55 },
-  blueprint: { gold: '#BFD9E4', rule: '#9FC3D2', ink: '#E8F2F6', rays: 0, grid: .18, mono: '#0C2A38' },
-  ticket:    { gold: '#E3C77E', rule: '#C9A227', ink: '#F3ECDC', rays: .1, grid: 0, stub: true }
+  poster:    { gold: '#E6C77E', rule: '#C8993F', ink: '#EDE0C4', rays: .14, grid: 0 },
+  night:     { gold: '#F0DCA6', rule: '#C8993F', ink: '#F2E8D2', rays: .05, grid: 0, dim: .55 },
+  blueprint: { gold: '#C6D8CE', rule: '#9AB0A4', ink: '#E6EFE8', rays: 0, grid: .18, mono: '#16201C' },
+  ticket:    { gold: '#E6C77E', rule: '#C8993F', ink: '#EDE0C4', rays: .1, grid: 0, stub: true }
 };
+
+/**
+ * Les fonds gardent la teinte propre à chaque motif, mais sont ramenés vers
+ * l'acajou et le verre fumé du cabinet : les quarante planches se lisent alors
+ * comme une même collection d'instruments, et non comme quarante affiches.
+ */
+const CABINET = { a: '#1C0F0A', b: '#16201C' };
+const melange = (hex, vers, part) => {
+  const n = (h, i) => parseInt(h.slice(1 + i * 2, 3 + i * 2), 16);
+  return '#' + [0, 1, 2].map((i) => Math.round(n(hex, i) * (1 - part) + n(vers, i) * part)
+    .toString(16).padStart(2, '0')).join('');
+};
+for (const k of Object.keys(GROUND)) {
+  GROUND[k] = {
+    a: melange(GROUND[k].a, CABINET.a, .42),
+    b: melange(GROUND[k].b, CABINET.b, .3),
+    accent: GROUND[k].accent
+  };
+}
 
 const escSvg = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -178,7 +197,7 @@ const MOTIFS = {
     }
     return `
     <circle cx="150" cy="108" r="78" fill="none" stroke="${v.gold}" stroke-width="1"/>
-    <g stroke="${v.gold}" stroke-width="3" stroke-linecap="round">${flake}</g>
+    <g class="a-turn" style="transform-origin:150px 108px" stroke="${v.gold}" stroke-width="3" stroke-linecap="round">${flake}</g>
     ${diamond(150, 108, 7, v.gold)}
     ${steps(150, 226, 200, 76, 4, g.accent)}
     ${steps(150, 226, 108, 46, 3, v.gold)}
@@ -206,7 +225,7 @@ const MOTIFS = {
     <circle cx="170" cy="196" r="22" fill="none" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="170" cy="196" r="6" fill="${v.gold}"/>
     <circle cx="238" cy="200" r="14" fill="none" stroke="${v.gold}" stroke-width="2.5"/>
-    ${[0,1,2,3,4].map((i) => `<ellipse cx="${98 - i * 4}" cy="${96 - i * 19}" rx="${15 + i * 5}" ry="${9 + i * 3}" fill="${v.gold}" opacity="${(.5 - i * .08).toFixed(2)}"/>`).join('')}`,
+    ${[0,1,2,3,4].map((i) => `<ellipse class="a-smoke" style="animation-delay:${(i * .34).toFixed(2)}s" cx="${98 - i * 4}" cy="${96 - i * 19}" rx="${15 + i * 5}" ry="${9 + i * 3}" fill="${v.gold}" opacity="${(.5 - i * .08).toFixed(2)}"/>`).join('')}`,
 
   /** Main Street : omnibus à impériale et rails de tramway */
   tram: (g, v) => `
@@ -239,8 +258,8 @@ const MOTIFS = {
     <rect x="162" y="40" width="10" height="52" fill="${v.gold}"/>
     <rect x="122" y="34" width="22" height="8" fill="${v.gold}"/>
     <rect x="156" y="34" width="22" height="8" fill="${v.gold}"/>
-    <circle cx="56" cy="178" r="30" fill="none" stroke="${v.gold}" stroke-width="3"/>
-    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="56" y1="178" x2="${(56 + Math.cos(a) * 30).toFixed(1)}" y2="${(178 + Math.sin(a) * 30).toFixed(1)}" stroke="${v.gold}" stroke-width="2.5"/>`; }).join('')}
+    <g class="a-wheel" style="transform-origin:56px 178px"><circle cx="56" cy="178" r="30" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="56" y1="178" x2="${(56 + Math.cos(a) * 30).toFixed(1)}" y2="${(178 + Math.sin(a) * 30).toFixed(1)}" stroke="${v.gold}" stroke-width="2.5"/>`; }).join('')}</g>
     <circle cx="56" cy="178" r="7" fill="${v.gold}"/>
     ${[0,1,2,3,4,5,6,7,8,9].map((i) => `<path d="M${18 + i * 28} 232 q7 -8 14 0 t14 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity=".55"/>`).join('')}`,
 
@@ -309,7 +328,7 @@ const MOTIFS = {
     <rect x="112" y="92" width="76" height="52" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
     <circle cx="150" cy="118" r="30" fill="${g.a}" stroke="${v.gold}" stroke-width="2.5"/>
     ${[0,1,2,3,4,5,6,7,8,9,10,11].map((i) => { const a = i * Math.PI / 6; return `<line x1="${(150 + Math.cos(a) * 24).toFixed(1)}" y1="${(118 + Math.sin(a) * 24).toFixed(1)}" x2="${(150 + Math.cos(a) * 28).toFixed(1)}" y2="${(118 + Math.sin(a) * 28).toFixed(1)}" stroke="${v.gold}" stroke-width="${i % 3 ? 1.5 : 2.5}"/>`; }).join('')}
-    <path d="M150 118 L150 100 M150 118 L168 126" stroke="${v.gold}" stroke-width="3.5" stroke-linecap="round"/>
+    <path class="a-hand-h" style="transform-origin:150px 118px" d="M150 118 L150 100" stroke="${v.gold}" stroke-width="3.5" stroke-linecap="round"/><path class="a-hand-m" style="transform-origin:150px 118px" d="M150 118 L168 126" stroke="${v.gold}" stroke-width="3.5" stroke-linecap="round"/>
     <path d="M124 92 L150 58 L176 92Z" fill="${v.gold}"/>
     <rect x="18" y="52" width="264" height="2.5" fill="${v.gold}" opacity=".6"/>
     <path d="M196 54 L196 78" stroke="${v.gold}" stroke-width="2"/>
@@ -370,8 +389,8 @@ const MOTIFS = {
   /** Le Carrousel de Lancelot : cheval de manège et lance */
   carousel: (g, v) => `
     ${fan(150, 34, 126, 18, v.gold, .24)}
-    <path d="M44 86 L150 34 L256 86Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
-    ${[0,1,2,3,4,5,6].map((i) => `<path d="M${54 + i * 32} 86 L150 34" stroke="${v.gold}" stroke-width="1.4" opacity=".6"/>`).join('')}
+    <g class="a-canopy" style="transform-origin:150px 60px"><path d="M44 86 L150 34 L256 86Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
+    ${[0,1,2,3,4,5,6].map((i) => `<path d="M${54 + i * 32} 86 L150 34" stroke="${v.gold}" stroke-width="1.4" opacity=".6"/>`).join('')}</g>
     <rect x="40" y="86" width="220" height="8" fill="${v.gold}"/>
     ${diamond(150, 28, 8, v.gold)}
     <rect x="146" y="94" width="8" height="120" fill="${v.gold}"/>
@@ -389,7 +408,7 @@ const MOTIFS = {
     <circle cx="150" cy="112" r="70" fill="${g.accent}" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="150" cy="112" r="58" fill="${g.a}" stroke="${v.gold}" stroke-width="1.5"/>
     ${[0,1,2,3,4,5,6,7,8,9,10,11].map((i) => { const a = i * Math.PI / 6; return `<line x1="${(150 + Math.cos(a) * 44).toFixed(1)}" y1="${(112 + Math.sin(a) * 44).toFixed(1)}" x2="${(150 + Math.cos(a) * 54).toFixed(1)}" y2="${(112 + Math.sin(a) * 54).toFixed(1)}" stroke="${v.gold}" stroke-width="${i % 3 ? 1.6 : 3}"/>`; }).join('')}
-    <path d="M150 112 L150 74 M150 112 L182 128" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/>
+    <g style="transform-origin:150px 112px"><path class="a-hand-h" style="transform-origin:150px 112px" d="M150 112 L150 74" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/><path class="a-hand-m" style="transform-origin:150px 112px" d="M150 112 L182 128" stroke="${v.gold}" stroke-width="4" stroke-linecap="round"/></g>
     ${diamond(150, 112, 6, v.gold)}
     <rect x="142" y="26" width="16" height="18" rx="4" fill="${v.gold}"/>
     <circle cx="150" cy="22" r="11" fill="none" stroke="${v.gold}" stroke-width="3.5"/>`,
@@ -440,7 +459,7 @@ const MOTIFS = {
     ${[0,1,2,3,4,5,6].map((i) => `<path d="M${152 + i * 14} 136 L${159 + i * 14} 126 L${166 + i * 14} 136Z" fill="${g.accent}"/>`).join('')}
     <circle cx="170" cy="192" r="14" fill="none" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="222" cy="192" r="14" fill="none" stroke="${v.gold}" stroke-width="3"/>
-    ${[0,1,2,3].map((i) => `<ellipse cx="${74 - i * 5}" cy="${100 - i * 20}" rx="${12 + i * 5}" ry="${7 + i * 3}" fill="${v.gold}" opacity="${(.45 - i * .09).toFixed(2)}"/>`).join('')}`,
+    ${[0,1,2,3].map((i) => `<ellipse class="a-smoke" style="animation-delay:${(i * .4).toFixed(2)}s" cx="${74 - i * 5}" cy="${100 - i * 20}" rx="${12 + i * 5}" ry="${7 + i * 3}" fill="${v.gold}" opacity="${(.45 - i * .09).toFixed(2)}"/>`).join('')}`,
 
   /** Meet Mickey Mouse : marquise de théâtre et cordon de velours */
   marquee: (g, v) => `
@@ -505,8 +524,8 @@ const MOTIFS = {
     ${fan(150, 232, 180, 18, v.gold, .2)}
     <circle cx="150" cy="112" r="82" fill="none" stroke="${v.gold}" stroke-width="3"/>
     <circle cx="150" cy="112" r="62" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
-    <circle cx="150" cy="112" r="42" fill="none" stroke="${v.gold}" stroke-width="2"/>
-    <circle cx="150" cy="112" r="22" fill="${v.gold}"/>
+    <circle class="a-ping" cx="150" cy="112" r="42" fill="none" stroke="${v.gold}" stroke-width="2"/>
+    <circle class="a-ping" style="animation-delay:.6s" cx="150" cy="112" r="22" fill="${v.gold}"/>
     ${[0,1,2,3].map((i) => { const a = i * Math.PI / 2 + Math.PI / 4; return `<line x1="${(150 + Math.cos(a) * 82).toFixed(1)}" y1="${(112 + Math.sin(a) * 82).toFixed(1)}" x2="${(150 + Math.cos(a) * 104).toFixed(1)}" y2="${(112 + Math.sin(a) * 104).toFixed(1)}" stroke="${v.gold}" stroke-width="3"/>`; }).join('')}
     <path d="M44 232 L140 124" stroke="${v.gold}" stroke-width="4" opacity=".9"/>
     <path d="M44 232 L140 124" stroke="${g.a}" stroke-width="1.4" stroke-dasharray="5 7"/>
@@ -518,7 +537,7 @@ const MOTIFS = {
     ${fan(150, 124, 136, 20, v.gold, .18)}
     <circle cx="150" cy="124" r="26" fill="${v.gold}"/>
     <circle cx="150" cy="124" r="34" fill="none" stroke="${v.gold}" stroke-width="1.5" opacity=".7"/>
-    ${[[96,16,-22],[122,12,14],[148,9,-8]].map(([rx, ry, rot]) => `<ellipse cx="150" cy="124" rx="${rx}" ry="${ry}" fill="none" stroke="${v.gold}" stroke-width="2.5" transform="rotate(${rot} 150 124)"/>`).join('')}
+    ${[[96,16,-22,0],[122,12,14,1],[148,9,-8,2]].map(([rx, ry, rot, i]) => `<g class="a-orbit a-orbit--${i}" style="transform-origin:150px 124px"><ellipse cx="150" cy="124" rx="${rx}" ry="${ry}" fill="none" stroke="${v.gold}" stroke-width="2.5" transform="rotate(${rot} 150 124)"/></g>`).join('')}
     <circle cx="246" cy="98" r="13" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
     <circle cx="58" cy="146" r="10" fill="${g.accent}" stroke="${v.gold}" stroke-width="2"/>
     <circle cx="192" cy="186" r="8" fill="${v.gold}"/>
@@ -553,7 +572,7 @@ const MOTIFS = {
 
   /** Welcome to Starport : balise d'atterrissage et portique */
   beacon: (g, v) => `
-    ${[0,1,2,3,4].map((i) => `<ellipse cx="150" cy="206" rx="${40 + i * 28}" ry="${10 + i * 7}" fill="none" stroke="${v.gold}" stroke-width="${(2.6 - i * .4).toFixed(1)}" opacity="${(.9 - i * .16).toFixed(2)}"/>`).join('')}
+    ${[0,1,2,3,4].map((i) => `<ellipse class="a-ping" style="animation-delay:${(i * .5).toFixed(2)}s" cx="150" cy="206" rx="${40 + i * 28}" ry="${10 + i * 7}" fill="none" stroke="${v.gold}" stroke-width="${(2.6 - i * .4).toFixed(1)}" opacity="${(.9 - i * .16).toFixed(2)}"/>`).join('')}
     <path d="M110 206 L132 92 L168 92 L190 206Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
     <path d="M132 92 L150 50 L168 92Z" fill="${v.gold}"/>
     ${[0,1,2].map((i) => `<rect x="${130 - i * 2}" y="${118 + i * 26}" width="${40 + i * 4}" height="9" fill="${v.gold}" opacity="${(.9 - i * .16).toFixed(2)}"/>`).join('')}
@@ -612,7 +631,7 @@ const MOTIFS = {
     ${[0,1,2,3,4,5].map((i) => `<rect x="${50 + i * 14}" y="${206 + (i % 2) * 2}" width="8" height="4" fill="${v.gold}" opacity=".6"/>`).join('')}
     <rect x="232" y="128" width="9" height="96" fill="${v.gold}"/>
     <path d="M226 128 q10 -30 20 0Z" fill="${v.gold}"/>
-    ${[0,1,2].map((i) => `<path d="M${230 + i * 3} ${118 - i * 12} q6 -12 10 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity="${(.8 - i * .22).toFixed(2)}"/>`).join('')}
+    ${[0,1,2].map((i) => `<path class="a-smoke" style="animation-delay:${(i * .3).toFixed(2)}s" d="M${230 + i * 3} ${118 - i * 12} q6 -12 10 0" fill="none" stroke="${v.gold}" stroke-width="2" opacity="${(.8 - i * .22).toFixed(2)}"/>`).join('')}
     <rect x="18" y="224" width="264" height="4" fill="${v.gold}"/>`,
 
   /** La Cabane des Robinson : arbre-maison et roue à aubes */
@@ -627,8 +646,8 @@ const MOTIFS = {
     <rect x="106" y="142" width="14" height="18" fill="${v.gold}"/>
     <rect x="166" y="166" width="46" height="30" fill="${g.a}" stroke="${v.gold}" stroke-width="2"/>
     <path d="M160 166 L189 144 L218 166Z" fill="${v.gold}"/>
-    <circle cx="238" cy="206" r="26" fill="none" stroke="${v.gold}" stroke-width="3"/>
-    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="238" y1="206" x2="${(238 + Math.cos(a) * 26).toFixed(1)}" y2="${(206 + Math.sin(a) * 26).toFixed(1)}" stroke="${v.gold}" stroke-width="2.2"/>`; }).join('')}
+    <g class="a-wheel" style="transform-origin:238px 206px"><circle cx="238" cy="206" r="26" fill="none" stroke="${v.gold}" stroke-width="3"/>
+    ${[0,1,2,3,4,5,6,7].map((i) => { const a = i * Math.PI / 4; return `<line x1="238" y1="206" x2="${(238 + Math.cos(a) * 26).toFixed(1)}" y2="${(206 + Math.sin(a) * 26).toFixed(1)}" stroke="${v.gold}" stroke-width="2.2"/>`; }).join('')}</g>
     <rect x="18" y="226" width="264" height="4" fill="${v.gold}"/>`,
 
   /** Le Galion des Pirates : coque, mâts et voiles carrées */
@@ -686,7 +705,7 @@ const MOTIFS = {
     <path d="M96 190 Q96 158 150 158 Q204 158 204 190 Q204 206 150 206 Q96 206 96 190Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
     <path d="M204 176 L250 160 L246 188 L204 186Z" fill="${g.accent}" stroke="${v.gold}" stroke-width="2.5"/>
     <path d="M96 180 q-32 2 -30 22 q2 16 22 12" fill="none" stroke="${v.gold}" stroke-width="5"/>
-    <path d="M132 158 Q150 140 168 158Z" fill="${v.gold}"/>
+    <path class="a-flicker" style="transform-origin:150px 158px" d="M132 158 Q150 140 168 158Z" fill="${v.gold}"/>
     ${diamond(150, 148, 6, v.gold)}
     ${[0,1,2,3].map((i) => `<path d="M${248 - i * 4} ${152 - i * 20} q10 -16 16 0" fill="none" stroke="${v.gold}" stroke-width="2.2" opacity="${(.85 - i * .18).toFixed(2)}"/>`).join('')}
     <rect x="62" y="226" width="176" height="6" fill="${v.gold}"/>
@@ -742,13 +761,18 @@ export function posterSVG(motif, variant = 'poster', opts = {}) {
        <text x="150" y="320" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="9" letter-spacing="5" fill="${v.gold}" opacity=".85">ADMIT ONE</text></g>`
     : '';
 
-  return `<svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Affiche Art déco')}">
-  <defs>
+  /* Une attraction fermée garde son motif, mais le laiton s'est terni. */
+  const fade = opts.fade
+    ? `<filter id="${uid}f"><feColorMatrix type="saturate" values="0.14"/></filter>`
+    : '';
+
+  return `<svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escSvg(opts.alt || 'Planche gravée')}"${opts.fade ? ` filter="url(#${uid}f)" opacity=".74"` : ''}>
+  <defs>${fade}
     <linearGradient id="${uid}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${g.b}"/><stop offset="1" stop-color="${g.a}"/></linearGradient>
     <clipPath id="${uid}c"><rect x="18" y="60" width="264" height="240"/></clipPath>
   </defs>
 
-  <rect width="300" height="420" fill="#0B1C26"/>
+  <rect width="300" height="420" fill="#1C0F0A"/>
 
   <!-- Bandeau du land -->
   <text x="150" y="33" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="${land.length > 18 ? 9 : 10.5}" letter-spacing="${land.length > 18 ? 3 : 4.5}" fill="${v.gold}">${land}</text>
