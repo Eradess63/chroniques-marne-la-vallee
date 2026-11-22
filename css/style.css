@@ -544,7 +544,7 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 
 .masthead { position: relative; }
 .retour {
-  position: absolute; z-index: 4; top: 18px; right: 20px;
+  position: absolute; z-index: 4; top: 18px; left: 20px;
   display: inline-flex; align-items: center; gap: 7px;
   padding: 9px 17px; border: 1px solid var(--cuivre); border-radius: 22px;
   background: rgba(25, 13, 7, .78); color: var(--laiton-clair); text-decoration: none;
@@ -555,7 +555,7 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 .retour:hover, .retour:focus-visible { border-color: var(--laiton); background: rgba(200, 153, 63, .2); color: var(--encre); }
 
 @media (max-width: 640px) {
-  .retour { top: 12px; right: 12px; padding: 8px 14px; font-size: .66rem; }
+  .retour { top: 12px; left: 12px; padding: 8px 14px; font-size: .66rem; }
 }
 
 /* ===========================================================================
