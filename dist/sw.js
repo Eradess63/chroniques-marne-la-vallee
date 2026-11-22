@@ -8,7 +8,7 @@
  * affiche d'elle-même la date du dernier relevé quand elle ne peut pas joindre
  * l'API.
  */
-const VERSION = '202611221856';
+const VERSION = '202611221859';
 const CACHE = `chroniques-${VERSION}`;
 
 /** Ressources mises de côté dès l'installation, chemins relatifs à la portée. */
@@ -24,9 +24,27 @@ self.addEventListener('install', (e) => {
   e.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     await Promise.allSettled(SOCLE.map((u) => cache.add(new Request(u, { cache: 'reload' }))));
+    await gardePolices(cache);
     self.skipWaiting();
   })());
 });
+
+/**
+ * Garder la feuille de style des polices ne suffit pas : elle ne fait que
+ * pointer vers des fichiers .woff2 dont l'adresse change à chaque révision.
+ * On la lit donc pour aller chercher les fichiers eux-mêmes, sans quoi
+ * l'application hors connexion retomberait sur une police système.
+ */
+async function gardePolices(cache) {
+  try {
+    const css = SOCLE.find((u) => u.includes('fonts.googleapis.com'));
+    if (!css) return;
+    const rep = await cache.match(css) || await fetch(css);
+    const texte = await rep.clone().text();
+    const urls = [...new Set([...texte.matchAll(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+)\)/g)].map((m) => m[1]))];
+    await Promise.allSettled(urls.map((u) => cache.add(new Request(u, { mode: 'cors' }))));
+  } catch { /* sans les polices le site reste lisible : on n'échoue pas pour ça */ }
+}
 
 self.addEventListener('activate', (e) => {
   e.waitUntil((async () => {
