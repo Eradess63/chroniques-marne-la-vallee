@@ -37,6 +37,12 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
+      # Le déploiement cherche parfois l'artefact avant que l'API l'ait indexé,
+      # et échoue sur un « Found 0 artifact(s) » alors que le téléversement a
+      # réussi une fraction de seconde plus tôt. Quelques secondes suffisent.
+      - name: Laisser l'artefact s'indexer
+        run: sleep 10
+
       - name: Déployer
         id: deploiement
         uses: actions/deploy-pages@v4
