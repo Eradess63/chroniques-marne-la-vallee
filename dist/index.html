@@ -560,12 +560,34 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
   text-underline-offset: 4px; text-decoration-color: var(--cuivre); }
 .bilan__vider:hover { color: var(--rouge-cadran); }
 
+/* ===========================================================================
+   Retour au portail
+   Posé dans l'angle de l'enseigne, assez grand pour se toucher au pouce.
+   =========================================================================== */
+
+.masthead { position: relative; }
+.retour {
+  position: absolute; z-index: 4; top: 18px; right: 20px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 17px; border: 1px solid var(--cuivre); border-radius: 22px;
+  background: rgba(25, 13, 7, .78); color: var(--laiton-clair); text-decoration: none;
+  font-family: var(--font-plaque); font-size: .72rem; font-weight: 600;
+  letter-spacing: .1em; white-space: nowrap;
+  transition: border-color .2s, background .2s, color .2s;
+}
+.retour:hover, .retour:focus-visible { border-color: var(--laiton); background: rgba(200, 153, 63, .2); color: var(--encre); }
+
+@media (max-width: 640px) {
+  .retour { top: 12px; right: 12px; padding: 8px 14px; font-size: .66rem; }
+}
+
 </style>
 </head>
 <body>
 
 <header class="masthead">
   <div class="deco-top" aria-hidden="true"></div>
+  <a class="retour" href="https://univers-alexandre.alexandre-207cc.workers.dev/">✧&nbsp;Les univers</a>
   <div class="sign">
     <span class="sign__corner sign__corner--tl" aria-hidden="true"></span>
     <span class="sign__corner sign__corner--tr" aria-hidden="true"></span>
