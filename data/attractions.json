@@ -643,7 +643,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "frost",
+      "motif": "globe",
       "posterLines": [
         "IT'S A",
         "SMALL WORLD"
@@ -697,8 +697,8 @@
       "name": "Mickey's PhilharMagic",
       "tagline": "",
       "park": "dlp",
-      "land": "Fantasyland",
-      "motif": "kitchen",
+      "land": "Discoveryland",
+      "motif": "concert",
       "posterLines": [
         "MICKEY'S",
         "PHILHARMAGIC"
@@ -752,7 +752,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "manor",
+      "motif": "cottage",
       "posterLines": [
         "LE PAYS DES",
         "CONTES DE FÉES"
@@ -806,10 +806,9 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "tower",
+      "motif": "circustrain",
       "posterLines": [
-        "CASEY JR.",
-        "CIRCUS TRAIN"
+        "CASEY JR."
       ],
       "stub": true,
       "queueTimes": {
@@ -861,7 +860,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "kitchen",
+      "motif": "marquee",
       "posterLines": [
         "MEET",
         "MICKEY MOUSE"
@@ -914,7 +913,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "manor",
+      "motif": "pocketwatch",
       "posterLines": [
         "ALICE'S CURIOUS",
         "LABYRINTH"
@@ -967,7 +966,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "mesa",
+      "motif": "dragon",
       "posterLines": [
         "LA TANIÈRE",
         "DU DRAGON"
@@ -1125,14 +1124,13 @@
     {
       "id": "star-tours",
       "name": "Star Tours : L'Aventure Continue",
-      "tagline": "",
+      "tagline": "Six portes d'embarquement, et jamais deux fois le même voyage",
       "park": "dlp",
       "land": "Discoveryland",
-      "motif": "rocket",
+      "motif": "spaceport",
       "posterLines": [
         "STAR TOURS"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Star Tours: The Adventures Continue*",
@@ -1147,47 +1145,89 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "2017-03-26",
+          "label": "26 mars 2017 (version d'origine : 12 avril 1992)"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering · simulateurs Thales Training & Simulation (1992 : Rediffusion Simulation)",
+        "type": "Simulateur de mouvement en 3D",
+        "transport": "Cabine sur base hydraulique ATLAS, débattement de 35° sur trois axes",
+        "duration": "Environ 4 min 30 à 5 min selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 102,
+          "label": "1,02 m"
         },
-        "capacity": "À confirmer",
+        "capacity": "40 passagers par cabine, sur 5 rangées · 6 bases de mouvement",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": true,
+          "singleRider": false,
           "photoPass": null,
           "pmr": null
+        },
+        "extra": {
+          "Portes d'embarquement": "6, contre 4 en Californie",
+          "Combinaisons de scènes": "plus de 250 depuis 2024 (environ 60 avant)"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "La version d'origine ouvre le 12 avril 1992 avec le parc et tient vingt-quatre ans. Paris est le dernier des quatre parcs à conserver le spectacle initial : il ne ferme que le 16 mars 2016. La nouvelle version ouvre le 26 mars 2017 pour le vingt-cinquième anniversaire, et reçoit une mise à jour majeure le 5 avril 2024.",
+      "synopsis": "Vous embarquez dans un vol commercial banal, qui tourne mal avant même le décollage. La cabine est un simulateur monté sur vérins : elle tangue, plonge et se cabre en accord avec l'écran. Les scènes sont tirées au sort au départ, si bien que deux voyages consécutifs ne se ressemblent jamais.",
+      "secrets": [
+        "Paris compte six portes d'embarquement, contre quatre en Californie.",
+        "Le nombre de combinaisons a explosé avec la mise à jour de 2024 : la communication officielle parle de plus de deux cent cinquante variantes, contre une soixantaine auparavant.",
+        "Les destinations sont tirées au sort : impossible de choisir sa planète ou de s'assurer de croiser un personnage.",
+        "En 1992, le pilote de la cabine était un droïde. Depuis 2017, ce sont des pilotes issus du récit officiel.",
+        "Les simulateurs d'origine avaient été conçus dans le Sussex, en Angleterre. Les actuels sont signés Thales.",
+        "La façade reprend le style spatioport, comme en Californie et à Tokyo. En Floride, le bâtiment est thématisé en village forestier.",
+        "Pendant les travaux, la gare Discoveryland du chemin de fer est restée fermée et n'a rouvert que le 15 mars 2017.",
+        "Un chasseur rebelle a été installé sur le toit du bâtiment lors de la refonte."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Rejouabilité réelle grâce au tirage au sort",
+          "Débit élevé, six cabines en parallèle",
+          "Accessible dès 1,02 m"
+        ],
+        "cons": [
+          "Secouant pour les sensibles au mal des transports",
+          "Qualité variable selon la combinaison tirée"
+        ],
+        "text": "L'attraction la plus rejouable du parc. Deux tours d'affilée donnent rarement le même voyage."
+      },
       "sources": [
-        "https://themeparkinsider.com/reviews/disneyland-paris"
+        "https://en.wikipedia.org/wiki/Star_Tours_%E2%80%93_The_Adventures_Continue",
+        "https://darkridedatabase.com/rides/star-tours-laventure-continue/",
+        "https://www.ed92.org/?p=412811"
       ]
     },
     {
       "id": "buzz-lightyear-laser-blast",
       "name": "Buzz Lightyear Laser Blast",
-      "tagline": "",
+      "tagline": "Quatre-vingt-huit cibles, et deux qui valent le double",
       "park": "dlp",
       "land": "Discoveryland",
-      "motif": "rocket",
+      "motif": "target",
       "posterLines": [
         "BUZZ LIGHTYEAR",
         "LASER BLAST"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Buzz Lightyear Laser Blast"
@@ -1200,46 +1240,90 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "2006-04-08",
+          "label": "8 avril 2006 · rénovation complète en 2020"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Parcours scénique interactif de tir",
+        "transport": "Omnimover de troisième génération · véhicules pivotant sur 360° au joystick",
+        "duration": "Environ 4 min 30 à 5 min selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "2 passagers par véhicule · environ 2 000 personnes par heure (à confirmer)",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": true,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": true
+        },
+        "extra": {
+          "Cibles": "88",
+          "Longueur de voie": "163,87 m",
+          "Surface du parcours": "1 376,50 m²",
+          "Figurines de petits hommes verts": "725"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre le 8 avril 2006 à la place du Visionarium, cinéma en Circle-Vision 360° présent depuis 1992 et fermé en septembre 2004. Elle a été entièrement rénovée en 2020 : décors fluorescents, systèmes laser et propulsion des cabines ont été repris.",
+      "synopsis": "Vous êtes recruté comme cadet et embarqué dans un véhicule à deux places, armé d'un blaster à visée laser. Les cibles s'allument au fil du parcours : cercles, carrés, triangles, pentagones, chacun avec son barème. Le joystick fait pivoter la cabine sur un tour complet, ce qui permet de viser derrière soi.",
+      "secrets": [
+        "Le parcours compte quatre-vingt-huit cibles, sur 163,87 mètres de voie et 1 376,50 m².",
+        "Le barème monte par paliers : cent points pour un cercle, mille pour un carré, cinq mille pour un triangle, dix mille pour un pentagone.",
+        "Deux cibles valent bien davantage et sont cachées : cinquante mille points sur l'armure du robot géant, vingt-cinq mille sur le volcan.",
+        "Sept cent vingt-cinq figurines de petits hommes verts sont disséminées dans l'attraction.",
+        "Un clin d'œil au Visionarium subsiste : le robot photodroïde de l'ancien spectacle est dissimulé derrière le robot géant, à gauche, au tout début du parcours.",
+        "Le bilinguisme est traité d'une façon propre à Paris : l'animatronique de la file parle français et anglais, et une scène alterne les deux langues sur une boucle de six répliques.",
+        "Les voix françaises sont celles de Richard Darbois, Laurent Gamelon et Christophe Lemoine.",
+        "Sept grades sanctionnent le score final, mais les seuils varient d'une source à l'autre.",
+        "C'est l'une des rares attractions du parc dont le véhicule accueille un fauteuil roulant sans transfert."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Rejouable à l'infini pour le score",
+          "Aucune taille minimale",
+          "Véhicule adapté aux fauteuils, sans transfert"
+        ],
+        "cons": [
+          "Blasters parfois capricieux",
+          "Score très dépendant des cibles cachées"
+        ],
+        "text": "Le meilleur compromis du parc entre attraction familiale et compétition. Les cibles cachées changent tout une fois connues."
+      },
       "sources": [
-        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+        "https://www.dlpguide.com/guidebook/disneyland-park/discoveryland/buzz-lightyear-laser-blast/",
+        "https://magic-tips.app/en/disneyland-paris/parc-disneyland/attractions/buzz-lightyear-laser-blast"
       ]
     },
     {
       "id": "orbitron",
       "name": "Orbitron",
-      "tagline": "",
+      "tagline": "Des planètes qui tournent à contresens",
       "park": "dlp",
       "land": "Discoveryland",
-      "motif": "rocket",
+      "motif": "orrery",
       "posterLines": [
         "ORBITRON"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Orbitron®",
@@ -1253,46 +1337,88 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · remontée complète en décembre 2021"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering · direction artistique Tim Delaney",
+        "type": "Carrousel aérien doublé d'un planétaire mécanique",
+        "transport": "Machines volantes pilotées au levier, par piston hydraulique à double effet",
+        "duration": "Environ 1 min 30 à 2 min selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "12 machines de 2 places en tandem, soit 24 passagers par cycle",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": true,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Hauteur maximale atteinte": "7,8 m",
+          "Sponsor historique": "BNP puis BNP Paribas, de 1992 à 2002"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre avec le parc le 12 avril 1992. Elle est repeinte en 2009, puis entièrement démontée en janvier 2021 pour une remise à neuf — nouvelle feuille d'or, éclairage LED — avant de rouvrir le 17 décembre 2021.",
+      "synopsis": "Au centre, un planétaire de cuivre et de laiton tourne lentement. Autour, douze machines volantes montent et descendent au gré du levier que chaque passager tient en main. Le mouvement contraire des planètes donne l'impression d'aller deux fois plus vite qu'en réalité.",
+      "secrets": [
+        "Les planètes tournent en sens inverse des machines volantes, ce qui double l'impression de vitesse sans que rien n'aille plus vite.",
+        "Le dessin s'inspire des croquis de Léonard de Vinci et de sa représentation du système solaire, dans un style rétro-futuriste évoquant les feuilletons des années 1930.",
+        "Les fusées des années 1950 des autres parcs ont été remplacées à Paris par des machines de cuivre, de laiton et de bronze.",
+        "Là où les autres parcs ont une navette spatiale immobile au centre, Paris a mis un ensemble de planètes en rotation.",
+        "C'est la seule version de ce type de manège construite au niveau du sol, entourée de bassins et de rochers.",
+        "Une machine monte au maximum à 7,8 mètres.",
+        "L'attraction a été commanditée par la BNP, puis BNP Paribas, de 1992 à 2002.",
+        "Le dessin parisien a fait école à l'envers : une copie quasi identique a été installée à l'entrée du Tomorrowland californien en 1998.",
+        "C'est la seule attraction exclue du pass Premier Access Ultimate ; elle n'est accessible qu'à l'unité."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Vue dégagée sur tout Discoveryland",
+          "Pilotage réel de la hauteur",
+          "Superbe de nuit"
+        ],
+        "cons": [
+          "Tour très court",
+          "Banquettes profondes, peu de maintien du dos"
+        ],
+        "text": "Un manège de place publique, sauvé par son décor. À faire de nuit, quand les dorures prennent la lumière."
+      },
       "sources": [
-        "https://list.fandom.com/wiki/Disneyland_Park_(Paris)"
+        "https://dlpguide.com/guidebook/disneyland-park/discoveryland/orbitron-machines-volantes/",
+        "https://magic-tips.app/fr/disneyland-paris/parc-disneyland/attractions/orbitron"
       ]
     },
     {
       "id": "autopia",
       "name": "Autopia",
-      "tagline": "",
+      "tagline": "Soixante voitures, et pas deux identiques",
       "park": "dlp",
       "land": "Discoveryland",
-      "motif": "rocket",
+      "motif": "roadster",
       "posterLines": [
         "AUTOPIA"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Autopia, presented by Avis",
@@ -1306,33 +1432,75 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1992-04-12",
+          "label": "12 avril 1992 · rénovée en décembre 2019"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Circuit de conduite guidé par rail central",
+        "transport": "Voiture à essence conduite par le visiteur",
+        "duration": "Environ 4 à 7 minutes selon les sources",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 81,
+          "label": "81 cm en passager · 1,32 m pour conduire"
         },
-        "capacity": "À confirmer",
+        "capacity": "2 personnes par voiture · 60 voitures",
         "services": {
           "premierAccess": null,
-          "singleRider": null,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": "transfer"
+        },
+        "extra": {
+          "Sponsors successifs": "Mattel (1992), Esso (2002), Ford (2008), Avis (depuis 2023)",
+          "Consommation après rénovation": "42 kW, contre 450 kW avant"
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le circuit ouvre avec le parc le 12 avril 1992. Il a connu quatre commanditaires successifs : Mattel, Esso, Ford, puis Avis depuis le 18 décembre 2023. Une rénovation achevée en décembre 2019 a refait la voie, les sols et l'éclairage.",
+      "synopsis": "On prend le volant d'une voiture futuriste telle qu'on l'imaginait dans les années 1950, et l'on s'élance sur un circuit bordé de gratte-ciels miniatures et de panneaux géants. Un rail central empêche de sortir de la route, mais l'accélérateur, lui, est bien réel.",
+      "secrets": [
+        "Chacune des soixante voitures est unique, grâce à des ailerons, enjoliveurs et pare-chocs interchangeables.",
+        "Le décor s'inspire d'un court-métrage Disney des années 1950 consacré aux autoroutes de l'avenir, d'où le style Art déco très marqué.",
+        "Contrairement à Hong Kong, passé à l'électrique, Paris roule toujours à l'essence.",
+        "La rénovation de 2019 a remplacé les mille cinq cents projecteurs par des LED : la consommation est passée de 450 kW à 42 kW.",
+        "Elle a aussi ajouté un spectacle lumineux sur les toits, qui raconte l'histoire de Discoveryland.",
+        "Depuis 2023, les conducteurs repartent avec un permis de conduire commémoratif.",
+        "Les cent premiers visiteurs du 18 décembre 2023 ont reçu un tirage de la nouvelle affiche.",
+        "Les chiens guides et d'assistance ne sont pas admis, les véhicules étant trop bas."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Vrai plaisir de conduite pour les enfants",
+          "Décor Art déco soigné",
+          "Permis commémoratif à la sortie"
+        ],
+        "cons": [
+          "Démarrages et arrêts brutaux",
+          "1,32 m requis pour conduire, ce qui déçoit les plus jeunes"
+        ],
+        "text": "Une attraction qu'on fait pour l'enfant qui tient le volant. Le décor mérite qu'on lève les yeux entre deux virages."
+      },
       "sources": [
-        "https://tarifs.org/en/disneyland-paris-height-requirements"
+        "https://www.dlpguide.com/guidebook/disneyland-park/discoveryland/autopia/",
+        "https://blooloop.com/theme-park/news/disneyland-paris-autopia-reopen/"
       ]
     },
     {
@@ -1632,9 +1800,9 @@
         ]
       },
       "localStatus": {
-        "status": null,
-        "until": null,
-        "note": ""
+        "status": "refurb",
+        "until": "2027-07-01",
+        "note": "Réhabilitation technique la plus lourde depuis 2007."
       },
       "fiche": {
         "opening": {
@@ -1992,7 +2160,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "manor",
+      "motif": "clocktower",
       "posterLines": [
         "PETER PAN'S",
         "FLIGHT"
@@ -2046,7 +2214,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "kitchen",
+      "motif": "bigtop",
       "posterLines": [
         "DUMBO"
       ],
@@ -2098,7 +2266,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "manor",
+      "motif": "marionette",
       "posterLines": [
         "LES VOYAGES",
         "DE PINOCCHIO"
@@ -2151,7 +2319,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "manor",
+      "motif": "apple",
       "posterLines": [
         "BLANCHE-NEIGE"
       ],
@@ -2204,7 +2372,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "kitchen",
+      "motif": "teacup",
       "posterLines": [
         "MAD HATTER'S",
         "TEA CUPS"
@@ -2258,7 +2426,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "manor",
+      "motif": "carousel",
       "posterLines": [
         "LE CARROUSEL",
         "DE LANCELOT"
@@ -2311,7 +2479,7 @@
       "tagline": "",
       "park": "dlp",
       "land": "Fantasyland",
-      "motif": "manor",
+      "motif": "crown",
       "posterLines": [
         "PRINCESS",
         "PAVILION"
@@ -2718,15 +2886,14 @@
     {
       "id": "frontierland-playground",
       "name": "Frontierland Playground",
-      "tagline": "",
+      "tagline": "L'ancien village, devenu aire de jeux",
       "park": "dlp",
       "land": "Frontierland",
-      "motif": "fort",
+      "motif": "playground",
       "posterLines": [
         "FRONTIERLAND",
         "PLAYGROUND"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Frontierland Playground"
@@ -2739,47 +2906,83 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1996-06-22",
+          "label": "22 juin 1996 · renommée en 2019"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Inconnu",
+        "type": "Aire de jeux extérieure",
+        "transport": "Aucun",
+        "duration": "Libre",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune · ouverte jusqu'à 12 ans"
         },
-        "capacity": "À confirmer",
+        "capacity": "Inconnue",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": false,
+          "pmr": true
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "Le site accueillait à l'origine l'embarcadère des Indian Canoes, ouvert avec le parc en 1992 et retiré faute de capacité. Un village thématisé y ouvre le 22 juin 1996, avant d'être renommé Frontierland Playground au début de l'été 2019, le thème d'origine n'étant plus d'actualité.",
+      "synopsis": "Toboggans, balançoires, ponts et structures d'escalade suspendus entre des mâts de bois, sur un sol souple et dans un espace clôturé. Depuis la berge, les parents assis voient passer les trains de Big Thunder Mountain et les bateaux à aubes.",
+      "secrets": [
+        "Les six canoës qui partaient d'ici mesuraient 10,66 mètres chacun.",
+        "Le chenal d'embarquement des canoës est toujours visible, par une courte passerelle en bois à gauche de l'aire de jeux.",
+        "Le lancement de 1996 s'accompagnait d'une mini-parade et d'un spectacle au Chaparral Theater.",
+        "En 2010, l'arche d'entrée a été supprimée et remplacée par une enseigne posée dans la végétation.",
+        "L'espace est ouvert aux enfants jusqu'à douze ans, mais les équipements sont dimensionnés pour les quatre à huit ans.",
+        "La zone est entièrement accessible, même si la plupart des équipements ne conviennent pas à tous les visiteurs."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Vue sur Big Thunder depuis les bancs",
+          "Sol souple et espace clôturé",
+          "Aucune attente"
+        ],
+        "cons": [
+          "Équipements adaptés à une tranche d'âge étroite",
+          "Peu d'ombre"
+        ],
+        "text": "Une halte utile plus qu'une attraction. Le bon endroit pour laisser souffler les enfants pendant qu'un adulte garde un œil sur la rivière."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://www.dein-dlrp.de/en/disneyland-resort-paris/disneyland-park/frontierland/frontierland-playground.html",
+        "https://dlpguide.com/guidebook/disneyland-park/frontierland/pocahontas-indian-village",
+        "https://d23.com/a-to-z/pocahontas-indian-village/"
       ]
     },
     {
       "id": "mysteres-du-nautilus",
       "name": "Les Mystères du Nautilus",
-      "tagline": "",
+      "tagline": "Le sous-marin du lagon est un leurre",
       "park": "dlp",
       "land": "Discoveryland",
-      "motif": "rocket",
+      "motif": "porthole",
       "posterLines": [
         "LES MYSTÈRES",
         "DU NAUTILUS"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Les Mystères du Nautilus"
@@ -2792,46 +2995,85 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "1994-07-04",
+          "label": "4 juillet 1994 · rouvert le 1er juillet 2023"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering · conception Tom Sherman · refonte 2023 Louise Doré",
+        "type": "Visite à pied",
+        "transport": "Aucun · parcours libre",
+        "duration": "Environ 10 minutes",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Flux libre",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
+          "premierAccess": false,
+          "singleRider": false,
           "photoPass": null,
-          "pmr": null
+          "pmr": true
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre le 4 juillet 1994, descendante directe d'une visite de décors présentée en Californie dès 1955. Elle ferme vers la fin de 2021 et rouvre le 1er juillet 2023, après une refonte intégrale qui a remplacé la scène finale et renouvelé la narration.",
+      "synopsis": "On entre par un phare, on descend un escalier en colimaçon, et un couloir sous-marin mène aux coursives du Nautilus. Salon, chambre de plongée, compartiment des ballasts : la visite montre comment les pièces du sous-marin s'articulent entre elles, ce que le film ne fait jamais.",
+      "secrets": [
+        "Le sous-marin visible dans le lagon est un leurre. Le parcours se déroule dans un bâtiment dissimulé derrière de hautes haies, et l'escalier en colimaçon sert à désorienter le visiteur pour qu'il ne s'en aperçoive pas.",
+        "Le projet initial prévoyait le Nautilus amarré dans un complexe au moins deux fois plus grand que Space Mountain, avec un restaurant à taille réelle dans le Grand Salon. Il a été réduit pour des raisons de coût.",
+        "Construit en parallèle de Space Mountain, le Nautilus a été achevé un an plus tôt, dans les délais et sous le budget.",
+        "Tom Sherman, son concepteur, alors en rémission d'un cancer, a fabriqué lui-même les scaphandres de la chambre de plongée et esquissé plus de deux cent cinquante illustrations sur des serviettes en papier. Il a reçu à l'inauguration le titre d'Amiral du Nautilus.",
+        "La scène du calmar géant, longtemps le seul animatronique de la visite, reposait sur un procédé dit « sec pour mouillé » : seule l'eau du hublot était réelle. Elle a été raccourcie, puis supprimée en 2023.",
+        "Depuis 2023, le hublot montre dauphins, requins-marteaux, baleines à bosse et tortues, avec un effet de profondeur inspiré de la caméra multiplane.",
+        "L'équipe des programmes animaliers d'Epcot, biologistes marins compris, a conseillé le nouveau récit consacré à la conservation des océans.",
+        "L'orgue a été restauré pour coller à l'accessoire du film de 1954, dont l'original se trouve aujourd'hui au manoir hanté de Disneyland en Californie.",
+        "Les horaires sont très réduits, même en haute saison : il arrive que la visite n'ouvre qu'à 13 h 30 et ferme dès 17 h 30."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Densité de détail rare, à hauteur de main",
+          "Aucune file la plupart du temps",
+          "Accessible en fauteuil, ascenseur à l'entrée"
+        ],
+        "cons": [
+          "Horaires d'ouverture très restreints",
+          "La disparition du calmar divise les habitués"
+        ],
+        "text": "Le secret le mieux gardé du parc. Dix minutes d'un décor d'une densité que peu d'attractions atteignent — à condition de tomber sur une heure d'ouverture."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://en.wikipedia.org/wiki/Les_Myst%C3%A8res_du_Nautilus",
+        "https://d23.com/a-to-z/myst%C3%A8res-du-nautilus-les/",
+        "https://wdwnt.com/2023/06/imagineers-share-details-about-les-mysteres-du-nautilus-refurbishment-in-disneyland-paris/"
       ]
     },
     {
       "id": "starport",
       "name": "Welcome to Starport : A Star Wars Encounter",
-      "tagline": "",
+      "tagline": "Deux salles en parallèle, pour tenir le débit",
       "park": "dlp",
       "land": "Discoveryland",
-      "motif": "rocket",
+      "motif": "beacon",
       "posterLines": [
         "STARPORT"
       ],
-      "stub": true,
       "queueTimes": {
         "aliases": [
           "Welcome to Starport: A Star Wars Encounter",
@@ -2845,33 +3087,69 @@
       },
       "fiche": {
         "opening": {
-          "iso": null,
-          "label": "À confirmer"
+          "iso": "2017-03-26",
+          "label": "26 mars 2017"
         },
-        "builder": "À confirmer",
-        "type": "À confirmer",
-        "transport": "À confirmer",
-        "duration": "À confirmer",
+        "builder": "Walt Disney Imagineering",
+        "type": "Rencontre de personnages scénarisée",
+        "transport": "Aucun · parcours à pied",
+        "duration": "Environ 3 minutes de rencontre, hors attente",
         "minHeight": {
-          "cm": null,
-          "label": "À confirmer"
+          "cm": 0,
+          "label": "Aucune"
         },
-        "capacity": "À confirmer",
+        "capacity": "Deux salles de rencontre en parallèle",
         "services": {
-          "premierAccess": null,
-          "singleRider": null,
-          "photoPass": null,
-          "pmr": null
+          "premierAccess": false,
+          "singleRider": false,
+          "photoPass": true,
+          "pmr": true
         }
       },
-      "history": "",
-      "synopsis": "",
-      "secrets": [],
-      "gallery": [],
+      "history": "L'attraction ouvre le 26 mars 2017, le même jour que la nouvelle version de Star Tours, à l'emplacement d'une ancienne boutique. La sortie de Star Tours a dû être déplacée pour dégager la place.",
+      "synopsis": "Une file couverte, un court pré-show, puis l'une des deux salles de rencontre. Le décor est celui d'une base spatiale sombre. Le personnage présent change selon les jours, et le programme est affiché à l'entrée.",
+      "secrets": [
+        "L'attraction occupe l'emplacement d'une ancienne boutique, et son installation a obligé à déplacer la sortie de Star Tours.",
+        "À l'ouverture, un seul personnage y apparaissait, tous les jours. Le casting s'est élargi depuis, sans garantie.",
+        "Deux salles fonctionnent en parallèle, ce qui est rare pour ce type d'attraction au parc, et sert à absorber le débit.",
+        "L'attente moyenne tourne autour de vingt-trois minutes, avec un creux vers 17 h et une pointe vers 20 h.",
+        "En mai 2025, le toit du bâtiment a accueilli une terrasse saisonnière avec des personnages itinérants.",
+        "Ni les bases de données de montagnes russes ni celles de parcours scéniques ne la répertorient : les sources la traitent comme une rencontre, pas comme une attraction."
+      ],
+      "gallery": [
+        {
+          "variant": "poster",
+          "caption": "Affiche principale"
+        },
+        {
+          "variant": "night",
+          "caption": "Version nocturne"
+        },
+        {
+          "variant": "blueprint",
+          "caption": "Schéma du tracé"
+        },
+        {
+          "variant": "ticket",
+          "caption": "Billet souvenir"
+        }
+      ],
       "images": [],
-      "review": null,
+      "review": {
+        "pros": [
+          "Photographe PhotoPass sur place",
+          "Décor soigné pour une rencontre",
+          "Deux salles, donc file qui avance"
+        ],
+        "cons": [
+          "Personnage non garanti",
+          "Pointe de fréquentation en soirée"
+        ],
+        "text": "Une rencontre mieux mise en scène que la moyenne. Vérifier le programme affiché à l'entrée avant de s'engager dans la file."
+      },
       "sources": [
-        "https://queue-times.com/parks/4/"
+        "https://www.dlpguide.com/?p=9947",
+        "https://www.parcsetloisirs.fr/en/parc/disneyland-paris/welcome-to-starport-a-star-wars-encounter"
       ]
     },
     {
@@ -2879,7 +3157,7 @@
       "name": "Les Tapis Volants — Flying Carpets Over Agrabah",
       "tagline": "",
       "park": "daw",
-      "land": "Worlds of Pixar",
+      "land": "World Premiere Plaza",
       "motif": "rocket",
       "posterLines": [
         "LES TAPIS",
@@ -3160,9 +3438,9 @@
         ]
       },
       "localStatus": {
-        "status": null,
+        "status": "closed",
         "until": null,
-        "note": ""
+        "note": "Fermée le 7 janvier 2019."
       },
       "fiche": {
         "opening": {
