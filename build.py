@@ -50,5 +50,6 @@ assert '<style>' in html and 'app-data' in html, 'le repli a manqué sa cible'
 
 (root / 'dist').mkdir(exist_ok=True)
 (root / 'dist' / 'index.html').write_text(html, encoding='utf-8')
-(root / 'dist' / 'bundle.check.js').write_text('(function(){\n' + js + '\n})();', encoding='utf-8')
+(root / '.check').mkdir(exist_ok=True)
+(root / '.check' / 'bundle.js').write_text('(function(){\n' + js + '\n})();', encoding='utf-8')
 print('built', len(html))

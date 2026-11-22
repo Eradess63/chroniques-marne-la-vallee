@@ -31,7 +31,7 @@ const fold = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCa
 const parkName = (id) => state.parks.find((p) => p.id === id)?.name || id;
 const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
-/** Statut affiché : réglage local (localStatus) > données Queue-Times, sinon indisponible */
+/** Statut affiché : réglage local (localStatus) > données ThemeParks.wiki, sinon indisponible */
 function statusOf(a) {
   const local = a.localStatus || {};
   const live = state.live.get(a.id);
@@ -136,7 +136,7 @@ function renderLivebar() {
     : `à l'instant`;
   const text = {
     loading: `Chargement des temps d'attente…`,
-    live: `Temps d'attente ${horodatage} · source : ${state.via || 'Queue-Times'}`,
+    live: `Temps d'attente ${horodatage} · source : ${state.via || 'ThemeParks.wiki'}`,
     partial: `Temps d'attente pour une partie des attractions seulement · ${horodatage}`,
     unavailable: `Temps d'attente indisponibles.${detail}`
   }[state.mode];
@@ -252,7 +252,7 @@ function renderFicheStatus() {
       ? "Temps d'attente non disponibles."
       : state.mode === 'loading'
         ? ''
-        : `Queue-Times · ${state.age ? `relevé ${ageLabel(state.age)}` : 'en direct'}`;
+        : `ThemeParks.wiki · ${state.age ? `relevé ${ageLabel(state.age)}` : 'en direct'}`;
   }
 }
 

@@ -1,8 +1,14 @@
 # Publie le site sur GitHub Pages à chaque poussée sur main.
 #
-# Il n'y a plus de relevé planifié : themeparks.wiki autorise le CORS, donc le
-# navigateur interroge l'API directement et le site n'a plus besoin que le
-# dépôt lui serve des temps d'attente en conserve.
+# Ce qui est publié, c'est dist/ : un seul fichier, styles, scripts et données
+# compris. GitHub Pages met ses fichiers en cache dix minutes, et servir des
+# modules séparés revenait à livrer un script neuf avec une feuille de style
+# périmée, ou l'inverse. Avec un fichier unique, le site est toujours cohérent
+# avec lui-même.
+#
+# Il n'y a plus de relevé planifié non plus : themeparks.wiki autorise le CORS,
+# donc le navigateur interroge l'API directement et le dépôt n'a plus besoin de
+# lui servir des temps d'attente en conserve.
 name: Publication
 
 on:
@@ -30,7 +36,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: './dist'
       - name: Déployer
         id: deploiement
         uses: actions/deploy-pages@v4

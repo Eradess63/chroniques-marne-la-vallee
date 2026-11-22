@@ -226,7 +226,7 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 .fiche__tagline { margin: 0 0 26px; font-style: italic; font-size: 1.1rem; color: var(--encre-faible); }
 .live { display: inline-flex; align-items: center; gap: 18px; padding: 12px 20px; background: linear-gradient(170deg, #32200F, #1C0F08); border: 1px solid var(--cuivre); border-radius: 3px; box-shadow: inset 0 1px 0 rgba(230,199,126,.18); }
 .live__status { display: flex; align-items: center; gap: 10px; font-family: var(--font-plaque); font-size: .64rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
-.live__status::before { content: ""; width: 11px; height: 11px; flex: none; border-radius: 50%; background: currentColor; box-shadow: 0 0 9px currentColor, inset 0 -1px 2px rgba(0,0,0,.5); }
+.live__status .lampe { width: 11px; height: 11px; }
 .live .ribbon--open { color: var(--vert-cadran); }
 .live .ribbon--closed { color: var(--rouge-cadran); }
 .live .ribbon--refurb { color: var(--ambre); }
@@ -412,8 +412,8 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 .card { animation: monte .5s cubic-bezier(.2, .8, .3, 1) both; animation-delay: calc(var(--i, 0) * 28ms); }
 
 @keyframes veille { 0%, 100% { opacity: 1; box-shadow: 0 0 6px currentColor; } 50% { opacity: .55; box-shadow: 0 0 2px currentColor; } }
-.ribbon--open .lampe, .live__status.ribbon--open::before { animation: veille 2.6s ease-in-out infinite; }
-.ribbon--down .lampe, .live__status.ribbon--down::before { animation: veille .9s steps(2, end) infinite; }
+.ribbon--open .lampe { animation: veille 2.6s ease-in-out infinite; }
+.ribbon--down .lampe { animation: veille .9s steps(2, end) infinite; }
 
 @keyframes reflet { from { transform: translateX(-130%) rotate(16deg); } to { transform: translateX(230%) rotate(16deg); } }
 .card:hover .card__art::after, .card:focus-within .card__art::after { animation: reflet 1.1s ease-in-out; }
@@ -450,7 +450,6 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
   .a-wheel, .a-turn, .a-canopy, .a-orbit, .a-orbit--1, .a-orbit--2,
   .a-hand-h, .a-hand-m, .a-smoke, .a-flicker, .a-ping,
   .ribbon--open .lampe, .ribbon--down .lampe,
-  .live__status.ribbon--open::before, .live__status.ribbon--down::before,
   .vient-de-changer .attente__val { animation: none !important; }
   .attente .curseur { transition: none !important; }
 }
@@ -502,7 +501,7 @@ dialog::backdrop { background: rgba(10, 5, 2, .9); }
 </main>
 
 <footer class="footer">
-  <p>Temps d'attente : <a href="https://queue-times.com/" target="_blank" rel="noopener">Powered by Queue-Times.com</a></p>
+  <p>Temps d'attente : <a href="https://themeparks.wiki/" target="_blank" rel="noopener">Powered by ThemeParks.wiki</a></p>
   <p>Site de fans, non officiel, sans lien avec The Walt Disney Company ni Disneyland Paris. Illustrations originales.</p>
 </footer>
 
@@ -6333,7 +6332,7 @@ const fold = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCa
 const parkName = (id) => state.parks.find((p) => p.id === id)?.name || id;
 const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
-/** Statut affiché : réglage local (localStatus) > données Queue-Times, sinon indisponible */
+/** Statut affiché : réglage local (localStatus) > données ThemeParks.wiki, sinon indisponible */
 function statusOf(a) {
   const local = a.localStatus || {};
   const live = state.live.get(a.id);
@@ -6438,7 +6437,7 @@ function renderLivebar() {
     : `à l'instant`;
   const text = {
     loading: `Chargement des temps d'attente…`,
-    live: `Temps d'attente ${horodatage} · source : ${state.via || 'Queue-Times'}`,
+    live: `Temps d'attente ${horodatage} · source : ${state.via || 'ThemeParks.wiki'}`,
     partial: `Temps d'attente pour une partie des attractions seulement · ${horodatage}`,
     unavailable: `Temps d'attente indisponibles.${detail}`
   }[state.mode];
@@ -6554,7 +6553,7 @@ function renderFicheStatus() {
       ? "Temps d'attente non disponibles."
       : state.mode === 'loading'
         ? ''
-        : `Queue-Times · ${state.age ? `relevé ${ageLabel(state.age)}` : 'en direct'}`;
+        : `ThemeParks.wiki · ${state.age ? `relevé ${ageLabel(state.age)}` : 'en direct'}`;
   }
 }
 
