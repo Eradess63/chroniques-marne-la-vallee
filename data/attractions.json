@@ -2,7 +2,8 @@
   "meta": {
     "title": "Chroniques de Marne-la-Vallée",
     "updated": "2026-11-21",
-    "note": "Données compilées à partir de sources publiques. Les alias Queue-Times ont été relevés sur l'API elle-même. Les fiches marquées « en cours » n'ont que leur nom, leur land et leurs sources. Le complexe compte 51 attractions au total."
+    "note": "Données compilées à partir de sources publiques. Les alias Queue-Times ont été relevés sur l'API elle-même. Les fiches marquées « en cours » n'ont que leur nom, leur land et leurs sources. Le complexe compte 51 attractions au total.",
+    "coordsSource": "Coordonnées : plans interactifs officiels Disneyland Paris (novembre 2026)"
   },
   "parks": [
     {
@@ -133,7 +134,11 @@
           "Quelques visiteurs la jugent surcotée face à Indiana Jones"
         ],
         "tip": "Y aller dès l'ouverture ou passer par le Premier Access : les retours évoquent une dizaine de minutes au lieu de quatre-vingt-dix."
-      }
+      },
+      "coords": [
+        48.871528,
+        2.774787
+      ]
     },
     {
       "id": "phantom-manor",
@@ -238,7 +243,11 @@
           "Le parcours reste sombre pour les plus jeunes"
         ],
         "tip": "L'attente varie énormément dans la journée, bien plus que sur les autres grandes attractions. En fin de soirée, l'entrée se fait souvent sans attendre."
-      }
+      },
+      "coords": [
+        48.870977,
+        2.776827
+      ]
     },
     {
       "id": "star-wars-hyperspace-mountain",
@@ -342,7 +351,11 @@
           "La taille minimale de 1,20 m, qui écarte les plus jeunes"
         ],
         "tip": "La file Single Rider fonctionne, mais plusieurs visiteurs signalent qu'elle accueille aussi les accès payants et qu'elle peut donc être lente. Elle redevient très efficace en soirée."
-      }
+      },
+      "coords": [
+        48.873651,
+        2.778863
+      ]
     },
     {
       "id": "tower-of-terror",
@@ -445,7 +458,11 @@
           "Plusieurs signalent un malaise passager après le tour"
         ],
         "tip": "Une porte de sortie est prévue juste avant l'embarquement, et plusieurs visiteurs rappellent qu'elle existe pour de bonnes raisons. Mieux vaut éviter juste après un repas."
-      }
+      },
+      "coords": [
+        48.866753,
+        2.778767
+      ]
     },
     {
       "id": "ratatouille",
@@ -548,7 +565,11 @@
           "Le contraste brutal entre cette file et l'intérieur du bâtiment"
         ],
         "tip": "Sous vingt minutes d'attente, les retours sont unanimement enthousiastes. Au-delà, l'avis dépend beaucoup de la tolérance à la file extérieure."
-      }
+      },
+      "coords": [
+        48.86757,
+        2.776222
+      ]
     },
     {
       "id": "frozen-ever-after",
@@ -635,6 +656,10 @@
       "posterLines": [
         "FROZEN",
         "EVER AFTER"
+      ],
+      "coords": [
+        48.864108,
+        2.773508
       ]
     },
     {
@@ -733,6 +758,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/its-a-small-world/",
         "https://wdwnt.com/2023/05/dolls-in-wheelchairs-debut-on-its-a-small-world-in-disneyland-paris"
+      ],
+      "coords": [
+        48.87469,
+        2.776084
       ]
     },
     {
@@ -813,6 +842,10 @@
         "https://en.wikipedia.org/wiki/Mickey%27s_PhilharMagic",
         "https://darkridedatabase.com/rides/discoveryland-theatre/",
         "https://disneyandmore.blogspot.com/2018/10/mickeys-philarmagic-opens-at-disneyland.html"
+      ],
+      "coords": [
+        48.87456,
+        2.779698
       ]
     },
     {
@@ -894,6 +927,10 @@
         "https://en.wikipedia.org/wiki/Storybook_Land_Canal_Boats",
         "https://www.dlpguide.com/guidebook/disneyland-park/fantasyland/le-pays-des-contes-de-fees/",
         "https://airtimenews.org/2024/08/30/nouvelles-scenes-le-pays-des-contes-de-fees-30-aout-2024/"
+      ],
+      "coords": [
+        48.87519,
+        2.774483
       ]
     },
     {
@@ -972,6 +1009,10 @@
         "https://coasterpedia.net/wiki/Casey_Jr._%E2%80%93_le_Petit_Train_du_Cirque",
         "https://en.wikipedia.org/wiki/Casey_Jr._Circus_Train",
         "https://fr.wikipedia.org/wiki/Casey_Jr_Circus_Train"
+      ],
+      "coords": [
+        48.875176,
+        2.774151
       ]
     },
     {
@@ -1054,6 +1095,10 @@
       "sources": [
         "https://www.chroniquedisney.fr/parc/2012-meet-mickey-mouse.htm",
         "https://fr.wikipedia.org/wiki/Fantasyland_Theater"
+      ],
+      "coords": [
+        48.874422,
+        2.77392
       ]
     },
     {
@@ -1151,6 +1196,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/alices-curious-labyrinth/",
         "https://en.wikipedia.org/wiki/Alice%27s_Curious_Labyrinth"
+      ],
+      "coords": [
+        48.874461,
+        2.774518
       ]
     },
     {
@@ -1245,6 +1294,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/la-taniere-du-dragon/",
         "https://en.wikipedia.org/wiki/La_Tani%C3%A8re_du_Dragon"
+      ],
+      "coords": [
+        48.87308,
+        2.775918
       ]
     },
     {
@@ -1346,6 +1399,10 @@
         "https://www.dlpguide.com/guidebook/disneyland-park/adventureland/pirates-of-the-caribbean/",
         "https://fr.wikipedia.org/wiki/Pirates_of_the_Caribbean",
         "https://www.chroniquedisney.fr/dossier/2017-pirates-reouverture.htm"
+      ],
+      "coords": [
+        48.873493,
+        2.773381
       ]
     },
     {
@@ -1450,6 +1507,10 @@
         "https://en.wikipedia.org/wiki/Indiana_Jones_and_the_Temple_of_Peril",
         "https://rcdb.com/957.htm",
         "https://www.chroniquedisney.fr/parc/1993-indiana-jones-temple-peril.htm"
+      ],
+      "coords": [
+        48.872429,
+        2.772029
       ]
     },
     {
@@ -1546,6 +1607,10 @@
         "https://en.wikipedia.org/wiki/Star_Tours_%E2%80%93_The_Adventures_Continue",
         "https://darkridedatabase.com/rides/star-tours-laventure-continue/",
         "https://www.ed92.org/?p=412811"
+      ],
+      "coords": [
+        48.874677,
+        2.778782
       ]
     },
     {
@@ -1643,6 +1708,10 @@
       "sources": [
         "https://www.dlpguide.com/guidebook/disneyland-park/discoveryland/buzz-lightyear-laser-blast/",
         "https://magic-tips.app/en/disneyland-paris/parc-disneyland/attractions/buzz-lightyear-laser-blast"
+      ],
+      "coords": [
+        48.87343,
+        2.777947
       ]
     },
     {
@@ -1738,6 +1807,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/discoveryland/orbitron-machines-volantes/",
         "https://magic-tips.app/fr/disneyland-paris/parc-disneyland/attractions/orbitron"
+      ],
+      "coords": [
+        48.873486,
+        2.778457
       ]
     },
     {
@@ -1832,6 +1905,10 @@
       "sources": [
         "https://www.dlpguide.com/guidebook/disneyland-park/discoveryland/autopia/",
         "https://blooloop.com/theme-park/news/disneyland-paris-autopia-reopen/"
+      ],
+      "coords": [
+        48.873417,
+        2.778797
       ]
     },
     {
@@ -1909,6 +1986,10 @@
         "https://news.disneylandparis.com/en/walt-disney-studio-park-discovery/",
         "https://disney.fandom.com/wiki/Raiponce_Tangled_Spin",
         "https://www.themeparkinsider.com/flume/202601/12284/"
+      ],
+      "coords": [
+        48.866153,
+        2.77663
       ]
     },
     {
@@ -2026,7 +2107,11 @@
           "Une file d'attente parfois très longue en journée"
         ],
         "tip": "La file Single Rider est le meilleur rapport attente/temps de tour de la land, à condition d'accepter d'être séparé de son groupe."
-      }
+      },
+      "coords": [
+        48.865448,
+        2.779415
+      ]
     },
     {
       "id": "spider-man-web-adventure",
@@ -2105,6 +2190,10 @@
         "https://en.wikipedia.org/wiki/Web_Slingers:_A_Spider-Man_Adventure",
         "https://news.disneylandparis.com/en/walt-disney-studio-park-discovery/",
         "https://en.wikipedia.org/wiki/Avengers_Campus"
+      ],
+      "coords": [
+        48.866115,
+        2.779369
       ]
     },
     {
@@ -2180,6 +2269,10 @@
       "sources": [
         "https://en.wikipedia.org/wiki/Toy_Soldiers_Parachute_Drop",
         "https://fr.wikipedia.org/wiki/Toy_Soldiers_Parachute_Drop"
+      ],
+      "coords": [
+        48.867188,
+        2.777234
       ]
     },
     {
@@ -2261,6 +2354,10 @@
         "https://en.wikipedia.org/wiki/Crush%27s_Coaster",
         "https://mickeyfromthe.uk/news/crushs-coaster-closing-for-10-months-from-september-2026",
         "https://coasterpedia.net/wiki/Crush%27s_Coaster"
+      ],
+      "coords": [
+        48.868041,
+        2.778142
       ]
     },
     {
@@ -2336,6 +2433,10 @@
       "sources": [
         "https://fr.wikipedia.org/wiki/Cars_Road_Trip",
         "https://en.wikipedia.org/wiki/List_of_Disney_Adventure_World_attractions"
+      ],
+      "coords": [
+        48.866519,
+        2.775024
       ]
     },
     {
@@ -2413,6 +2514,10 @@
         "https://en.wikipedia.org/wiki/Cars_Quatre_Roues_Rallye",
         "https://coasterpedia.net/wiki/Cars_Quatre_Roues_Rallye",
         "https://www.dlpguide.com/guidebook/walt-disney-studios-park/toon-studio/cars-quatre-roues-rallye/"
+      ],
+      "coords": [
+        48.867726,
+        2.777854
       ]
     },
     {
@@ -2522,7 +2627,11 @@
           "Un embarquement lent, et aucun banc dans la file"
         ],
         "tip": "À prendre quand la file est courte, et pour se déplacer. Le prendre pour la vue expose à la déception."
-      }
+      },
+      "coords": [
+        48.870814,
+        2.77909
+      ]
     },
     {
       "id": "main-street-vehicles",
@@ -2625,7 +2734,11 @@
           "Des retours signalent une offre très limitée en fauteuils roulants"
         ],
         "tip": "Les arrêts sont à Town Square et à Central Plaza, aux deux extrémités de la rue. En dehors de ces deux points, les véhicules ne s'arrêtent pas."
-      }
+      },
+      "coords": [
+        48.871327,
+        2.778946
+      ]
     },
     {
       "id": "peter-pans-flight",
@@ -2716,6 +2829,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/peter-pans-flight/",
         "https://en.wikipedia.org/wiki/Peter_Pan%27s_Flight"
+      ],
+      "coords": [
+        48.873838,
+        2.77408
       ]
     },
     {
@@ -2806,6 +2923,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/dumbo-the-flying-elephant/",
         "https://www.freizeitpark-welt.de/freizeitparks/disneyland_paris/attraktionen/dumbo-the-flying-elephant-r183"
+      ],
+      "coords": [
+        48.874152,
+        2.774606
       ]
     },
     {
@@ -2894,6 +3015,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/les-voyages-de-pinocchio/",
         "https://en.wikipedia.org/wiki/Pinocchio%27s_Daring_Journey"
+      ],
+      "coords": [
+        48.873545,
+        2.775157
       ]
     },
     {
@@ -2984,6 +3109,10 @@
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/blanche-neige-et-les-sept-nains/",
         "https://coasterpedia.net/wiki/Blanche-Neige_et_les_Sept_Nains",
         "https://www.laughingplace.com/disney-parks/snow-white-refurb-at-disneyland-paris/"
+      ],
+      "coords": [
+        48.873445,
+        2.775298
       ]
     },
     {
@@ -3076,6 +3205,10 @@
       },
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/mad-hatters-tea-cups/"
+      ],
+      "coords": [
+        48.874365,
+        2.775025
       ]
     },
     {
@@ -3167,6 +3300,10 @@
       "sources": [
         "https://dlpguide.com/guidebook/disneyland-park/fantasyland/le-carrousel-de-lancelot/",
         "https://en.wikipedia.org/wiki/Le_Carrousel_de_Lancelot"
+      ],
+      "coords": [
+        48.873908,
+        2.775168
       ]
     },
     {
@@ -3242,6 +3379,10 @@
       "sources": [
         "https://fr.wikipedia.org/wiki/Princess_Pavilion",
         "https://www.chroniquedisney.fr/parc/2011-princess-pavilion.htm"
+      ],
+      "coords": [
+        48.874745,
+        2.775558
       ]
     },
     {
@@ -3339,6 +3480,10 @@
       "sources": [
         "https://www.chroniquedisney.fr/parc/1992-cabane-robinson.htm",
         "https://fr.wikipedia.org/wiki/La_Cabane_des_Robinson"
+      ],
+      "coords": [
+        48.872336,
+        2.773744
       ]
     },
     {
@@ -3427,6 +3572,10 @@
       "sources": [
         "https://julieears.com/attractions/le-galion-des-pirates/",
         "https://insidethemagic.net/2025/11/disney-shutters-pirates-attraction-cj1/"
+      ],
+      "coords": [
+        48.872927,
+        2.773621
       ]
     },
     {
@@ -3517,6 +3666,10 @@
       "sources": [
         "https://www.chroniquedisney.fr/parc/1999-plagedespirates.htm",
         "https://d23.com/a-to-z/la-plage-des-pirates/"
+      ],
+      "coords": [
+        48.87274,
+        2.773771
       ]
     },
     {
@@ -3623,7 +3776,11 @@
           "À sacrifier en priorité si la journée est courte"
         ],
         "tip": "Monter sur le pont supérieur, et viser le crépuscule."
-      }
+      },
+      "coords": [
+        48.871173,
+        2.776563
+      ]
     },
     {
       "id": "river-rogue-keelboats",
@@ -3802,6 +3959,10 @@
         "https://www.dein-dlrp.de/en/disneyland-resort-paris/disneyland-park/frontierland/frontierland-playground.html",
         "https://dlpguide.com/guidebook/disneyland-park/frontierland/pocahontas-indian-village",
         "https://d23.com/a-to-z/pocahontas-indian-village/"
+      ],
+      "coords": [
+        48.870336,
+        2.774223
       ]
     },
     {
@@ -3894,6 +4055,10 @@
         "https://en.wikipedia.org/wiki/Les_Myst%C3%A8res_du_Nautilus",
         "https://d23.com/a-to-z/myst%C3%A8res-du-nautilus-les/",
         "https://wdwnt.com/2023/06/imagineers-share-details-about-les-mysteres-du-nautilus-refurbishment-in-disneyland-paris/"
+      ],
+      "coords": [
+        48.873432,
+        2.779553
       ]
     },
     {
@@ -3982,6 +4147,10 @@
       "sources": [
         "https://www.dlpguide.com/?p=9947",
         "https://www.parcsetloisirs.fr/en/parc/disneyland-paris/welcome-to-starport-a-star-wars-encounter"
+      ],
+      "coords": [
+        48.874544,
+        2.778952
       ]
     },
     {
@@ -4061,6 +4230,10 @@
         "https://en.wikipedia.org/wiki/The_Magic_Carpets_of_Aladdin",
         "https://news.disneylandparis.com/rehabilitation-de-lattraction-les-tapis-volants-flying-carpets-over-agrabah/",
         "https://www.chroniquedisney.fr/parc/2002-tapis-volants.htm"
+      ],
+      "coords": [
+        48.868288,
+        2.778352
       ]
     },
     {
@@ -4135,6 +4308,10 @@
       "sources": [
         "https://fr.wikipedia.org/wiki/Disney_Adventure_World",
         "https://www.hellodisneyland.com/walt-disney-studios/"
+      ],
+      "coords": [
+        48.866487,
+        2.780126
       ]
     },
     {
@@ -4212,6 +4389,10 @@
         "https://www.chroniquedisney.fr/parc/2010-rc-racer.htm",
         "https://en.wikipedia.org/wiki/RC_Racer",
         "https://lord-park.com/attractions/rc-racer/"
+      ],
+      "coords": [
+        48.866903,
+        2.776651
       ]
     },
     {
@@ -4286,6 +4467,10 @@
       "sources": [
         "https://en.wikipedia.org/wiki/Slinky_Dog_Zigzag_Spin",
         "https://en.wikipedia.org/wiki/Worlds_of_Pixar"
+      ],
+      "coords": [
+        48.867136,
+        2.776959
       ]
     },
     {
@@ -4361,6 +4546,10 @@
       "sources": [
         "https://news.disneylandparis.com/a-la-decouverte-de-walt-disney-studios/",
         "https://en.wikipedia.org/wiki/Avengers_Campus"
+      ],
+      "coords": [
+        48.865428,
+        2.779079
       ]
     },
     {
@@ -4435,6 +4624,10 @@
       "sources": [
         "https://fr.wikipedia.org/wiki/Disney_Adventure_World",
         "https://en.wikipedia.org/wiki/Toon_Studio"
+      ],
+      "coords": [
+        48.867427,
+        2.778332
       ]
     },
     {
@@ -4532,6 +4725,10 @@
       "sources": [
         "https://www.chroniquedisney.fr/parc/1992-dlpadventure.htm",
         "https://en.wikipedia.org/wiki/Adventure_Isle_(Disneyland_Paris)"
+      ],
+      "coords": [
+        48.872736,
+        2.77316
       ]
     },
     {
@@ -4622,6 +4819,10 @@
       "sources": [
         "https://d23.com/a-to-z/le-passage-enchante-daladdin/",
         "https://www.chroniquedisney.fr/parc/1993-passagealaddin.htm"
+      ],
+      "coords": [
+        48.872441,
+        2.775416
       ]
     }
   ]

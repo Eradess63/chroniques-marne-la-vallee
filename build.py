@@ -33,7 +33,7 @@ def mod(name):
     return s
 
 
-js = '\n'.join(mod(n) for n in ['config.js', 'api.js', 'posters.js', 'reviews.js', 'parcours.js', 'app.js'])
+js = '\n'.join(mod(n) for n in ['config.js', 'api.js', 'posters.js', 'reviews.js', 'parcours.js', 'plan.js', 'app.js'])
 css = (root / 'css' / 'style.css').read_text(encoding='utf-8')
 data = (root / 'data' / 'attractions.json').read_text(encoding='utf-8').replace('</', '<\\/')
 
@@ -59,6 +59,14 @@ html = re.sub(r'<script type="module" src="js/app\.js(?:\?v=\d+)?"></script>',
               lambda _: '<script type="application/json" id="app-data">' + data + '</script>\n'
                         '<script type="application/json" id="app-art">' + art_json + '</script>\n'
                         '<script>\n(function(){\n' + js + '\n})();\n</script>', html, count=1)
+
+# Le plan et « Près de moi » sont des scripts ordinaires (partagés avec le
+# Carnet de parc) : repliés tels quels, avant le script principal.
+for nom in ['park-map.js', 'nearby.js']:
+    code = (root / 'js' / nom).read_text(encoding='utf-8').replace('</', '<\\/')
+    html, n = re.subn(r'<script src="js/' + re.escape(nom) + r'"></script>',
+                      lambda _: '<script>\n' + code + '\n</script>', html, count=1)
+    assert n == 1, nom + ' introuvable dans index.html'
 
 assert '<style>' in html and 'app-data' in html, 'le repli a manqué sa cible'
 

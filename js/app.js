@@ -4,6 +4,7 @@ import { loadWaitTimes } from './api.js';
 import { posterSVG } from './posters.js';
 import { loadReviews, addReview } from './reviews.js';
 import { estEpingle, estFait, basculeEpingle, basculeFait, bilan, videParcours } from './parcours.js';
+import { initPlan, planSection, geo, autourHTML } from './plan.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -258,8 +259,26 @@ async function refreshLive() {
   state.updatedAt = new Date();
   renderLivebar();
   renderGrid();
+  renderAutour();
   if (state.openId) renderFicheStatus();
 }
+
+/* ---------- Près de moi ---------- */
+let autourTri = 'distance';
+function renderAutour() {
+  const el = $('#autour'), btn = $('#btn-pres');
+  if (btn) btn.setAttribute('aria-pressed', String(geo.actif));
+  if (!el) return;
+  const html = autourHTML(state.attractions, statusOf, autourTri);
+  el.hidden = !html;
+  el.innerHTML = html;
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#btn-pres')) { geo.basculer(); return; }
+  const tri = e.target.closest('[data-autour-tri]');
+  if (tri) { autourTri = tri.dataset.autourTri; renderAutour(); }
+});
+geo.surChangement(renderAutour);
 
 /* ---------- Fiche détaillée ---------- */
 const ICONS = {
@@ -427,6 +446,8 @@ function openFiche(id) {
        <aside class="ticket__stub" aria-hidden="true"><span class="stub__admit">Admit one</span><span class="stub__letter"><span>E</span></span><span class="stub__no">N° ${String(state.attractions.indexOf(a) + 1).padStart(4, '0')}</span></aside>
       </div>
     </section>
+
+    ${planSection(a)}
 
     ${a.history || a.synopsis ? `<section class="section" aria-labelledby="h-story">
       <h3 class="section__title rule" id="h-story"><span>L'histoire et le synopsis</span></h3>
@@ -634,6 +655,7 @@ async function init() {
     }
     state.parks = data.parks;
     state.attractions = data.attractions;
+    initPlan(state.attractions);
 
     // Illustrations : intégrées à la page par la construction. Celles qui
     // manquent ne cassent rien — l'attraction garde sa planche gravée.

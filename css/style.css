@@ -612,3 +612,21 @@ body.vue-fiche main { padding: 0; }
 }
 @keyframes sortie { to { opacity: 0; transform: translateY(-10px) scale(.985); } }
 @keyframes entree { from { opacity: 0; transform: translateY(16px) scale(.99); } }
+
+/* ---------- Plan et « Près de moi » ---------- */
+.plan-apercu { border: 1px solid rgba(200, 153, 63, .55); border-radius: 10px; overflow: hidden; max-width: 640px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.plan-note { margin: 8px 2px 0; color: var(--encre-faible); font-size: .82rem; }
+.autour { margin: 14px 0 6px; padding: 16px 18px; border: 1px solid rgba(200, 153, 63, .45); border-radius: 12px; background: rgba(28, 15, 10, .72); }
+.autour__tete { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.autour__kicker { font: 600 .68rem var(--font-plaque); letter-spacing: .16em; text-transform: uppercase; color: var(--laiton); }
+.autour__titre { margin: 2px 0 0; font: 500 1.25rem var(--font-display); color: var(--encre); }
+.autour__liste { display: grid; gap: 6px; }
+.autour__ligne { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 10px 12px; border: 1px solid rgba(154, 95, 46, .5); border-radius: 9px; background: rgba(200, 153, 63, .06); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.autour__ligne:hover, .autour__ligne:focus-visible { border-color: var(--laiton-clair); }
+.autour__ligne strong { display: block; font-size: 1rem; }
+.autour__ligne small { display: block; color: var(--encre-faible); font-size: .8rem; }
+.autour__attente { flex: none; min-width: 66px; text-align: center; padding: 4px 9px; border-radius: 999px; background: rgba(200, 153, 63, .18); color: var(--laiton-clair); font: 600 .85rem var(--font-body); }
+.autour__attente--court { background: rgba(111, 168, 122, .22); color: #9fd8aa; }
+.autour__attente--ferme { background: rgba(194, 96, 90, .2); color: #e9a29d; font-size: .75rem; }
+.autour__info { margin: 8px 2px 0; color: var(--encre-faible); font-size: .82rem; }
+.autour__info--alerte { color: #f2c96b; }
