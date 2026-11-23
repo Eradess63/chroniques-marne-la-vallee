@@ -703,6 +703,10 @@ body.vue-fiche main { padding: 0; }
         <span class="filter-label" id="lbl-state">État</span>
         <div class="seg" id="filter-state"></div>
       </div>
+      <div class="filter-group" role="group" aria-labelledby="lbl-sort">
+        <span class="filter-label" id="lbl-sort">Trier</span>
+        <div class="seg" id="filter-sort"></div>
+      </div>
       <div class="filter-group" role="group" aria-labelledby="lbl-autour">
         <span class="filter-label" id="lbl-autour">Autour</span>
         <div class="seg"><button type="button" class="seg__btn" id="btn-pres" aria-pressed="false">📍 Près de moi</button></div>
@@ -7540,7 +7544,7 @@ const state = {
   updatedAt: null,
   failures: [],
   age: null,
-  filters: { park: 'all', land: 'all', state: 'all', parcours: 'all', q: '' },
+  filters: { park: 'all', land: 'all', state: 'all', parcours: 'all', sort: 'land', q: '' },
   openId: null
 };
 
@@ -7548,6 +7552,12 @@ const STATE_OPTIONS = [
   { id: 'all', label: 'Toutes' },
   { id: 'open', label: 'Ouvertes' },
   { id: 'closed', label: 'Fermées / En rénovation' }
+];
+
+// Tri de la grille : l'ordre du guide (par land) ou la file d'attente en direct.
+const SORT_OPTIONS = [
+  { id: 'land', label: 'Par land' },
+  { id: 'wait', label: '⏱ Attente la plus courte' }
 ];
 
 const PARCOURS_OPTIONS = [
@@ -7621,6 +7631,7 @@ function renderFilters() {
   if (f.land !== 'all' && !lands.includes(f.land)) f.land = 'all';
   $('#filter-land').innerHTML = chip('land', 'all', 'Tous', f.land === 'all') + lands.map((l) => chip('land', l, l, f.land === l)).join('');
   $('#filter-state').innerHTML = STATE_OPTIONS.map((o) => chip('state', o.id, o.label, f.state === o.id, 'seg__btn')).join('');
+  $('#filter-sort').innerHTML = SORT_OPTIONS.map((o) => chip('sort', o.id, o.label, f.sort === o.id, 'seg__btn')).join('');
   $('#filter-parcours').innerHTML = PARCOURS_OPTIONS.map((o) => chip('parcours', o.id, o.label, f.parcours === o.id, 'seg__btn')).join('');
   renderBilan();
 }
@@ -7666,8 +7677,25 @@ function ribbonHTML(st) {
 
 let dernieresAttentes = new Map();
 
+/**
+ * Tri par attente : les attractions ouvertes avec une attente publiée, de la
+ * plus courte à la plus longue ; puis celles ouvertes sans attente publiée ;
+ * puis les interrompues, fermées et en rénovation.
+ */
+function rangAttente(a) {
+  const st = statusOf(a);
+  if (st.kind === 'open' && typeof st.wait === 'number') return st.wait;
+  if (st.kind === 'open') return 1000;
+  if (st.kind === 'down') return 2000;
+  if (st.kind === 'unknown') return 2500;
+  return 3000;
+}
+
 function renderGrid() {
-  const list = state.attractions.filter(matches);
+  let list = state.attractions.filter(matches);
+  if (state.filters.sort === 'wait') {
+    list = list.map((a, i) => ({ a, i, r: rangAttente(a) })).sort((x, y) => x.r - y.r || x.i - y.i).map((x) => x.a);
+  }
   $('#count').textContent = `${list.length} attraction${list.length > 1 ? 's' : ''} affichée${list.length > 1 ? 's' : ''} sur ${state.attractions.length}`;
   const avant = dernieresAttentes;
   dernieresAttentes = new Map(list.map((a) => [a.id, statusOf(a).wait]));

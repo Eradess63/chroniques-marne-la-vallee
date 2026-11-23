@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202611231306">
+<link rel="stylesheet" href="css/style.css?v=202611232006">
 
 <style>
 .universe-brand{position:relative;z-index:4;display:flex;align-items:center;gap:11px;width:min(940px,100%);margin:12px auto 10px;color:var(--encre);text-align:left;text-decoration:none;white-space:nowrap}
@@ -69,6 +69,10 @@
         <span class="filter-label" id="lbl-state">État</span>
         <div class="seg" id="filter-state"></div>
       </div>
+      <div class="filter-group" role="group" aria-labelledby="lbl-sort">
+        <span class="filter-label" id="lbl-sort">Trier</span>
+        <div class="seg" id="filter-sort"></div>
+      </div>
       <div class="filter-group" role="group" aria-labelledby="lbl-autour">
         <span class="filter-label" id="lbl-autour">Autour</span>
         <div class="seg"><button type="button" class="seg__btn" id="btn-pres" aria-pressed="false">📍 Près de moi</button></div>
@@ -106,7 +110,7 @@
 <script src="js/park-map.js"></script>
 <script src="js/nearby.js"></script>
 <script src="js/itinerary.js"></script>
-<script type="module" src="js/app.js?v=202611231306"></script>
+<script type="module" src="js/app.js?v=202611232006"></script>
 <script>
   /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
      ouvert depuis un fichier local, le site fonctionne sans lui. */
