@@ -111,6 +111,7 @@
   let anim = 0;           // requestAnimationFrame de l'envol
   let target = null;      // point visé, projeté
   let lastFocus = null;
+  let custom = null;      // options d'un plan « libre » (page /plan) : calques, fermeture…
   const tiles = new Map();
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -162,6 +163,18 @@
       const world = TILE * 2 ** view.zoom;
       ui.pin.style.transform = `translate(${W / 2 + (target.x - view.cx) * world}px,${H / 2 + (target.y - view.cy) * world}px)`;
     }
+    custom?.onRender?.(api(W, H));
+  }
+
+  // Ce qu'un plan libre peut faire : placer ses repères, voler vers un point.
+  function api(W, H) {
+    const world = TILE * 2 ** view.zoom;
+    return {
+      W, H, zoom: view.zoom,
+      toScreen(lat, lng) { const p = project(lat, lng); return { x: W / 2 + (p.x - view.cx) * world, y: H / 2 + (p.y - view.cy) * world }; },
+      flyTo(lat, lng, zoom = view.zoom, ms = 800) { const p = project(lat, lng); flyTo({ cx: p.x, cy: p.y, zoom }, ms); },
+      render
+    };
   }
 
   function zoomAround(newZoom, px, py) {
@@ -273,9 +286,10 @@
     return `<button type="button" class="pmPreview" data-map-kind="${kind}" data-map-name="${safe}" aria-label="${safe} : ouvrir le plan interactif">${tiles}<span class="pmPin" aria-hidden="true">${PIN_SVG}</span><span class="pmPreviewHint">Agrandir le plan ⤢</span></button>`;
   };
 
-  function open(kind, name, subtitle) {
+  function open(kind, name, subtitle, opts = null) {
     close(true);
-    const point = findPoint(kind, name);
+    custom = opts;
+    const point = opts ? (opts.target || null) : findPoint(kind, name);
     lastFocus = document.activeElement;
     const overlay = document.createElement('div');
     overlay.className = 'pmOverlay';
@@ -297,17 +311,20 @@
           <span class="pmCredit">Plan © Disneyland Paris</span>
         </div>
       </div>`;
+    if (opts) overlay.classList.add('pmFree');
     overlay.querySelector('small').textContent = subtitle || ({ s: 'Boutique', d: 'Restaurant', a: 'Attraction' }[kind] || '');
-    overlay.querySelector('h2').textContent = name;
+    overlay.querySelector('h2').textContent = name || '';
     overlay.querySelector('.pmLabel').textContent = name;
     document.body.append(overlay);
     ui = { overlay, view: overlay.querySelector('.pmView'), layer: overlay.querySelector('.pmLayer'), pin: overlay.querySelector('.pmPin'), me: overlay.querySelector('.pmMe') };
     document.documentElement.style.overflow = 'hidden';
 
-    const start = project(OVERVIEW.lat, OVERVIEW.lng);
-    view = { cx: start.x, cy: start.y, zoom: OVERVIEW.zoom };
+    const s0 = opts?.start || OVERVIEW;
+    const start = project(s0.lat, s0.lng);
+    view = { cx: start.x, cy: start.y, zoom: s0.zoom ?? OVERVIEW.zoom };
     target = point ? project(point[0], point[1]) : null;
-    if (!target) {
+    if (!target && opts) ui.pin.hidden = true;
+    else if (!target) {
       ui.pin.hidden = true;
       const msg = document.createElement('p');
       msg.className = 'pmMissing';
@@ -318,7 +335,7 @@
     bindGestures(ui.view);
     overlay.addEventListener('click', e => {
       const action = e.target.closest('[data-pm]')?.dataset.pm;
-      if (e.target === overlay || action === 'close') return close();
+      if ((e.target === overlay && !opts) || action === 'close') return close();
       const { width: W, height: H } = ui.view.getBoundingClientRect();
       if (action === 'in' || action === 'out') {
         const nz = clamp(Math.round(view.zoom) + (action === 'in' ? 1 : -1), ZOOM_MIN, ZOOM_MAX);
@@ -329,10 +346,17 @@
         anim = requestAnimationFrame(step);
       }
       if (action === 'focus' && target) flyTo({ cx: target.x, cy: target.y, zoom: TARGET_ZOOM }, 900);
+      else if (action === 'focus') {
+        // Plan libre : ⌖ ramène à ta position si elle est connue, sinon à la vue d'ensemble.
+        const me = window.nearby?.active && window.nearby.position;
+        const p = me ? project(me.lat, me.lng) : project(OVERVIEW.lat, OVERVIEW.lng);
+        flyTo({ cx: p.x, cy: p.y, zoom: me ? 18 : OVERVIEW.zoom }, 900);
+      }
     });
     overlay.addEventListener('keydown', trapFocus);
     addEventListener('resize', render);
 
+    opts?.mount?.(ui.view, ui.overlay);
     render();
     requestAnimationFrame(() => overlay.classList.add('pmOpen'));
     overlay.querySelector('[data-pm="close"]').focus({ preventScroll: true });
@@ -360,11 +384,13 @@
     cancelAnimationFrame(anim);
     removeEventListener('resize', render);
     const { overlay } = ui;
-    ui = null; target = null; tiles.clear();
+    const done = custom?.onClose;
+    ui = null; target = null; custom = null; tiles.clear();
     document.documentElement.style.overflow = '';
     if (immediate || reduceMotion) overlay.remove();
     else { overlay.classList.remove('pmOpen'); setTimeout(() => overlay.remove(), 300); }
     lastFocus?.focus?.({ preventScroll: true });
+    done?.();
   }
 
   document.addEventListener('click', e => {
@@ -376,4 +402,11 @@
 
   window.nearby?.onChange(() => render());
   window.openParkMap = open;
+  // Plan libre : window.parkMap.open({ title, subtitle, start, mount(view, overlay), onRender(api), onClose }).
+  window.parkMap = {
+    open: opts => open(null, opts.title, opts.subtitle, opts),
+    close: () => close(),
+    render: () => render(),
+    get api() { return ui ? api(ui.view.clientWidth, ui.view.clientHeight) : null; }
+  };
 })();

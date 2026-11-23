@@ -414,7 +414,7 @@ function openFiche(id) {
         <p class="fiche__tagline">${esc(a.tagline)}</p>
         <div id="fiche-live">${liveBlock(a)}</div>
         <div class="carnet">${epinglerBtn(a, estEpingle(a.id))
-          .replace('class="epingle', 'class="epingle epingle--plat')}${faitBtn(a)}</div>
+          .replace('class="epingle', 'class="epingle epingle--plat')}${faitBtn(a)}${a.coords && window.itinerary ? window.itinerary.button('a', a.name) : ''}</div>
         <p class="live__meta" id="fiche-meta"></p>
       </div>
     </div>
