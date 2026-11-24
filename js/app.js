@@ -2,7 +2,6 @@
 import { CONFIG } from './config.js';
 import { loadWaitTimes } from './api.js';
 import { posterSVG } from './posters.js';
-import { loadReviews, addReview } from './reviews.js';
 import { estEpingle, estFait, basculeEpingle, basculeFait, bilan, videParcours } from './parcours.js';
 import { initPlan, planSection, geo, autourHTML, habitudeSection, habitudeHTML, bindHabitude } from './plan.js';
 
@@ -378,7 +377,6 @@ function renderFicheStatus() {
 }
 
 function reviewsHTML(a) {
-  const mine = loadReviews(a.id);
   const v = a.visitors;
 
   // Synthèse rédigée à partir des avis publics en ligne : aucun avis n'est recopié.
@@ -407,18 +405,7 @@ function reviewsHTML(a) {
   return `
     ${visiteurs}
     ${chroniqueur}
-    <div class="visitors">
-      <h3>Votre commentaire</h3>
-      <form class="form" id="review-form" data-id="${esc(a.id)}">
-        <div><label for="rv-name">Votre prénom</label><input type="text" id="rv-name" name="name" maxlength="40" required></div>
-        <div><label for="rv-text">Votre commentaire</label><textarea id="rv-text" name="text" maxlength="600" required></textarea></div>
-        <button type="submit" class="btn">Publier</button>
-        <p class="form__msg" id="rv-msg" role="status"></p>
-      </form>
-      ${mine.length ? `<ul class="review-list">
-        ${mine.map((r) => `<li><strong>${esc(r.name)}</strong> <small>${new Date(r.date).toLocaleDateString('fr-FR')}</small><p>${esc(r.text)}</p></li>`).join('')}
-      </ul>` : '<p class="note">Aucun commentaire enregistré dans ce navigateur.</p>'}
-    </div>`;
+`;
 }
 
 /** Éléments de la galerie : photos fournies (si présentes) puis planches originales */
@@ -510,10 +497,10 @@ function openFiche(id) {
       </div>
     </section>` : ''}
 
-    <section class="section" aria-labelledby="h-rev">
-      <h3 class="section__title rule" id="h-rev"><span>Avis et notation</span></h3>
+    ${a.visitors || a.review ? `<section class="section" aria-labelledby="h-rev">
+      <h3 class="section__title rule" id="h-rev"><span>Avis</span></h3>
       <div class="reviews" id="reviews">${reviewsHTML(a)}</div>
-    </section>
+    </section>` : ''}
 
     ${(a.sources || []).length ? `<div class="sources"><strong>Sources</strong><ul>${(a.sources || []).map((u) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a></li>`).join('')}</ul></div>` : ''}`;
 
@@ -677,21 +664,6 @@ function bindEvents() {
   $('#fiche').addEventListener('close', () => {
     state.openId = null;
     try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch { try { location.hash = ''; } catch {} }
-  });
-
-  document.addEventListener('submit', (e) => {
-    const form = e.target.closest('#review-form');
-    if (!form) return;
-    e.preventDefault();
-    const data = new FormData(form);
-    const review = { name: String(data.get('name')).trim(), text: String(data.get('text')).trim(), date: new Date().toISOString() };
-    if (!review.name || !review.text) return;
-    const saved = addReview(form.dataset.id, review);
-    const a = state.attractions.find((x) => x.id === form.dataset.id);
-    $('#reviews').innerHTML = reviewsHTML(a);
-    const msg = $('#rv-msg');
-    msg.textContent = saved ? 'Merci, votre avis est enregistré dans ce navigateur.' : 'Avis affiché, mais le stockage local est indisponible : il sera perdu à la fermeture.';
-    if (!saved) msg.classList.add('form__msg--err');
   });
 
   window.addEventListener('hashchange', routeFromHash);

@@ -33,7 +33,7 @@ def mod(name):
     return s
 
 
-js = '\n'.join(mod(n) for n in ['config.js', 'api.js', 'posters.js', 'reviews.js', 'parcours.js', 'plan.js', 'app.js'])
+js = '\n'.join(mod(n) for n in ['config.js', 'api.js', 'posters.js', 'parcours.js', 'plan.js', 'app.js'])
 css = (root / 'css' / 'style.css').read_text(encoding='utf-8')
 data = (root / 'data' / 'attractions.json').read_text(encoding='utf-8').replace('</', '<\\/')
 
