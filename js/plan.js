@@ -74,9 +74,12 @@ export function autourHTML(attractions, statut, tri) {
 }
 
 /**
- * Bloc « Attente selon l'heure » de la fiche : moyennes par demi-heure tirées
- * des relevés du Carnet (toutes les 15 min), et les relevés d'aujourd'hui.
+ * Bloc « Attente selon l'heure » de la fiche : la courbe des attentes
+ * relevées aujourd'hui (toutes les 5 min par le Carnet), et en pointillés
+ * l'attente habituelle à chaque heure, tirée des jours précédents.
+ * Survoler ou toucher la courbe affiche le détail.
  */
+const hhmm = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}h${String(Math.round(m % 60)).padStart(2, '0')}`;
 export function habitudeHTML(a) {
   const h = window.waitHistory;
   if (!a.disney || !h) return '';
@@ -84,36 +87,93 @@ export function habitudeHTML(a) {
   const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes();
   const typeJour = [0, 6].includes(now.getDay()) ? 'w' : 'j';
   const courbe = h.curve(a.disney, typeJour), jour = h.today(a.disney);
+  const date = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
   if (!courbe.length && !jour.length) {
-    return `<p class="habitude__vide">Pas encore assez de relevés pour cette attraction${h.days ? ` (${h.days} jour${h.days > 1 ? 's' : ''} d’historique)` : ''}. Le Carnet note les attentes toutes les 15 minutes : la courbe se dessinera au fil des jours.</p>`;
+    return `<p class="habitude__date">${esc2(date)}</p><p class="habitude__vide">Pas encore de relevé pour cette attraction aujourd’hui. Le Carnet note les attentes toutes les 5 minutes pendant l’ouverture : la courbe se dessine au fil de la journée.</p>`;
   }
-  const S0 = 16, S1 = 47, W = 620, H = 170, PB = 22, PT = 10;
-  const max = Math.max(30, ...courbe.map((c) => c.wait), ...jour.map((j) => j[1]));
-  const x = (slot) => ((slot - S0) / (S1 - S0)) * W;
+  // Fenêtre : de l'ouverture (ou du premier relevé) à la fin des données.
+  const debut = Math.min(9 * 60, jour[0]?.[0] ?? 9 * 60, courbe[0] ? courbe[0].slot * 30 : 9 * 60);
+  const fin = Math.max(jour.length ? jour[jour.length - 1][0] + 15 : 0, courbe.length ? courbe[courbe.length - 1].slot * 30 + 30 : 0, debut + 180);
+  const W = 360, H = 190, PL = 24, PR = 6, PT = 10, PB = 20;
+  const max = Math.ceil(Math.max(30, ...courbe.map((c) => c.wait), ...jour.map((j) => j[1])) / 20) * 20;
+  const x = (m) => PL + ((m - debut) / (fin - debut)) * (W - PL - PR);
   const y = (w) => PT + (H - PT - PB) * (1 - w / max);
-  const bw = W / (S1 - S0) - 3;
-  const cur = Math.floor(nowMin / 30);
-  const barres = courbe.filter((c) => c.slot >= S0 && c.slot < S1).map((c) =>
-    `<rect x="${x(c.slot) + 1.5}" y="${y(c.wait)}" width="${bw}" height="${H - PB - y(c.wait)}" rx="2" class="${c.slot === cur ? 'hb-cur' : 'hb-bar'}"><title>${h.slotLabel(c.slot)} : ~${c.wait} min (${c.n} relevés)</title></rect>`).join('');
-  const ligne = jour.length > 1 ? `<polyline class="hb-auj" points="${jour.filter((j) => j[0] >= S0 * 30).map((j) => `${x(j[0] / 30).toFixed(1)},${y(j[1]).toFixed(1)}`).join(' ')}"/>` : '';
-  const points = jour.map((j) => `<circle cx="${x(j[0] / 30).toFixed(1)}" cy="${y(j[1]).toFixed(1)}" r="2.6" class="hb-pt"/>`).join('');
-  const heures = [9, 11, 13, 15, 17, 19, 21, 23].map((hh) => `<text x="${x(hh * 2)}" y="${H - 6}" class="hb-h">${hh} h</text>`).join('');
-  const grille = [15, 30, 45, 60, 90].filter((w) => w < max).map((w) => `<line x1="0" x2="${W}" y1="${y(w)}" y2="${y(w)}" class="hb-g"/><text x="${W - 2}" y="${y(w) - 3}" class="hb-gl">${w}</text>`).join('');
+  const grille = [];
+  for (let w = 0; w <= max; w += 20) grille.push(`<line x1="${PL}" x2="${W - PR}" y1="${y(w)}" y2="${y(w)}" class="hb-g"/><text x="${PL - 5}" y="${y(w) + 3}" class="hb-gl">${w}</text>`);
+  const pas = fin - debut > 420 ? 120 : 60;
+  for (let m = Math.ceil(debut / pas) * pas; m <= fin; m += pas) grille.push(`<text x="${x(m)}" y="${H - 6}" class="hb-h">${String(m / 60).padStart(2, '0')}h</text>`);
+  const pts = jour.map(([m, w]) => [x(m), y(w)]);
+  const ligne = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join('');
+  const aire = pts.length > 1 ? `<path class="hb-aire" d="${ligne}L${pts[pts.length - 1][0].toFixed(1)},${y(0)}L${pts[0][0].toFixed(1)},${y(0)}Z"/>` : '';
+  const habit = courbe.length > 1 ? `<path class="hb-habit" d="${courbe.map((c, i) => `${i ? 'L' : 'M'}${x(c.slot * 30 + 15).toFixed(1)},${y(c.wait).toFixed(1)}`).join('')}"/>` : '';
+  const maint = nowMin >= debut && nowMin <= fin ? `<line class="hb-now" x1="${x(nowMin)}" x2="${x(nowMin)}" y1="${PT}" y2="${y(0)}"/>` : '';
+  // Données du détail au survol : [minute, réel, habitude] tous les quarts d'heure.
+  const det = [];
+  for (let m = Math.ceil(debut / 15) * 15; m <= fin; m += 15) {
+    const r = jour.reduce((best, j) => (Math.abs(j[0] - m) <= 8 && (!best || Math.abs(j[0] - m) < Math.abs(best[0] - m)) ? j : best), null);
+    const c = courbe.find((k) => k.slot === Math.floor(m / 30));
+    if (r || c) det.push([m, r ? r[1] : null, c ? c.wait : null]);
+  }
   const calme = h.best(a.disney, 0), apres = h.best(a.disney, nowMin), t = h.typical(a.disney);
   const phrases = [];
-  if (calme) phrases.push(`En général, le plus calme : <b>vers ${h.slotLabel(calme.slot)}</b> (~${calme.wait} min).`);
-  if (t) phrases.push(`À cette heure-ci : ~${t.wait} min d’habitude.`);
-  if (apres && calme && apres.slot !== calme.slot) phrases.push(`D’ici la fermeture : vers ${h.slotLabel(apres.slot)} (~${apres.wait} min).`);
-  return `<svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente moyenne par demi-heure">${grille}${barres}${ligne}${points}${heures}</svg>
-    <p class="habitude__legende"><span class="hb-k hb-k--bar"></span> moyenne ${typeJour === 'w' ? 'le week-end' : 'en semaine'} <span class="hb-k hb-k--auj"></span> aujourd’hui</p>
+  if (jour.length) phrases.push(`Maintenant : <b>${jour[jour.length - 1][1]} min</b> (relevé de ${hhmm(jour[jour.length - 1][0])}).`);
+  if (t) phrases.push(`D’habitude à cette heure : ~${t.wait} min.`);
+  if (apres) phrases.push(`Plus calme d’ici la fermeture : <b>vers ${h.slotLabel(apres.slot)}</b> (~${apres.wait} min).`);
+  else if (calme) phrases.push(`En général, le plus calme : vers ${h.slotLabel(calme.slot)} (~${calme.wait} min).`);
+  return `<p class="habitude__date">${esc2(date)}</p>
+    <div class="habitude__cadre">
+      <svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente relevée aujourd’hui, heure par heure" data-det="${esc2(JSON.stringify(det))}" data-geo="${[debut, fin, W, PL, PR].join(',')}">
+        <defs><linearGradient id="hb-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--laiton)" stop-opacity=".45"/><stop offset="1" stop-color="var(--laiton)" stop-opacity="0"/></linearGradient></defs>
+        ${grille.join('')}${maint}${aire}${habit}${pts.length ? `<path class="hb-ligne" d="${ligne}"/>` : ''}
+        <line class="hb-curseur" x1="0" x2="0" y1="${PT}" y2="${y(0)}" visibility="hidden"/>
+      </svg>
+      <div class="habitude__bulle" hidden></div>
+    </div>
+    <p class="habitude__legende"><span class="hb-k hb-k--auj"></span> aujourd’hui${courbe.length ? ` <span class="hb-k hb-k--habit"></span> d’habitude ${typeJour === 'w' ? 'le week-end' : 'en semaine'}` : ''}</p>
     ${phrases.length ? `<p class="habitude__texte">${phrases.join(' ')}</p>` : ''}
-    <p class="plan-note">Relevés du Carnet toutes les 15 min depuis le ${h.since ? new Date(h.since + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) : '—'} · ${h.days} jour${h.days > 1 ? 's' : ''} · source ThemeParks.wiki</p>`;
+    <p class="plan-note">Relevés du Carnet toutes les 5 min (source ThemeParks.wiki)${h.days ? ` · ${h.days} jour${h.days > 1 ? 's' : ''} d’historique` : ''} · survole ou touche la courbe pour le détail.</p>`;
+}
+const esc2 = escH;
+
+/** Détail au survol (ou au toucher) de la courbe : heure, attente relevée, habitude. */
+let survolPose = false;
+export function bindHabitude() {
+  if (survolPose) return;
+  survolPose = true;
+  const montrer = (e) => {
+    const svg = e.target.closest?.('.habitude__graph');
+    if (!svg) return;
+    const det = JSON.parse(svg.dataset.det || '[]');
+    if (!det.length) return;
+    const [debut, fin, W, PL, PR] = svg.dataset.geo.split(',').map(Number);
+    const r = svg.getBoundingClientRect();
+    const vx = ((e.clientX - r.left) / r.width) * W;
+    const m = debut + ((vx - PL) / (W - PL - PR)) * (fin - debut);
+    const d = det.reduce((a, b) => (Math.abs(b[0] - m) < Math.abs(a[0] - m) ? b : a));
+    const px = PL + ((d[0] - debut) / (fin - debut)) * (W - PL - PR);
+    const cur = svg.querySelector('.hb-curseur');
+    cur.setAttribute('x1', px); cur.setAttribute('x2', px); cur.setAttribute('visibility', 'visible');
+    const bulle = svg.parentElement.querySelector('.habitude__bulle');
+    bulle.innerHTML = `<b>${hhmm(d[0])}</b>${d[1] != null ? `<span><i class="hb-k hb-k--auj"></i>Relevé : <strong>${d[1]} min</strong></span>` : ''}${d[2] != null ? `<span><i class="hb-k hb-k--habit"></i>D’habitude : ${d[2]} min</span>` : ''}`;
+    bulle.hidden = false;
+    const left = (px / W) * r.width;
+    bulle.style.left = Math.max(70, Math.min(r.width - 70, left)) + 'px';
+  };
+  document.addEventListener('pointermove', montrer);
+  document.addEventListener('pointerdown', montrer);
+  document.addEventListener('pointerout', (e) => {
+    const svg = e.target.closest?.('.habitude__graph');
+    if (!svg || svg.contains(e.relatedTarget)) return;
+    svg.querySelector('.hb-curseur')?.setAttribute('visibility', 'hidden');
+    const b = svg.parentElement.querySelector('.habitude__bulle');
+    if (b && e.pointerType === 'mouse') b.hidden = true;
+  });
 }
 
 export function habitudeSection(a) {
   if (!a.disney) return '';
   return `<section class="section" aria-labelledby="h-habitude">
-      <h3 class="section__title rule" id="h-habitude"><span>Attente selon l’heure</span></h3>
+      <h3 class="section__title rule" id="h-habitude"><span>Historique du temps d’attente</span></h3>
       <div id="fiche-habitude">${habitudeHTML(a)}</div>
     </section>`;
 }

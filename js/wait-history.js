@@ -1,7 +1,7 @@
 /*
- * Historique des temps d'attente (relevés toutes les 15 min par le Worker).
+ * Historique des temps d'attente (relevés toutes les 5 min par le Worker).
  *
- *   waitHistory.load()                → Promise (relit au plus toutes les 10 min)
+ *   waitHistory.load()                → Promise (relit au plus toutes les 4 min)
  *   waitHistory.typical(id, date?)    → { wait, n } attente habituelle à cette heure-là, ou null
  *   waitHistory.curve(id, type?)      → [{ slot, wait, n }] par demi-heure (type 'j' semaine, 'w' week-end)
  *   waitHistory.today(id)             → [[minute, attente]…] relevés du jour
@@ -31,7 +31,7 @@
     get since() { return data?.depuis || null; },
     get ready() { return !!data; },
     load() {
-      if (Date.now() - at < 10 * 60000 && data) return Promise.resolve(data);
+      if (Date.now() - at < 4 * 60000 && data) return Promise.resolve(data);
       return pending ??= fetch(location.hostname.endsWith('github.io') ? API : '/api/attentes', { cache: 'no-store' })
         .then(r => r.ok ? r.json() : null).then(d => { if (d) { data = d; at = Date.now(); listeners.forEach(f => { try { f(); } catch {} }); } return data; })
         .catch(() => data).finally(() => { pending = null; });

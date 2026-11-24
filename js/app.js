@@ -4,7 +4,7 @@ import { loadWaitTimes } from './api.js';
 import { posterSVG } from './posters.js';
 import { loadReviews, addReview } from './reviews.js';
 import { estEpingle, estFait, basculeEpingle, basculeFait, bilan, videParcours } from './parcours.js';
-import { initPlan, planSection, geo, autourHTML, habitudeSection, habitudeHTML } from './plan.js';
+import { initPlan, planSection, geo, autourHTML, habitudeSection, habitudeHTML, bindHabitude } from './plan.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -737,6 +737,8 @@ async function init() {
   // Historique des attentes (relevé par le Carnet) : la courbe de la fiche.
   window.waitHistory?.onChange(() => { if (state.openId) renderFicheStatus(); });
   window.waitHistory?.load();
+  setInterval(() => { if (!document.hidden) window.waitHistory?.load(); }, 5 * 60000);
+  bindHabitude();
   refreshLive();
   setInterval(refreshLive, CONFIG.REFRESH_MS);
 }
