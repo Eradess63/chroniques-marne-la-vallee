@@ -717,6 +717,8 @@ async function init() {
   renderLivebar();
   renderGrid();
   routeFromHash();
+  // Mode économie de batterie (même réglage que le Carnet).
+  try { document.documentElement.classList.toggle('eco', localStorage.getItem('carnet-eco-v1') === '1'); } catch {}
   // Journal : une attraction faite aujourd'hui compte aussi comme « déjà faite ».
   window.journal?.onChange((d) => {
     let change = false;

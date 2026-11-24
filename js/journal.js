@@ -17,7 +17,20 @@
   const parisDay = new Intl.DateTimeFormat('fr-CA', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' });
   const today = () => parisDay.format(new Date());
   const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
-  const write = d => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {} listeners.forEach(f => { try { f(d); } catch {} }); };
+  const write = d => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {} listeners.forEach(f => { try { f(d); } catch {} }); envoyerResume(d); };
+  /* Résumé du jour pour la notification du soir (envoyée par le serveur après
+     le train du retour). Regroupé : un envoi 15 s après la dernière coche. */
+  let minuteur = 0;
+  function envoyerResume(d) {
+    if (document.documentElement.hasAttribute('data-invite') || location.hostname.endsWith('github.io')) return;
+    clearTimeout(minuteur);
+    minuteur = setTimeout(() => {
+      const j = today(), l = (d[j] || []).slice().sort((a, b) => a.t - b.t), att = l.filter(e => e.k === 'a');
+      let m = 0, prev = null;
+      for (const e of l) if (e.lat != null) { if (prev) { const r = Math.PI / 180, h = Math.sin((e.lat - prev.lat) * r / 2) ** 2 + Math.cos(prev.lat * r) * Math.cos(e.lat * r) * Math.sin((e.lng - prev.lng) * r / 2) ** 2; m += 2 * 6371000 * Math.asin(Math.sqrt(h)) * 1.3; } prev = e; }
+      fetch('/api/push/journal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ jour: j, attractions: att.length, repas: l.filter(e => e.k === 'd').length, file: att.reduce((s, e) => s + (e.wait || 0), 0), km: m / 1000, top: att.length ? att[att.length - 1].name : '' }), keepalive: true }).catch(() => {});
+    }, 15000);
+  }
   const fold = v => String(v).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[’`]/g, "'").replace(/[^a-z0-9]+/g, ' ').trim();
   const match = (e, kind, name) => e.k === kind && fold(e.name) === fold(name);
 
