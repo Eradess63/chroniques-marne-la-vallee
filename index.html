@@ -19,8 +19,8 @@
 <meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202611242104">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Jost:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=Poiret+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=202611242128">
 
 <style>
 .universe-brand{position:relative;z-index:4;display:flex;align-items:center;gap:11px;width:min(940px,100%);margin:12px auto 10px;color:var(--encre);text-align:left;text-decoration:none;white-space:nowrap}
@@ -37,25 +37,22 @@
 <body>
 
 <header class="masthead">
-  <a class="universe-brand" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/" aria-label="Retour aux univers d’Alexandre"><span class="universe-brand__seal" aria-hidden="true">✦</span><span class="universe-brand__text"><small>LE GUIDE D’ALEXANDRE</small><strong>UNIVERS</strong></span></a>
-  <a class="plan-lien" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/plan">🗺 Plan des Parcs</a>
-  <div class="deco-top" aria-hidden="true"></div>
-  <div class="sign">
-    <span class="sign__corner sign__corner--tl" aria-hidden="true"></span>
-    <span class="sign__corner sign__corner--tr" aria-hidden="true"></span>
-    <span class="sign__corner sign__corner--bl" aria-hidden="true"></span>
-    <span class="sign__corner sign__corner--br" aria-hidden="true"></span>
-    <p class="sign__kicker">Encyclopédie des attractions</p>
-    <h1 class="sign__title">Chroniques de Marne-la-Vallée</h1>
-    <p class="sign__sub">Parc Disneyland et Disney Adventure World, attraction par attraction</p>
-    <div class="rule" aria-hidden="true"><i>◆</i></div>
-  </div>
+  <a class="brand" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/" aria-label="Retour aux univers d’Alexandre"><span class="brandSeal" aria-hidden="true">✦</span><span><small>LE GUIDE D’ALEXANDRE</small><strong>UNIVERS</strong></span></a>
+  <a class="planLink" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/plan">🗺 Plan des Parcs</a>
 </header>
 
 <main>
   <div id="vue-liste">
-  <section class="controls" aria-label="Filtres">
-    <h2 class="controls__title rule"><span>Programme du jour</span></h2>
+  <section class="hero">
+    <div class="heroCopy"><p class="eyebrow"><span>✧</span> ENCYCLOPÉDIE DES ATTRACTIONS · DISNEYLAND PARIS</p>
+      <h1>Chroniques<br><em>de Marne-la-Vallée</em></h1>
+      <p class="lede">Parc Disneyland et Disney Adventure World, attraction par attraction : histoire, temps d’attente en direct et habitudes du jour.</p>
+    </div>
+    <div class="heroSeal" aria-hidden="true"><span>✦</span><small>CHRONIQUES<br>DES PARCS</small></div>
+    <div class="heroMeta"><span>51 attractions référencées</span><span>2 Parcs</span></div>
+  </section>
+  <section class="controls catalog" aria-label="Filtres">
+    <div class="catalogHeading"><div><p class="eyebrow">LE CATALOGUE</p><h2>Le programme du jour</h2></div></div>
     <div class="search">
       <label for="search" class="sr-only">Rechercher une attraction</label>
       <input id="search" type="search" placeholder="Rechercher une attraction…" autocomplete="off">
@@ -112,7 +109,7 @@
 <script src="js/itinerary.js"></script>
 <script src="js/wait-history.js"></script>
 <script src="js/journal.js"></script>
-<script type="module" src="js/app.js?v=202611242104"></script>
+<script type="module" src="js/app.js?v=202611242128"></script>
 <script>
   /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
      ouvert depuis un fichier local, le site fonctionne sans lui. */
