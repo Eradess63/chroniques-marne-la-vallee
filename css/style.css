@@ -746,3 +746,9 @@ body.vue-fiche .hero { display: none; }
 }
 .fiche .carnet { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .btn-carnet { border-radius: 999px; font: 600 12px var(--font-body); letter-spacing: .04em; }
+
+/* Bandeau des attentes : une ligne discrète quand tout va bien */
+.livebar[data-mode="live"], .livebar[data-mode="loading"] { margin: 18px 0 0; padding: 0; border: 0; background: none; box-shadow: none; font: 12px var(--font-body); color: var(--encre-faible); gap: 8px; }
+.livebar[data-mode="live"]::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--vert-cadran); box-shadow: 0 0 6px var(--vert-cadran); }
+.livebar button { margin-left: 0; padding: 0 8px; border-radius: 999px; font: 14px var(--font-body); letter-spacing: 0; }
+.livebar[data-mode="live"] button, .livebar[data-mode="loading"] button { border: 0; background: none; color: var(--laiton-clair); }

@@ -770,6 +770,12 @@ body.vue-fiche .hero { display: none; }
 .fiche .carnet { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .btn-carnet { border-radius: 999px; font: 600 12px var(--font-body); letter-spacing: .04em; }
 
+/* Bandeau des attentes : une ligne discrète quand tout va bien */
+.livebar[data-mode="live"], .livebar[data-mode="loading"] { margin: 18px 0 0; padding: 0; border: 0; background: none; box-shadow: none; font: 12px var(--font-body); color: var(--encre-faible); gap: 8px; }
+.livebar[data-mode="live"]::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--vert-cadran); box-shadow: 0 0 6px var(--vert-cadran); }
+.livebar button { margin-left: 0; padding: 0 8px; border-radius: 999px; font: 14px var(--font-body); letter-spacing: 0; }
+.livebar[data-mode="live"] button, .livebar[data-mode="loading"] button { border: 0; background: none; color: var(--laiton-clair); }
+
 </style>
 
 <style>
@@ -8243,11 +8249,11 @@ function renderLivebar() {
     : `à l'instant`;
   const text = {
     loading: `Chargement des temps d'attente…`,
-    live: `Temps d'attente ${horodatage} · source : ${state.via || 'ThemeParks.wiki'}`,
+    live: `Attentes en direct · mises à jour ${horodatage}, toutes les 5 min`,
     partial: `Temps d'attente pour une partie des attractions seulement · ${horodatage}`,
-    unavailable: `Temps d'attente indisponibles.${detail}`
+    unavailable: `Temps d'attente indisponibles pour le moment, nouvel essai automatique dans 5 min.`
   }[state.mode];
-  bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh">Actualiser</button>`;
+  bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh" aria-label="Actualiser les temps d'attente">↻</button>`;
 }
 
 /**

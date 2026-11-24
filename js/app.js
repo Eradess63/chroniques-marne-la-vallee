@@ -240,11 +240,11 @@ function renderLivebar() {
     : `à l'instant`;
   const text = {
     loading: `Chargement des temps d'attente…`,
-    live: `Temps d'attente ${horodatage} · source : ${state.via || 'ThemeParks.wiki'}`,
+    live: `Attentes en direct · mises à jour ${horodatage}, toutes les 5 min`,
     partial: `Temps d'attente pour une partie des attractions seulement · ${horodatage}`,
-    unavailable: `Temps d'attente indisponibles.${detail}`
+    unavailable: `Temps d'attente indisponibles pour le moment, nouvel essai automatique dans 5 min.`
   }[state.mode];
-  bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh">Actualiser</button>`;
+  bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh" aria-label="Actualiser les temps d'attente">↻</button>`;
 }
 
 /**
