@@ -640,6 +640,7 @@ body.vue-fiche main { padding: 0; }
 .habitude__graph .hb-h { fill: var(--encre-faible); font: 9.5px var(--font-body); text-anchor: middle; }
 .habitude__graph .hb-aire { fill: url(#hb-grad); }
 .habitude__graph .hb-ligne { fill: none; stroke: var(--laiton-clair); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.habitude__graph .hb-dernier { fill: var(--laiton-clair); stroke: #1c0f0a; stroke-width: 2; }
 .habitude__graph .hb-habit { fill: none; stroke: var(--vert-cadran); stroke-width: 1.6; stroke-dasharray: 5 5; opacity: .85; }
 .habitude__graph .hb-now { stroke: var(--rouge-cadran); stroke-opacity: .5; stroke-dasharray: 2 3; }
 .habitude__graph .hb-curseur { stroke: var(--encre); stroke-opacity: .5; stroke-dasharray: 3 3; }

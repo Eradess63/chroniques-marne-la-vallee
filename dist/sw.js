@@ -8,7 +8,7 @@
  * affiche d'elle-même la date du dernier relevé quand elle ne peut pas joindre
  * l'API.
  */
-const VERSION = '202611241353';
+const VERSION = '202611241402';
 const CACHE = `chroniques-${VERSION}`;
 
 /** Ressources mises de côté dès l'installation, chemins relatifs à la portée. */

@@ -663,6 +663,7 @@ body.vue-fiche main { padding: 0; }
 .habitude__graph .hb-h { fill: var(--encre-faible); font: 9.5px var(--font-body); text-anchor: middle; }
 .habitude__graph .hb-aire { fill: url(#hb-grad); }
 .habitude__graph .hb-ligne { fill: none; stroke: var(--laiton-clair); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.habitude__graph .hb-dernier { fill: var(--laiton-clair); stroke: #1c0f0a; stroke-width: 2; }
 .habitude__graph .hb-habit { fill: none; stroke: var(--vert-cadran); stroke-width: 1.6; stroke-dasharray: 5 5; opacity: .85; }
 .habitude__graph .hb-now { stroke: var(--rouge-cadran); stroke-opacity: .5; stroke-dasharray: 2 3; }
 .habitude__graph .hb-curseur { stroke: var(--encre); stroke-opacity: .5; stroke-dasharray: 3 3; }
@@ -7775,6 +7776,29 @@ function autourHTML(attractions, statut, tri) {
  * l'attente habituelle à chaque heure, tirée des jours précédents.
  * Survoler ou toucher la courbe affiche le détail.
  */
+/**
+ * Tracé adouci qui passe par chaque relevé sans dépasser (spline cubique
+ * monotone, Fritsch-Carlson) : pas de bosse inventée entre deux relevés.
+ */
+function courbeDouce(pts) {
+  const n = pts.length;
+  if (n < 3) return pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join('');
+  const dx = [], pente = [], tg = [];
+  for (let i = 0; i < n - 1; i++) { dx[i] = pts[i + 1][0] - pts[i][0]; pente[i] = (pts[i + 1][1] - pts[i][1]) / (dx[i] || 1); }
+  tg[0] = pente[0]; tg[n - 1] = pente[n - 2];
+  for (let i = 1; i < n - 1; i++) tg[i] = pente[i - 1] * pente[i] <= 0 ? 0 : (pente[i - 1] + pente[i]) / 2;
+  for (let i = 0; i < n - 1; i++) {
+    if (pente[i] === 0) { tg[i] = tg[i + 1] = 0; continue; }
+    const a = tg[i] / pente[i], b = tg[i + 1] / pente[i], h = a * a + b * b;
+    if (h > 9) { const k = 3 / Math.sqrt(h); tg[i] = k * a * pente[i]; tg[i + 1] = k * b * pente[i]; }
+  }
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) {
+    const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], t = dx[i] / 3;
+    d += `C${(x0 + t).toFixed(1)},${(y0 + tg[i] * t).toFixed(1)} ${(x1 - t).toFixed(1)},${(y1 - tg[i + 1] * t).toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)}`;
+  }
+  return d;
+}
 const hhmm = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}h${String(Math.round(m % 60)).padStart(2, '0')}`;
 function habitudeHTML(a) {
   const h = window.waitHistory;
@@ -7801,9 +7825,9 @@ function habitudeHTML(a) {
   const pas = fin - debut > 420 ? 120 : 60;
   for (let m = Math.ceil(debut / pas) * pas; m <= fin; m += pas) grille.push(`<text x="${x(m)}" y="${H - 6}" class="hb-h">${String(m / 60).padStart(2, '0')}h</text>`);
   const pts = jour.map(([m, w]) => [x(m), y(w)]);
-  const ligne = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join('');
+  const ligne = courbeDouce(pts);
   const aire = pts.length > 1 ? `<path class="hb-aire" d="${ligne}L${pts[pts.length - 1][0].toFixed(1)},${y(0)}L${pts[0][0].toFixed(1)},${y(0)}Z"/>` : '';
-  const habit = courbe.length > 1 ? `<path class="hb-habit" d="${courbe.map((c, i) => `${i ? 'L' : 'M'}${x(c.slot * 30 + 15).toFixed(1)},${y(c.wait).toFixed(1)}`).join('')}"/>` : '';
+  const habit = courbe.length > 1 ? `<path class="hb-habit" d="${courbeDouce(courbe.map((c) => [x(c.slot * 30 + 15), y(c.wait)]))}"/>` : '';
   const maint = nowMin >= debut && nowMin <= fin ? `<line class="hb-now" x1="${x(nowMin)}" x2="${x(nowMin)}" y1="${PT}" y2="${y(0)}"/>` : '';
   // Données du détail au survol : [minute, réel, habitude] tous les quarts d'heure.
   const det = [];
@@ -7822,8 +7846,8 @@ function habitudeHTML(a) {
     <p class="habitude__bulle" aria-live="polite">${jour.length ? `<b>${hhmm(jour[jour.length - 1][0])}</b><span><i class="hb-k hb-k--auj"></i>Relevé : <strong>${jour[jour.length - 1][1]} min</strong></span>${t ? `<span><i class="hb-k hb-k--habit"></i>D’habitude : ${t.wait} min</span>` : ''}` : '<span>Touche la courbe pour le détail</span>'}</p>
     <div class="habitude__cadre">
       <svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente relevée aujourd’hui, heure par heure" data-det="${esc2(JSON.stringify(det))}" data-geo="${[debut, fin, W, PL, PR].join(',')}">
-        <defs><linearGradient id="hb-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--laiton)" stop-opacity=".45"/><stop offset="1" stop-color="var(--laiton)" stop-opacity="0"/></linearGradient></defs>
-        ${grille.join('')}${maint}${aire}${habit}${pts.length ? `<path class="hb-ligne" d="${ligne}"/>` : ''}
+        <defs><linearGradient id="hb-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--laiton)" stop-opacity=".38"/><stop offset=".7" stop-color="var(--laiton)" stop-opacity=".08"/><stop offset="1" stop-color="var(--laiton)" stop-opacity="0"/></linearGradient></defs>
+        ${grille.join('')}${maint}${aire}${habit}${pts.length ? `<path class="hb-ligne" d="${ligne}"/><circle class="hb-dernier" cx="${pts[pts.length - 1][0].toFixed(1)}" cy="${pts[pts.length - 1][1].toFixed(1)}" r="3.6"/>` : ''}
         <line class="hb-curseur" x1="0" x2="0" y1="${PT}" y2="${y(0)}" visibility="hidden"/>
       </svg>
     </div>
