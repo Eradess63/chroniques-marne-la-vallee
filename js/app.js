@@ -77,7 +77,10 @@ function matches(a) {
  * paysage, la planche un portrait — donc le cadre centre la seconde sur fond
  * sombre plutôt que de l'étirer.
  */
+// Illustrations peintes (app/attractions/<id>.webp), quand elles existent.
+const PHOTOS = new Set(["adventure-isle", "alices-curious-labyrinth", "art-of-disney-animation", "autopia", "avengers-flight-force", "big-thunder-mountain", "blanche-neige", "buzz-lightyear-laser-blast", "cabane-des-robinson", "carrousel-de-lancelot", "cars-quatre-roues-rallye", "cars-road-trip", "casey-jr-circus-train", "crushs-coaster", "disneyland-railroad", "dumbo", "frontierland-playground", "frozen-ever-after", "galion-des-pirates", "indiana-jones-temple-du-peril", "its-a-small-world", "la-taniere-du-dragon", "mad-hatters-tea-cups", "main-street-vehicles", "meet-mickey-mouse", "meet-spider-man", "mickeys-philharmagic", "mysteres-du-nautilus", "orbitron", "passage-aladdin", "pays-des-contes-de-fees", "peter-pans-flight", "phantom-manor", "pirates-beach", "pirates-of-the-caribbean", "princess-pavilion", "raiponce-tangled-spin", "ratatouille", "rc-racer", "river-rogue-keelboats", "slinky-dog", "spider-man-web-adventure", "star-tours", "star-wars-hyperspace-mountain", "starport", "stitch-live", "tapis-volants", "thunder-mesa-riverboat", "tower-of-terror", "toy-soldiers-parachute-drop", "voyages-de-pinocchio"]);
 function visuel(a) {
+  if (PHOTOS.has(a.id)) return `<div class="illu illu--photo"><img src="app/attractions/${a.id}.webp" alt="" loading="lazy" decoding="async"></div>`;
   const illu = state.art && state.art[a.id];
   return illu
     ? `<div class="illu">${illu}</div>`

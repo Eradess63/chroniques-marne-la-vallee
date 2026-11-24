@@ -654,3 +654,8 @@ body.vue-fiche main { padding: 0; }
 .habitude__bulle .hb-k--habit { margin-left: 0; }
 .habitude__texte { margin: 8px 0 4px; }
 .habitude__vide { color: var(--encre-faible); font-style: italic; }
+
+/* Illustrations peintes */
+.illu--photo { position: absolute; inset: 0; }
+.illu--photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+.fiche__art:has(.illu--photo) { max-width: 100%; width: 100%; box-sizing: border-box; }
