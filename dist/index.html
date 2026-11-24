@@ -7985,8 +7985,9 @@ function matches(a) {
  */
 // Illustrations peintes (app/attractions/<id>.webp), quand elles existent.
 const PHOTOS = new Set(["adventure-isle", "alices-curious-labyrinth", "art-of-disney-animation", "autopia", "avengers-flight-force", "big-thunder-mountain", "blanche-neige", "buzz-lightyear-laser-blast", "cabane-des-robinson", "carrousel-de-lancelot", "cars-quatre-roues-rallye", "cars-road-trip", "casey-jr-circus-train", "crushs-coaster", "disneyland-railroad", "dumbo", "frontierland-playground", "frozen-ever-after", "galion-des-pirates", "indiana-jones-temple-du-peril", "its-a-small-world", "la-taniere-du-dragon", "mad-hatters-tea-cups", "main-street-vehicles", "meet-mickey-mouse", "meet-spider-man", "mickeys-philharmagic", "mysteres-du-nautilus", "orbitron", "passage-aladdin", "pays-des-contes-de-fees", "peter-pans-flight", "phantom-manor", "pirates-beach", "pirates-of-the-caribbean", "princess-pavilion", "raiponce-tangled-spin", "ratatouille", "rc-racer", "river-rogue-keelboats", "slinky-dog", "spider-man-web-adventure", "star-tours", "star-wars-hyperspace-mountain", "starport", "stitch-live", "tapis-volants", "thunder-mesa-riverboat", "tower-of-terror", "toy-soldiers-parachute-drop", "voyages-de-pinocchio"]);
-function visuel(a) {
-  if (PHOTOS.has(a.id)) return `<div class="illu illu--photo"><img src="app/attractions/${a.id}.webp" alt="" loading="lazy" decoding="async"></div>`;
+// Cartes : version 800 px (~110 Ko) ; fiche : version 1200 px.
+function visuel(a, grand = false) {
+  if (PHOTOS.has(a.id)) return `<div class="illu illu--photo"><img src="app/attractions/${a.id}${grand ? '' : '-800'}.webp" alt="" loading="lazy" decoding="async"></div>`;
   const illu = state.art && state.art[a.id];
   return illu
     ? `<div class="illu">${illu}</div>`
@@ -8346,7 +8347,7 @@ function openFiche(id) {
       <span class="fiche__bar-nom">${esc(a.name)}</span>
     </div>
     <div class="fiche__head">
-      <div class="fiche__art${['closed', 'refurb'].includes(statusOf(a).kind) ? ' card__art--fanee' : ''}" role="img" aria-label="Illustration de ${esc(a.name)}">${visuel(a)}</div>
+      <div class="fiche__art${['closed', 'refurb'].includes(statusOf(a).kind) ? ' card__art--fanee' : ''}" role="img" aria-label="Illustration de ${esc(a.name)}">${visuel(a, true)}</div>
       <div>
         <p class="fiche__kicker"><span class="tag tag--land">${esc(a.land)}</span><span class="tag tag--park">${esc(parkName(a.park))}</span></p>
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>
