@@ -630,3 +630,19 @@ body.vue-fiche main { padding: 0; }
 .autour__attente--ferme { background: rgba(194, 96, 90, .2); color: #e9a29d; font-size: .75rem; }
 .autour__info { margin: 8px 2px 0; color: var(--encre-faible); font-size: .82rem; }
 .autour__info--alerte { color: #f2c96b; }
+
+/* Attente selon l'heure (historique des relevés) */
+.habitude__graph { display: block; width: 100%; height: auto; margin: 4px 0 6px; }
+.habitude__graph .hb-bar { fill: var(--laiton); opacity: .55; }
+.habitude__graph .hb-cur { fill: var(--laiton-clair); }
+.habitude__graph .hb-auj { fill: none; stroke: var(--vert-cadran); stroke-width: 2; }
+.habitude__graph .hb-pt { fill: var(--vert-cadran); }
+.habitude__graph .hb-g { stroke: var(--encre-faible); stroke-opacity: .18; }
+.habitude__graph .hb-gl, .habitude__graph .hb-h { fill: var(--encre-faible); font: 11px var(--font-body); text-anchor: end; }
+.habitude__graph .hb-h { text-anchor: middle; }
+.habitude__legende { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 0; color: var(--encre-faible); font-size: .85rem; }
+.hb-k { display: inline-block; width: 14px; height: 8px; border-radius: 2px; }
+.hb-k--bar { background: var(--laiton); opacity: .7; }
+.hb-k--auj { height: 2px; background: var(--vert-cadran); margin-left: 10px; }
+.habitude__texte { margin: 8px 0 4px; }
+.habitude__vide { color: var(--encre-faible); font-style: italic; }

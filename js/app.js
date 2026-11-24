@@ -4,7 +4,7 @@ import { loadWaitTimes } from './api.js';
 import { posterSVG } from './posters.js';
 import { loadReviews, addReview } from './reviews.js';
 import { estEpingle, estFait, basculeEpingle, basculeFait, bilan, videParcours } from './parcours.js';
-import { initPlan, planSection, geo, autourHTML } from './plan.js';
+import { initPlan, planSection, geo, autourHTML, habitudeSection, habitudeHTML } from './plan.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -348,6 +348,8 @@ function renderFicheStatus() {
   const a = state.attractions.find((x) => x.id === state.openId);
   const holder = $('#fiche-live');
   if (a && holder) holder.innerHTML = liveBlock(a);
+  const hab = $('#fiche-habitude');
+  if (a && hab) hab.innerHTML = habitudeHTML(a);
   const meta = $('#fiche-meta');
   if (meta) {
     meta.textContent = state.mode === 'unavailable'
@@ -437,8 +439,7 @@ function openFiche(id) {
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>
         <p class="fiche__tagline">${esc(a.tagline)}</p>
         <div id="fiche-live">${liveBlock(a)}</div>
-        <div class="carnet">${epinglerBtn(a, estEpingle(a.id))
-          .replace('class="epingle', 'class="epingle epingle--plat')}${faitBtn(a)}${a.coords && window.itinerary ? window.itinerary.button('a', a.name) : ''}</div>
+        <div class="carnet">${carnetBtns(a)}</div>
         <p class="live__meta" id="fiche-meta"></p>
       </div>
     </div>
@@ -470,6 +471,8 @@ function openFiche(id) {
        <aside class="ticket__stub" aria-hidden="true"><span class="stub__admit">Admit one</span><span class="stub__letter"><span>E</span></span><span class="stub__no">N° ${String(state.attractions.indexOf(a) + 1).padStart(4, '0')}</span></aside>
       </div>
     </section>
+
+    ${habitudeSection(a)}
 
     ${planSection(a)}
 
@@ -585,11 +588,23 @@ function showLightbox(id, index) {
 }
 
 /** La fiche ouverte doit refléter le carnet sans être reconstruite entièrement. */
+/** Boutons du carnet de la fiche : épingler, déjà faite, itinéraire, journal du jour. */
+function journalExtra(a) {
+  const st = statusOf(a), x = {};
+  if (a.coords) { x.lat = a.coords[0]; x.lng = a.coords[1]; }
+  if (st.kind === 'open' && typeof st.wait === 'number') x.wait = st.wait;
+  return x;
+}
+function carnetBtns(a) {
+  return epinglerBtn(a, estEpingle(a.id)).replace('class="epingle', 'class="epingle epingle--plat') + faitBtn(a)
+    + (a.coords && window.itinerary ? window.itinerary.button('a', a.name) : '')
+    + (window.journal ? window.journal.button('a', a.name, journalExtra(a)) : '');
+}
 function rafraichirCarnetFiche() {
   const a = state.attractions.find((x) => x.id === state.openId);
   const zone = $('#fiche .carnet');
   if (!a || !zone) return;
-  zone.innerHTML = epinglerBtn(a, estEpingle(a.id)).replace('class="epingle', 'class="epingle epingle--plat') + faitBtn(a);
+  zone.innerHTML = carnetBtns(a);
 }
 
 /* ---------- Événements ---------- */
@@ -606,7 +621,13 @@ function bindEvents() {
     const ep = t.closest('[data-epingler]');
     if (ep) { basculeEpingle(ep.dataset.epingler); renderFilters(); renderGrid(); if (state.openId) rafraichirCarnetFiche(); return; }
     const fa = t.closest('[data-fait]');
-    if (fa) { basculeFait(fa.dataset.fait); renderFilters(); renderGrid(); rafraichirCarnetFiche(); return; }
+    if (fa) {
+      const faite = basculeFait(fa.dataset.fait);
+      // Marquée faite : notée aussi dans le journal du jour (et retirée si on se ravise).
+      const at = state.attractions.find((x) => x.id === fa.dataset.fait);
+      if (at && window.journal) faite ? window.journal.add('a', at.name, journalExtra(at)) : window.journal.remove('a', at.name);
+      renderFilters(); renderGrid(); rafraichirCarnetFiche(); return;
+    }
     if (t.closest('[data-vider-parcours]')) { videParcours(); renderFilters(); renderGrid(); return; }
     const card = t.closest('[data-open]');
     if (card) return openFiche(card.dataset.open);
@@ -703,6 +724,19 @@ async function init() {
   renderLivebar();
   renderGrid();
   routeFromHash();
+  // Journal : une attraction faite aujourd'hui compte aussi comme « déjà faite ».
+  window.journal?.onChange((d) => {
+    let change = false;
+    for (const e of d[window.journal.today()] || []) {
+      const at = e.k === 'a' && state.attractions.find((x) => x.name === e.name);
+      if (at && !estFait(at.id)) { basculeFait(at.id); change = true; }
+    }
+    if (change) { renderFilters(); renderGrid(); }
+    if (state.openId) rafraichirCarnetFiche();
+  });
+  // Historique des attentes (relevé par le Carnet) : la courbe de la fiche.
+  window.waitHistory?.onChange(() => { if (state.openId) renderFicheStatus(); });
+  window.waitHistory?.load();
   refreshLive();
   setInterval(refreshLive, CONFIG.REFRESH_MS);
 }

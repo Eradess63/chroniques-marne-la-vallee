@@ -654,6 +654,22 @@ body.vue-fiche main { padding: 0; }
 .autour__info { margin: 8px 2px 0; color: var(--encre-faible); font-size: .82rem; }
 .autour__info--alerte { color: #f2c96b; }
 
+/* Attente selon l'heure (historique des relevés) */
+.habitude__graph { display: block; width: 100%; height: auto; margin: 4px 0 6px; }
+.habitude__graph .hb-bar { fill: var(--laiton); opacity: .55; }
+.habitude__graph .hb-cur { fill: var(--laiton-clair); }
+.habitude__graph .hb-auj { fill: none; stroke: var(--vert-cadran); stroke-width: 2; }
+.habitude__graph .hb-pt { fill: var(--vert-cadran); }
+.habitude__graph .hb-g { stroke: var(--encre-faible); stroke-opacity: .18; }
+.habitude__graph .hb-gl, .habitude__graph .hb-h { fill: var(--encre-faible); font: 11px var(--font-body); text-anchor: end; }
+.habitude__graph .hb-h { text-anchor: middle; }
+.habitude__legende { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 0; color: var(--encre-faible); font-size: .85rem; }
+.hb-k { display: inline-block; width: 14px; height: 8px; border-radius: 2px; }
+.hb-k--bar { background: var(--laiton); opacity: .7; }
+.hb-k--auj { height: 2px; background: var(--vert-cadran); margin-left: 10px; }
+.habitude__texte { margin: 8px 0 4px; }
+.habitude__vide { color: var(--encre-faible); font-style: italic; }
+
 </style>
 
 <style>
@@ -1393,6 +1409,176 @@ body.vue-fiche main { padding: 0; }
 })();
 
 </script>
+<script>
+/*
+ * Historique des temps d'attente (relevés toutes les 15 min par le Worker).
+ *
+ *   waitHistory.load()                → Promise (relit au plus toutes les 10 min)
+ *   waitHistory.typical(id, date?)    → { wait, n } attente habituelle à cette heure-là, ou null
+ *   waitHistory.curve(id, type?)      → [{ slot, wait, n }] par demi-heure (type 'j' semaine, 'w' week-end)
+ *   waitHistory.today(id)             → [[minute, attente]…] relevés du jour
+ *   waitHistory.best(id, fromMin?)    → { slot, wait } demi-heure la plus calme (à partir de fromMin)
+ *   waitHistory.forecast(id, now, at, current) → attente prévue à l'heure « at »
+ *   waitHistory.days                  → nombre de jours de relevés
+ *   waitHistory.onChange(fn)
+ * Identifiants : ceux de Disney (P1RA00…). Partagé avec les Chroniques.
+ */
+(() => {
+  const API = 'https://carnet-parc-alexandre.alexandre-207cc.workers.dev/api/attentes';
+  const MIN_N = 2; // relevés minimum pour parler d'une habitude
+  let data = null, at = 0, pending = null;
+  const listeners = new Set(), memo = new Map();
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  function paris(d) {
+    const p = Object.fromEntries(parts.formatToParts(d).map(x => [x.type, x.value]));
+    return { minute: +p.hour * 60 + +p.minute, type: p.weekday === 'Sat' || p.weekday === 'Sun' ? 'w' : 'j' };
+  }
+  // Le profil du bon type de jour, sinon l'autre faute de mieux.
+  function table(id, type) {
+    const m = data?.moyennes || {};
+    return m[type]?.[id] || m[type === 'w' ? 'j' : 'w']?.[id] || null;
+  }
+  const api = {
+    get days() { return data?.jours || 0; },
+    get since() { return data?.depuis || null; },
+    get ready() { return !!data; },
+    load() {
+      if (Date.now() - at < 10 * 60000 && data) return Promise.resolve(data);
+      return pending ??= fetch(location.hostname.endsWith('github.io') ? API : '/api/attentes', { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : null).then(d => { if (d) { data = d; at = Date.now(); listeners.forEach(f => { try { f(); } catch {} }); } return data; })
+        .catch(() => data).finally(() => { pending = null; });
+    },
+    typical(id, date = new Date()) {
+      // Mémorisé par demi-heure : l'itinéraire intelligent l'appelle des milliers de fois.
+      const k = id + '|' + Math.floor(+date / 1800000) + '|' + at;
+      if (memo.has(k)) return memo.get(k);
+      const { minute, type } = paris(date), t = table(id, type);
+      const c = t?.[Math.floor(minute / 30)];
+      const r = c && c[1] >= MIN_N ? { wait: c[0], n: c[1] } : null;
+      if (memo.size > 5000) memo.clear();
+      memo.set(k, r);
+      return r;
+    },
+    curve(id, type = paris(new Date()).type) {
+      const t = table(id, type) || {};
+      return Object.entries(t).map(([s, [wait, n]]) => ({ slot: +s, wait, n })).filter(x => x.n >= MIN_N).sort((a, b) => a.slot - b.slot);
+    },
+    today(id) { return data?.aujourdhui?.[id] || []; },
+    best(id, fromMin = 0) {
+      const c = api.curve(id).filter(x => x.slot * 30 + 30 > fromMin);
+      return c.length ? c.reduce((a, b) => (b.wait < a.wait ? b : a)) : null;
+    },
+    // Attente prévue en arrivant à « later » : l'attente actuelle, corrigée de
+    // l'écart habituel entre maintenant et cette heure-là.
+    forecast(id, now, later, current) {
+      if (typeof current !== 'number') return current;
+      const a = api.typical(id, new Date(now)), b = api.typical(id, new Date(later));
+      if (!a || !b || Math.abs(later - now) < 20 * 60000) return current;
+      const ratio = a.wait > 4 ? b.wait / a.wait : null;
+      const f = ratio ? current * ratio : current + (b.wait - a.wait);
+      return Math.max(0, Math.round(Math.min(f, current + 90)));
+    },
+    slotLabel: s => `${Math.floor(s / 2)} h ${s % 2 ? '30' : ''}`.trim(),
+    onChange(fn) { listeners.add(fn); }
+  };
+  window.waitHistory = api;
+})();
+
+</script>
+<script>
+/*
+ * Journal de visites : ce que j'ai fait, jour par jour.
+ *
+ * Gardé dans le navigateur (clé carnet-journal-v1, synchronisée entre
+ * appareils), partagé entre le plan, les restaurants et les Chroniques :
+ *   { "2026-12-04": [{ k: 'a'|'d', name, t: horodatage, wait?: min, lat?, lng? }] }
+ *
+ *   journal.button(kind, name, extra?) → bouton « Fait aujourd'hui » à bascule
+ *   journal.toggle(kind, name, extra?) / add / remove / has(kind, name)
+ *   journal.days()               → { jour: [entrées] }
+ *   journal.onChange(fn)
+ * L'attente notée est celle affichée en direct au moment de cocher.
+ */
+(() => {
+  const KEY = 'carnet-journal-v1';
+  const listeners = new Set();
+  const parisDay = new Intl.DateTimeFormat('fr-CA', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const today = () => parisDay.format(new Date());
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+  const write = d => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {} listeners.forEach(f => { try { f(d); } catch {} }); };
+  const fold = v => String(v).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[’`]/g, "'").replace(/[^a-z0-9]+/g, ' ').trim();
+  const match = (e, kind, name) => e.k === kind && fold(e.name) === fold(name);
+
+  // Coordonnées et attente du moment, quand la page les connaît.
+  function context(kind, name) {
+    const out = {};
+    const pts = window.parkMapPoints?.[kind] || {};
+    const hit = pts[name] || Object.entries(pts).find(([n]) => fold(n) === fold(name))?.[1];
+    if (hit) { out.lat = hit[0]; out.lng = hit[1]; }
+    if (kind === 'a' && hit?.[2] && window.parkLive) {
+      const info = window.parkLive.get(hit[2]);
+      if (info?.status === 'OPERATING' && typeof info.wait === 'number') out.wait = info.wait;
+    }
+    return out;
+  }
+
+  const has = (kind, name, day = today()) => (read()[day] || []).some(e => match(e, kind, name));
+  function add(kind, name, extra = {}) {
+    const d = read(), day = today();
+    if ((d[day] || []).some(e => match(e, kind, name))) return;
+    const e = { k: kind, name, t: Date.now(), ...context(kind, name) };
+    for (const [k, v] of Object.entries(extra)) if (v != null && v !== '') e[k] = v;
+    (d[day] ||= []).push(e);
+    write(d);
+  }
+  function remove(kind, name, day = today()) {
+    const d = read();
+    if (!d[day]) return;
+    d[day] = d[day].filter(e => !match(e, kind, name));
+    if (!d[day].length) delete d[day];
+    write(d);
+  }
+  function toggle(kind, name, extra) {
+    if (has(kind, name)) { remove(kind, name); return false; }
+    add(kind, name, extra); return true;
+  }
+
+  const style = document.createElement('style');
+  style.textContent = `
+  .jrnBtn{display:inline-flex;align-items:center;gap:6px;border:1px solid #84c7a099;background:transparent;color:#9be0b4;border-radius:999px;padding:6px 12px;font:600 12px 'Jost',Arial,sans-serif;cursor:pointer;white-space:nowrap}
+  .jrnBtn:hover,.jrnBtn:focus-visible{background:#84c7a01f;outline:none}
+  .jrnBtn[aria-pressed="true"]{background:#84c7a0;color:#1b1418;border-color:#84c7a0}`;
+  document.head.append(style);
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const label = (kind, on) => on ? '✓ Fait aujourd’hui' : kind === 'd' ? '🍽 Mangé ici aujourd’hui' : '☐ Fait aujourd’hui';
+  // extra : { wait, lat, lng } connus de la page (attente affichée, position du repère).
+  function button(kind, name, extra) {
+    const on = has(kind, name);
+    const x = extra && Object.keys(extra).length ? ` data-jrn-extra="${esc(JSON.stringify(extra))}"` : '';
+    return `<button type="button" class="jrnBtn" data-jrn-kind="${kind}" data-jrn-name="${esc(name)}"${x} aria-pressed="${on}">${label(kind, on)}<\/button>`;
+  }
+  function refreshButtons() {
+    for (const b of document.querySelectorAll('[data-jrn-name]')) {
+      const on = has(b.dataset.jrnKind, b.dataset.jrnName);
+      b.setAttribute('aria-pressed', String(on));
+      b.textContent = label(b.dataset.jrnKind, on);
+    }
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-jrn-name]');
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    let extra;
+    try { extra = b.dataset.jrnExtra ? JSON.parse(b.dataset.jrnExtra) : undefined; } catch {}
+    toggle(b.dataset.jrnKind, b.dataset.jrnName, extra);
+    refreshButtons();
+  }, true);
+  addEventListener('storage', e => { if (e.key === KEY) refreshButtons(); });
+
+  window.journal = { KEY, today, has, add, remove, toggle, button, days: read, onChange(fn) { listeners.add(fn); } };
+})();
+
+</script>
 <script type="application/json" id="app-data">{
   "meta": {
     "title": "Chroniques de Marne-la-Vallée",
@@ -1533,7 +1719,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.871528,
         2.774787
-      ]
+      ],
+      "disney": "P1RA00"
     },
     {
       "id": "phantom-manor",
@@ -1642,7 +1829,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.870977,
         2.776827
-      ]
+      ],
+      "disney": "P1RA03"
     },
     {
       "id": "star-wars-hyperspace-mountain",
@@ -1750,7 +1938,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873651,
         2.778863
-      ]
+      ],
+      "disney": "P1DA08"
     },
     {
       "id": "tower-of-terror",
@@ -1857,7 +2046,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.866753,
         2.778767
-      ]
+      ],
+      "disney": "P2ZA02"
     },
     {
       "id": "ratatouille",
@@ -1964,7 +2154,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.86757,
         2.776222
-      ]
+      ],
+      "disney": "P2XA09"
     },
     {
       "id": "frozen-ever-after",
@@ -2055,7 +2246,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.864108,
         2.773508
-      ]
+      ],
+      "disney": "P2EA00"
     },
     {
       "id": "its-a-small-world",
@@ -2157,7 +2349,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.87469,
         2.776084
-      ]
+      ],
+      "disney": "P1NA07"
     },
     {
       "id": "mickeys-philharmagic",
@@ -2241,7 +2434,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.87456,
         2.779698
-      ]
+      ],
+      "disney": "P1G103"
     },
     {
       "id": "pays-des-contes-de-fees",
@@ -2326,7 +2520,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.87519,
         2.774483
-      ]
+      ],
+      "disney": "P1NA09"
     },
     {
       "id": "casey-jr-circus-train",
@@ -2408,7 +2603,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.875176,
         2.774151
-      ]
+      ],
+      "disney": "P1NA03"
     },
     {
       "id": "meet-mickey-mouse",
@@ -2494,7 +2690,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.874422,
         2.77392
-      ]
+      ],
+      "disney": "P1M115"
     },
     {
       "id": "alices-curious-labyrinth",
@@ -2595,7 +2792,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.874461,
         2.774518
-      ]
+      ],
+      "disney": "P1NA00"
     },
     {
       "id": "la-taniere-du-dragon",
@@ -2693,7 +2891,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.87308,
         2.775918
-      ]
+      ],
+      "disney": "P1NA12"
     },
     {
       "id": "pirates-of-the-caribbean",
@@ -2798,7 +2997,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873493,
         2.773381
-      ]
+      ],
+      "disney": "P1AA04"
     },
     {
       "id": "indiana-jones-temple-du-peril",
@@ -2906,7 +3106,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.872429,
         2.772029
-      ]
+      ],
+      "disney": "P1AA02"
     },
     {
       "id": "star-tours",
@@ -3006,7 +3207,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.874677,
         2.778782
-      ]
+      ],
+      "disney": "P1DA09"
     },
     {
       "id": "buzz-lightyear-laser-blast",
@@ -3107,7 +3309,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.87343,
         2.777947
-      ]
+      ],
+      "disney": "P1DA04"
     },
     {
       "id": "orbitron",
@@ -3206,7 +3409,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873486,
         2.778457
-      ]
+      ],
+      "disney": "P1DA07"
     },
     {
       "id": "autopia",
@@ -3304,7 +3508,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873417,
         2.778797
-      ]
+      ],
+      "disney": "P1DA03"
     },
     {
       "id": "raiponce-tangled-spin",
@@ -3385,7 +3590,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.866153,
         2.77663
-      ]
+      ],
+      "disney": "P2DA00"
     },
     {
       "id": "avengers-flight-force",
@@ -3506,7 +3712,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.865448,
         2.779415
-      ]
+      ],
+      "disney": "P2AC01"
     },
     {
       "id": "spider-man-web-adventure",
@@ -3589,7 +3796,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.866115,
         2.779369
-      ]
+      ],
+      "disney": "P2AC02"
     },
     {
       "id": "toy-soldiers-parachute-drop",
@@ -3668,7 +3876,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.867188,
         2.777234
-      ]
+      ],
+      "disney": "P2XA07"
     },
     {
       "id": "crushs-coaster",
@@ -3753,7 +3962,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.868041,
         2.778142
-      ]
+      ],
+      "disney": "P2XA03"
     },
     {
       "id": "cars-road-trip",
@@ -3832,7 +4042,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.866519,
         2.775024
-      ]
+      ],
+      "disney": "P2XA00"
     },
     {
       "id": "cars-quatre-roues-rallye",
@@ -3913,7 +4124,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.867726,
         2.777854
-      ]
+      ],
+      "disney": "P2XA02"
     },
     {
       "id": "disneyland-railroad",
@@ -4026,7 +4238,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.870814,
         2.77909
-      ]
+      ],
+      "disney": "P1MA05"
     },
     {
       "id": "main-street-vehicles",
@@ -4133,7 +4346,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.871327,
         2.778946
-      ]
+      ],
+      "disney": "P1MA04"
     },
     {
       "id": "peter-pans-flight",
@@ -4228,7 +4442,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873838,
         2.77408
-      ]
+      ],
+      "disney": "P1NA10"
     },
     {
       "id": "dumbo",
@@ -4322,7 +4537,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.874152,
         2.774606
-      ]
+      ],
+      "disney": "P1NA05"
     },
     {
       "id": "voyages-de-pinocchio",
@@ -4414,7 +4630,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873545,
         2.775157
-      ]
+      ],
+      "disney": "P1NA13"
     },
     {
       "id": "blanche-neige",
@@ -4508,7 +4725,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873445,
         2.775298
-      ]
+      ],
+      "disney": "P1NA01"
     },
     {
       "id": "mad-hatters-tea-cups",
@@ -4604,7 +4822,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.874365,
         2.775025
-      ]
+      ],
+      "disney": "P1NA08"
     },
     {
       "id": "carrousel-de-lancelot",
@@ -4699,7 +4918,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873908,
         2.775168
-      ]
+      ],
+      "disney": "P1NA02"
     },
     {
       "id": "princess-pavilion",
@@ -4778,7 +4998,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.874745,
         2.775558
-      ]
+      ],
+      "disney": "P1M116"
     },
     {
       "id": "cabane-des-robinson",
@@ -4879,7 +5100,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.872336,
         2.773744
-      ]
+      ],
+      "disney": "P1AA01"
     },
     {
       "id": "galion-des-pirates",
@@ -4971,7 +5193,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.872927,
         2.773621
-      ]
+      ],
+      "disney": "P1AA08"
     },
     {
       "id": "pirates-beach",
@@ -5065,7 +5288,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.87274,
         2.773771
-      ]
+      ],
+      "disney": "P1AA05"
     },
     {
       "id": "thunder-mesa-riverboat",
@@ -5175,7 +5399,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.871173,
         2.776563
-      ]
+      ],
+      "disney": "P1RA06"
     },
     {
       "id": "river-rogue-keelboats",
@@ -5358,7 +5583,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.870336,
         2.774223
-      ]
+      ],
+      "disney": "P1RA07"
     },
     {
       "id": "mysteres-du-nautilus",
@@ -5454,7 +5680,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.873432,
         2.779553
-      ]
+      ],
+      "disney": "P1DA06"
     },
     {
       "id": "starport",
@@ -5546,7 +5773,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.874544,
         2.778952
-      ]
+      ],
+      "disney": "P1M117"
     },
     {
       "id": "tapis-volants",
@@ -5629,7 +5857,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.868288,
         2.778352
-      ]
+      ],
+      "disney": "P2XA05"
     },
     {
       "id": "stitch-live",
@@ -5707,7 +5936,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.866487,
         2.780126
-      ]
+      ],
+      "disney": "P2YS03"
     },
     {
       "id": "rc-racer",
@@ -5788,7 +6018,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.866903,
         2.776651
-      ]
+      ],
+      "disney": "P2XA06"
     },
     {
       "id": "slinky-dog",
@@ -5866,7 +6097,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.867136,
         2.776959
-      ]
+      ],
+      "disney": "P2XA08"
     },
     {
       "id": "meet-spider-man",
@@ -5945,7 +6177,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.865428,
         2.779079
-      ]
+      ],
+      "disney": "P2MG32"
     },
     {
       "id": "art-of-disney-animation",
@@ -6023,7 +6256,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.867427,
         2.778332
-      ]
+      ],
+      "disney": "P2GS54"
     },
     {
       "id": "adventure-isle",
@@ -6124,7 +6358,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.872736,
         2.77316
-      ]
+      ],
+      "disney": "P1AA00"
     },
     {
       "id": "passage-aladdin",
@@ -6218,7 +6453,8 @@ body.vue-fiche main { padding: 0; }
       "coords": [
         48.872441,
         2.775416
-      ]
+      ],
+      "disney": "P1AA03"
     }
   ]
 }
@@ -7524,6 +7760,51 @@ function autourHTML(attractions, statut, tri) {
     <p class="autour__info">Temps de marche estimés · ta position reste sur ton téléphone.</p>`;
 }
 
+/**
+ * Bloc « Attente selon l'heure » de la fiche : moyennes par demi-heure tirées
+ * des relevés du Carnet (toutes les 15 min), et les relevés d'aujourd'hui.
+ */
+function habitudeHTML(a) {
+  const h = window.waitHistory;
+  if (!a.disney || !h) return '';
+  if (!h.ready) return '<p class="habitude__vide">Chargement de l’historique…</p>';
+  const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes();
+  const typeJour = [0, 6].includes(now.getDay()) ? 'w' : 'j';
+  const courbe = h.curve(a.disney, typeJour), jour = h.today(a.disney);
+  if (!courbe.length && !jour.length) {
+    return `<p class="habitude__vide">Pas encore assez de relevés pour cette attraction${h.days ? ` (${h.days} jour${h.days > 1 ? 's' : ''} d’historique)` : ''}. Le Carnet note les attentes toutes les 15 minutes : la courbe se dessinera au fil des jours.</p>`;
+  }
+  const S0 = 16, S1 = 47, W = 620, H = 170, PB = 22, PT = 10;
+  const max = Math.max(30, ...courbe.map((c) => c.wait), ...jour.map((j) => j[1]));
+  const x = (slot) => ((slot - S0) / (S1 - S0)) * W;
+  const y = (w) => PT + (H - PT - PB) * (1 - w / max);
+  const bw = W / (S1 - S0) - 3;
+  const cur = Math.floor(nowMin / 30);
+  const barres = courbe.filter((c) => c.slot >= S0 && c.slot < S1).map((c) =>
+    `<rect x="${x(c.slot) + 1.5}" y="${y(c.wait)}" width="${bw}" height="${H - PB - y(c.wait)}" rx="2" class="${c.slot === cur ? 'hb-cur' : 'hb-bar'}"><title>${h.slotLabel(c.slot)} : ~${c.wait} min (${c.n} relevés)</title></rect>`).join('');
+  const ligne = jour.length > 1 ? `<polyline class="hb-auj" points="${jour.filter((j) => j[0] >= S0 * 30).map((j) => `${x(j[0] / 30).toFixed(1)},${y(j[1]).toFixed(1)}`).join(' ')}"/>` : '';
+  const points = jour.map((j) => `<circle cx="${x(j[0] / 30).toFixed(1)}" cy="${y(j[1]).toFixed(1)}" r="2.6" class="hb-pt"/>`).join('');
+  const heures = [9, 11, 13, 15, 17, 19, 21, 23].map((hh) => `<text x="${x(hh * 2)}" y="${H - 6}" class="hb-h">${hh} h</text>`).join('');
+  const grille = [15, 30, 45, 60, 90].filter((w) => w < max).map((w) => `<line x1="0" x2="${W}" y1="${y(w)}" y2="${y(w)}" class="hb-g"/><text x="${W - 2}" y="${y(w) - 3}" class="hb-gl">${w}</text>`).join('');
+  const calme = h.best(a.disney, 0), apres = h.best(a.disney, nowMin), t = h.typical(a.disney);
+  const phrases = [];
+  if (calme) phrases.push(`En général, le plus calme : <b>vers ${h.slotLabel(calme.slot)}</b> (~${calme.wait} min).`);
+  if (t) phrases.push(`À cette heure-ci : ~${t.wait} min d’habitude.`);
+  if (apres && calme && apres.slot !== calme.slot) phrases.push(`D’ici la fermeture : vers ${h.slotLabel(apres.slot)} (~${apres.wait} min).`);
+  return `<svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente moyenne par demi-heure">${grille}${barres}${ligne}${points}${heures}</svg>
+    <p class="habitude__legende"><span class="hb-k hb-k--bar"></span> moyenne ${typeJour === 'w' ? 'le week-end' : 'en semaine'} <span class="hb-k hb-k--auj"></span> aujourd’hui</p>
+    ${phrases.length ? `<p class="habitude__texte">${phrases.join(' ')}</p>` : ''}
+    <p class="plan-note">Relevés du Carnet toutes les 15 min depuis le ${h.since ? new Date(h.since + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) : '—'} · ${h.days} jour${h.days > 1 ? 's' : ''} · source ThemeParks.wiki</p>`;
+}
+
+function habitudeSection(a) {
+  if (!a.disney) return '';
+  return `<section class="section" aria-labelledby="h-habitude">
+      <h3 class="section__title rule" id="h-habitude"><span>Attente selon l’heure</span></h3>
+      <div id="fiche-habitude">${habitudeHTML(a)}</div>
+    </section>`;
+}
+
 /** Point d'entrée : données, filtres, grille, fiche détaillée, galerie, avis. */
 
 
@@ -7873,6 +8154,8 @@ function renderFicheStatus() {
   const a = state.attractions.find((x) => x.id === state.openId);
   const holder = $('#fiche-live');
   if (a && holder) holder.innerHTML = liveBlock(a);
+  const hab = $('#fiche-habitude');
+  if (a && hab) hab.innerHTML = habitudeHTML(a);
   const meta = $('#fiche-meta');
   if (meta) {
     meta.textContent = state.mode === 'unavailable'
@@ -7962,8 +8245,7 @@ function openFiche(id) {
         <h2 class="fiche__title" id="fiche-title">${esc(a.name)}</h2>
         <p class="fiche__tagline">${esc(a.tagline)}</p>
         <div id="fiche-live">${liveBlock(a)}</div>
-        <div class="carnet">${epinglerBtn(a, estEpingle(a.id))
-          .replace('class="epingle', 'class="epingle epingle--plat')}${faitBtn(a)}${a.coords && window.itinerary ? window.itinerary.button('a', a.name) : ''}</div>
+        <div class="carnet">${carnetBtns(a)}</div>
         <p class="live__meta" id="fiche-meta"></p>
       </div>
     </div>
@@ -7995,6 +8277,8 @@ function openFiche(id) {
        <aside class="ticket__stub" aria-hidden="true"><span class="stub__admit">Admit one</span><span class="stub__letter"><span>E</span></span><span class="stub__no">N° ${String(state.attractions.indexOf(a) + 1).padStart(4, '0')}</span></aside>
       </div>
     </section>
+
+    ${habitudeSection(a)}
 
     ${planSection(a)}
 
@@ -8110,11 +8394,23 @@ function showLightbox(id, index) {
 }
 
 /** La fiche ouverte doit refléter le carnet sans être reconstruite entièrement. */
+/** Boutons du carnet de la fiche : épingler, déjà faite, itinéraire, journal du jour. */
+function journalExtra(a) {
+  const st = statusOf(a), x = {};
+  if (a.coords) { x.lat = a.coords[0]; x.lng = a.coords[1]; }
+  if (st.kind === 'open' && typeof st.wait === 'number') x.wait = st.wait;
+  return x;
+}
+function carnetBtns(a) {
+  return epinglerBtn(a, estEpingle(a.id)).replace('class="epingle', 'class="epingle epingle--plat') + faitBtn(a)
+    + (a.coords && window.itinerary ? window.itinerary.button('a', a.name) : '')
+    + (window.journal ? window.journal.button('a', a.name, journalExtra(a)) : '');
+}
 function rafraichirCarnetFiche() {
   const a = state.attractions.find((x) => x.id === state.openId);
   const zone = $('#fiche .carnet');
   if (!a || !zone) return;
-  zone.innerHTML = epinglerBtn(a, estEpingle(a.id)).replace('class="epingle', 'class="epingle epingle--plat') + faitBtn(a);
+  zone.innerHTML = carnetBtns(a);
 }
 
 /* ---------- Événements ---------- */
@@ -8131,7 +8427,13 @@ function bindEvents() {
     const ep = t.closest('[data-epingler]');
     if (ep) { basculeEpingle(ep.dataset.epingler); renderFilters(); renderGrid(); if (state.openId) rafraichirCarnetFiche(); return; }
     const fa = t.closest('[data-fait]');
-    if (fa) { basculeFait(fa.dataset.fait); renderFilters(); renderGrid(); rafraichirCarnetFiche(); return; }
+    if (fa) {
+      const faite = basculeFait(fa.dataset.fait);
+      // Marquée faite : notée aussi dans le journal du jour (et retirée si on se ravise).
+      const at = state.attractions.find((x) => x.id === fa.dataset.fait);
+      if (at && window.journal) faite ? window.journal.add('a', at.name, journalExtra(at)) : window.journal.remove('a', at.name);
+      renderFilters(); renderGrid(); rafraichirCarnetFiche(); return;
+    }
     if (t.closest('[data-vider-parcours]')) { videParcours(); renderFilters(); renderGrid(); return; }
     const card = t.closest('[data-open]');
     if (card) return openFiche(card.dataset.open);
@@ -8228,6 +8530,19 @@ async function init() {
   renderLivebar();
   renderGrid();
   routeFromHash();
+  // Journal : une attraction faite aujourd'hui compte aussi comme « déjà faite ».
+  window.journal?.onChange((d) => {
+    let change = false;
+    for (const e of d[window.journal.today()] || []) {
+      const at = e.k === 'a' && state.attractions.find((x) => x.name === e.name);
+      if (at && !estFait(at.id)) { basculeFait(at.id); change = true; }
+    }
+    if (change) { renderFilters(); renderGrid(); }
+    if (state.openId) rafraichirCarnetFiche();
+  });
+  // Historique des attentes (relevé par le Carnet) : la courbe de la fiche.
+  window.waitHistory?.onChange(() => { if (state.openId) renderFicheStatus(); });
+  window.waitHistory?.load();
   refreshLive();
   setInterval(refreshLive, CONFIG.REFRESH_MS);
 }

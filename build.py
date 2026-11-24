@@ -62,7 +62,7 @@ html = re.sub(r'<script type="module" src="js/app\.js(?:\?v=\d+)?"></script>',
 
 # Le plan et « Près de moi » sont des scripts ordinaires (partagés avec le
 # Carnet de parc) : repliés tels quels, avant le script principal.
-for nom in ['park-map.js', 'nearby.js', 'itinerary.js']:
+for nom in ['park-map.js', 'nearby.js', 'itinerary.js', 'wait-history.js', 'journal.js']:
     code = (root / 'js' / nom).read_text(encoding='utf-8').replace('</', '<\\/')
     html, n = re.subn(r'<script src="js/' + re.escape(nom) + r'"></script>',
                       lambda _: '<script>\n' + code + '\n</script>', html, count=1)

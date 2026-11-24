@@ -138,7 +138,8 @@
       "coords": [
         48.871528,
         2.774787
-      ]
+      ],
+      "disney": "P1RA00"
     },
     {
       "id": "phantom-manor",
@@ -247,7 +248,8 @@
       "coords": [
         48.870977,
         2.776827
-      ]
+      ],
+      "disney": "P1RA03"
     },
     {
       "id": "star-wars-hyperspace-mountain",
@@ -355,7 +357,8 @@
       "coords": [
         48.873651,
         2.778863
-      ]
+      ],
+      "disney": "P1DA08"
     },
     {
       "id": "tower-of-terror",
@@ -462,7 +465,8 @@
       "coords": [
         48.866753,
         2.778767
-      ]
+      ],
+      "disney": "P2ZA02"
     },
     {
       "id": "ratatouille",
@@ -569,7 +573,8 @@
       "coords": [
         48.86757,
         2.776222
-      ]
+      ],
+      "disney": "P2XA09"
     },
     {
       "id": "frozen-ever-after",
@@ -660,7 +665,8 @@
       "coords": [
         48.864108,
         2.773508
-      ]
+      ],
+      "disney": "P2EA00"
     },
     {
       "id": "its-a-small-world",
@@ -762,7 +768,8 @@
       "coords": [
         48.87469,
         2.776084
-      ]
+      ],
+      "disney": "P1NA07"
     },
     {
       "id": "mickeys-philharmagic",
@@ -846,7 +853,8 @@
       "coords": [
         48.87456,
         2.779698
-      ]
+      ],
+      "disney": "P1G103"
     },
     {
       "id": "pays-des-contes-de-fees",
@@ -931,7 +939,8 @@
       "coords": [
         48.87519,
         2.774483
-      ]
+      ],
+      "disney": "P1NA09"
     },
     {
       "id": "casey-jr-circus-train",
@@ -1013,7 +1022,8 @@
       "coords": [
         48.875176,
         2.774151
-      ]
+      ],
+      "disney": "P1NA03"
     },
     {
       "id": "meet-mickey-mouse",
@@ -1099,7 +1109,8 @@
       "coords": [
         48.874422,
         2.77392
-      ]
+      ],
+      "disney": "P1M115"
     },
     {
       "id": "alices-curious-labyrinth",
@@ -1200,7 +1211,8 @@
       "coords": [
         48.874461,
         2.774518
-      ]
+      ],
+      "disney": "P1NA00"
     },
     {
       "id": "la-taniere-du-dragon",
@@ -1298,7 +1310,8 @@
       "coords": [
         48.87308,
         2.775918
-      ]
+      ],
+      "disney": "P1NA12"
     },
     {
       "id": "pirates-of-the-caribbean",
@@ -1403,7 +1416,8 @@
       "coords": [
         48.873493,
         2.773381
-      ]
+      ],
+      "disney": "P1AA04"
     },
     {
       "id": "indiana-jones-temple-du-peril",
@@ -1511,7 +1525,8 @@
       "coords": [
         48.872429,
         2.772029
-      ]
+      ],
+      "disney": "P1AA02"
     },
     {
       "id": "star-tours",
@@ -1611,7 +1626,8 @@
       "coords": [
         48.874677,
         2.778782
-      ]
+      ],
+      "disney": "P1DA09"
     },
     {
       "id": "buzz-lightyear-laser-blast",
@@ -1712,7 +1728,8 @@
       "coords": [
         48.87343,
         2.777947
-      ]
+      ],
+      "disney": "P1DA04"
     },
     {
       "id": "orbitron",
@@ -1811,7 +1828,8 @@
       "coords": [
         48.873486,
         2.778457
-      ]
+      ],
+      "disney": "P1DA07"
     },
     {
       "id": "autopia",
@@ -1909,7 +1927,8 @@
       "coords": [
         48.873417,
         2.778797
-      ]
+      ],
+      "disney": "P1DA03"
     },
     {
       "id": "raiponce-tangled-spin",
@@ -1990,7 +2009,8 @@
       "coords": [
         48.866153,
         2.77663
-      ]
+      ],
+      "disney": "P2DA00"
     },
     {
       "id": "avengers-flight-force",
@@ -2111,7 +2131,8 @@
       "coords": [
         48.865448,
         2.779415
-      ]
+      ],
+      "disney": "P2AC01"
     },
     {
       "id": "spider-man-web-adventure",
@@ -2194,7 +2215,8 @@
       "coords": [
         48.866115,
         2.779369
-      ]
+      ],
+      "disney": "P2AC02"
     },
     {
       "id": "toy-soldiers-parachute-drop",
@@ -2273,7 +2295,8 @@
       "coords": [
         48.867188,
         2.777234
-      ]
+      ],
+      "disney": "P2XA07"
     },
     {
       "id": "crushs-coaster",
@@ -2358,7 +2381,8 @@
       "coords": [
         48.868041,
         2.778142
-      ]
+      ],
+      "disney": "P2XA03"
     },
     {
       "id": "cars-road-trip",
@@ -2437,7 +2461,8 @@
       "coords": [
         48.866519,
         2.775024
-      ]
+      ],
+      "disney": "P2XA00"
     },
     {
       "id": "cars-quatre-roues-rallye",
@@ -2518,7 +2543,8 @@
       "coords": [
         48.867726,
         2.777854
-      ]
+      ],
+      "disney": "P2XA02"
     },
     {
       "id": "disneyland-railroad",
@@ -2631,7 +2657,8 @@
       "coords": [
         48.870814,
         2.77909
-      ]
+      ],
+      "disney": "P1MA05"
     },
     {
       "id": "main-street-vehicles",
@@ -2738,7 +2765,8 @@
       "coords": [
         48.871327,
         2.778946
-      ]
+      ],
+      "disney": "P1MA04"
     },
     {
       "id": "peter-pans-flight",
@@ -2833,7 +2861,8 @@
       "coords": [
         48.873838,
         2.77408
-      ]
+      ],
+      "disney": "P1NA10"
     },
     {
       "id": "dumbo",
@@ -2927,7 +2956,8 @@
       "coords": [
         48.874152,
         2.774606
-      ]
+      ],
+      "disney": "P1NA05"
     },
     {
       "id": "voyages-de-pinocchio",
@@ -3019,7 +3049,8 @@
       "coords": [
         48.873545,
         2.775157
-      ]
+      ],
+      "disney": "P1NA13"
     },
     {
       "id": "blanche-neige",
@@ -3113,7 +3144,8 @@
       "coords": [
         48.873445,
         2.775298
-      ]
+      ],
+      "disney": "P1NA01"
     },
     {
       "id": "mad-hatters-tea-cups",
@@ -3209,7 +3241,8 @@
       "coords": [
         48.874365,
         2.775025
-      ]
+      ],
+      "disney": "P1NA08"
     },
     {
       "id": "carrousel-de-lancelot",
@@ -3304,7 +3337,8 @@
       "coords": [
         48.873908,
         2.775168
-      ]
+      ],
+      "disney": "P1NA02"
     },
     {
       "id": "princess-pavilion",
@@ -3383,7 +3417,8 @@
       "coords": [
         48.874745,
         2.775558
-      ]
+      ],
+      "disney": "P1M116"
     },
     {
       "id": "cabane-des-robinson",
@@ -3484,7 +3519,8 @@
       "coords": [
         48.872336,
         2.773744
-      ]
+      ],
+      "disney": "P1AA01"
     },
     {
       "id": "galion-des-pirates",
@@ -3576,7 +3612,8 @@
       "coords": [
         48.872927,
         2.773621
-      ]
+      ],
+      "disney": "P1AA08"
     },
     {
       "id": "pirates-beach",
@@ -3670,7 +3707,8 @@
       "coords": [
         48.87274,
         2.773771
-      ]
+      ],
+      "disney": "P1AA05"
     },
     {
       "id": "thunder-mesa-riverboat",
@@ -3780,7 +3818,8 @@
       "coords": [
         48.871173,
         2.776563
-      ]
+      ],
+      "disney": "P1RA06"
     },
     {
       "id": "river-rogue-keelboats",
@@ -3963,7 +4002,8 @@
       "coords": [
         48.870336,
         2.774223
-      ]
+      ],
+      "disney": "P1RA07"
     },
     {
       "id": "mysteres-du-nautilus",
@@ -4059,7 +4099,8 @@
       "coords": [
         48.873432,
         2.779553
-      ]
+      ],
+      "disney": "P1DA06"
     },
     {
       "id": "starport",
@@ -4151,7 +4192,8 @@
       "coords": [
         48.874544,
         2.778952
-      ]
+      ],
+      "disney": "P1M117"
     },
     {
       "id": "tapis-volants",
@@ -4234,7 +4276,8 @@
       "coords": [
         48.868288,
         2.778352
-      ]
+      ],
+      "disney": "P2XA05"
     },
     {
       "id": "stitch-live",
@@ -4312,7 +4355,8 @@
       "coords": [
         48.866487,
         2.780126
-      ]
+      ],
+      "disney": "P2YS03"
     },
     {
       "id": "rc-racer",
@@ -4393,7 +4437,8 @@
       "coords": [
         48.866903,
         2.776651
-      ]
+      ],
+      "disney": "P2XA06"
     },
     {
       "id": "slinky-dog",
@@ -4471,7 +4516,8 @@
       "coords": [
         48.867136,
         2.776959
-      ]
+      ],
+      "disney": "P2XA08"
     },
     {
       "id": "meet-spider-man",
@@ -4550,7 +4596,8 @@
       "coords": [
         48.865428,
         2.779079
-      ]
+      ],
+      "disney": "P2MG32"
     },
     {
       "id": "art-of-disney-animation",
@@ -4628,7 +4675,8 @@
       "coords": [
         48.867427,
         2.778332
-      ]
+      ],
+      "disney": "P2GS54"
     },
     {
       "id": "adventure-isle",
@@ -4729,7 +4777,8 @@
       "coords": [
         48.872736,
         2.77316
-      ]
+      ],
+      "disney": "P1AA00"
     },
     {
       "id": "passage-aladdin",
@@ -4823,7 +4872,8 @@
       "coords": [
         48.872441,
         2.775416
-      ]
+      ],
+      "disney": "P1AA03"
     }
   ]
 }
