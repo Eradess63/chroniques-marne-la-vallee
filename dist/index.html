@@ -1488,6 +1488,18 @@ body.vue-fiche main { padding: 0; }
       const f = ratio ? current * ratio : current + (b.wait - a.wait);
       return Math.max(0, Math.round(Math.min(f, current + 90)));
     },
+    // Affluence attendue un jour donné (date « AAAA-MM-JJ ») d'après le jour de
+    // la semaine : 'calme' | 'moyenne' | 'chargée', ou null faute de recul.
+    crowd(date) {
+      const sem = data?.semaine || {};
+      const known = Object.values(sem).filter(v => v[1] >= 2);
+      if (known.length < 4) return null;
+      const dow = String(new Date(date + 'T12:00:00Z').getUTCDay()), v = sem[dow];
+      if (!v || v[1] < 2) return null;
+      const all = known.reduce((a, b) => a + b[0], 0) / known.length;
+      const r = v[0] / all;
+      return { level: r < 0.88 ? 'calme' : r > 1.12 ? 'chargée' : 'moyenne', wait: Math.round(v[0]), days: v[1] };
+    },
     slotLabel: s => `${Math.floor(s / 2)} h ${s % 2 ? '30' : ''}`.trim(),
     onChange(fn) { listeners.add(fn); }
   };
