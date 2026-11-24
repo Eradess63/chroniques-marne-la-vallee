@@ -160,9 +160,17 @@ export function habitudeHTML(a) {
   const phrases = [];
   if (jour.length) phrases.push(`Maintenant : <b>${jour[jour.length - 1][1]} min</b> (relevé de ${hhmm(jour[jour.length - 1][0])}).`);
   if (t) phrases.push(`D’habitude à cette heure : ~${t.wait} min.`);
-  if (apres) phrases.push(`Plus calme d’ici la fermeture : <b>vers ${h.slotLabel(apres.slot)}</b> (~${apres.wait} min).`);
-  else if (calme) phrases.push(`En général, le plus calme : vers ${h.slotLabel(calme.slot)} (~${calme.wait} min).`);
+  // Le conseil, en une phrase et en tête : quand y aller.
+  const actuel = jour.length ? jour[jour.length - 1][1] : t?.wait;
+  let conseil = '';
+  if (apres) {
+    const maintenant = apres.slot === Math.floor(nowMin / 30);
+    conseil = maintenant || (typeof actuel === 'number' && actuel <= apres.wait + 3)
+      ? `🎯 <b>C’est le bon moment</b> : ${typeof actuel === 'number' ? `~${actuel} min` : `~${apres.wait} min`}, le plus calme d’ici la fermeture.`
+      : `🎯 Vise <b>${h.slotLabel(apres.slot)}</b> : ~${apres.wait} min d’habitude${typeof actuel === 'number' ? `, contre ${actuel} min maintenant` : ''}.`;
+  } else if (calme) conseil = `🎯 En général, le plus calme : <b>${h.slotLabel(calme.slot)}</b> (~${calme.wait} min).`;
   return `<p class="habitude__date">${esc2(date)}</p>
+    ${conseil ? `<p class="habitude__conseil">${conseil}</p>` : ''}
     <p class="habitude__bulle" aria-live="polite">${jour.length ? `<b>${hhmm(jour[jour.length - 1][0])}</b><span><i class="hb-k hb-k--auj"></i>Relevé : <strong>${jour[jour.length - 1][1]} min</strong></span>${t ? `<span><i class="hb-k hb-k--habit"></i>D’habitude : ${t.wait} min</span>` : ''}` : '<span>Touche la courbe pour le détail</span>'}</p>
     <div class="habitude__cadre">
       <svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente relevée aujourd’hui, heure par heure" data-det="${esc2(JSON.stringify(det))}" data-geo="${[debut, fin, W, PL, PR].join(',')}">

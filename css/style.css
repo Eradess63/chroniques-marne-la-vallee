@@ -752,3 +752,6 @@ body.vue-fiche .hero { display: none; }
 .livebar[data-mode="live"]::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--vert-cadran); box-shadow: 0 0 6px var(--vert-cadran); }
 .livebar button { margin-left: 0; padding: 0 8px; border-radius: 999px; font: 14px var(--font-body); letter-spacing: 0; }
 .livebar[data-mode="live"] button, .livebar[data-mode="loading"] button { border: 0; background: none; color: var(--laiton-clair); }
+
+.habitude__conseil { margin: 6px 0 12px; padding: 10px 14px; border: 1px solid rgba(200,153,63,.5); border-radius: 10px; background: rgba(200,153,63,.1); font: 15px/1.5 var(--font-body); color: var(--encre); }
+.habitude__conseil b { color: var(--laiton-clair); }

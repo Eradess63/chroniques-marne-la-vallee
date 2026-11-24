@@ -29,6 +29,9 @@ const STATE_OPTIONS = [
 ];
 
 // Tri de la grille : l'ordre du guide (par land) ou la file d'attente en direct.
+/* Raccourci « Attentes » de l'icône : ?tri=attente ouvre la liste triée. */
+try { if (new URLSearchParams(location.search).get('tri') === 'attente') state.filters.sort = 'wait'; } catch {}
+
 const SORT_OPTIONS = [
   { id: 'land', label: 'Par land' },
   { id: 'wait', label: '⏱ Attente la plus courte' },
