@@ -42,12 +42,14 @@
       if (memo.has(k)) return memo.get(k);
       const { minute, type } = paris(date), t = table(id, type);
       const c = t?.[Math.floor(minute / 30)];
-      const r = c && c[1] >= MIN_N ? { wait: c[0], n: c[1] } : null;
+      // Une « habitude » se lit sur plusieurs jours : pas avant le deuxième.
+      const r = api.days >= 2 && c && c[1] >= MIN_N ? { wait: c[0], n: c[1] } : null;
       if (memo.size > 5000) memo.clear();
       memo.set(k, r);
       return r;
     },
     curve(id, type = paris(new Date()).type) {
+      if (api.days < 2) return [];
       const t = table(id, type) || {};
       return Object.entries(t).map(([s, [wait, n]]) => ({ slot: +s, wait, n })).filter(x => x.n >= MIN_N).sort((a, b) => a.slot - b.slot);
     },

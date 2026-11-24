@@ -88,12 +88,14 @@ export function habitudeHTML(a) {
   const typeJour = [0, 6].includes(now.getDay()) ? 'w' : 'j';
   const courbe = h.curve(a.disney, typeJour), jour = h.today(a.disney);
   const date = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  const t = h.typical(a.disney);
   if (!courbe.length && !jour.length) {
     return `<p class="habitude__date">${esc2(date)}</p><p class="habitude__vide">Pas encore de relevé pour cette attraction aujourd’hui. Le Carnet note les attentes toutes les 5 minutes pendant l’ouverture : la courbe se dessine au fil de la journée.</p>`;
   }
   // Fenêtre : de l'ouverture (ou du premier relevé) à la fin des données.
-  const debut = Math.min(9 * 60, jour[0]?.[0] ?? 9 * 60, courbe[0] ? courbe[0].slot * 30 : 9 * 60);
-  const fin = Math.max(jour.length ? jour[jour.length - 1][0] + 15 : 0, courbe.length ? courbe[courbe.length - 1].slot * 30 + 30 : 0, debut + 180);
+  // Sans habitude connue, la fenêtre suit les relevés du jour (au moins 2 h).
+  const debut = courbe.length ? Math.min(courbe[0].slot * 30, jour[0]?.[0] ?? 24 * 60) : Math.max(8 * 60, Math.floor(((jour[0]?.[0] ?? 9 * 60) - 30) / 30) * 30);
+  const fin = Math.max(jour.length ? jour[jour.length - 1][0] + 15 : 0, courbe.length ? courbe[courbe.length - 1].slot * 30 + 30 : 0, debut + 120);
   const W = 360, H = 190, PL = 24, PR = 6, PT = 10, PB = 20;
   const max = Math.ceil(Math.max(30, ...courbe.map((c) => c.wait), ...jour.map((j) => j[1])) / 20) * 20;
   const x = (m) => PL + ((m - debut) / (fin - debut)) * (W - PL - PR);
@@ -114,20 +116,20 @@ export function habitudeHTML(a) {
     const c = courbe.find((k) => k.slot === Math.floor(m / 30));
     if (r || c) det.push([m, r ? r[1] : null, c ? c.wait : null]);
   }
-  const calme = h.best(a.disney, 0), apres = h.best(a.disney, nowMin), t = h.typical(a.disney);
+  const calme = h.best(a.disney, 0), apres = h.best(a.disney, nowMin);
   const phrases = [];
   if (jour.length) phrases.push(`Maintenant : <b>${jour[jour.length - 1][1]} min</b> (relevé de ${hhmm(jour[jour.length - 1][0])}).`);
   if (t) phrases.push(`D’habitude à cette heure : ~${t.wait} min.`);
   if (apres) phrases.push(`Plus calme d’ici la fermeture : <b>vers ${h.slotLabel(apres.slot)}</b> (~${apres.wait} min).`);
   else if (calme) phrases.push(`En général, le plus calme : vers ${h.slotLabel(calme.slot)} (~${calme.wait} min).`);
   return `<p class="habitude__date">${esc2(date)}</p>
+    <p class="habitude__bulle" aria-live="polite">${jour.length ? `<b>${hhmm(jour[jour.length - 1][0])}</b><span><i class="hb-k hb-k--auj"></i>Relevé : <strong>${jour[jour.length - 1][1]} min</strong></span>${t ? `<span><i class="hb-k hb-k--habit"></i>D’habitude : ${t.wait} min</span>` : ''}` : '<span>Touche la courbe pour le détail</span>'}</p>
     <div class="habitude__cadre">
       <svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente relevée aujourd’hui, heure par heure" data-det="${esc2(JSON.stringify(det))}" data-geo="${[debut, fin, W, PL, PR].join(',')}">
         <defs><linearGradient id="hb-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--laiton)" stop-opacity=".45"/><stop offset="1" stop-color="var(--laiton)" stop-opacity="0"/></linearGradient></defs>
         ${grille.join('')}${maint}${aire}${habit}${pts.length ? `<path class="hb-ligne" d="${ligne}"/>` : ''}
         <line class="hb-curseur" x1="0" x2="0" y1="${PT}" y2="${y(0)}" visibility="hidden"/>
       </svg>
-      <div class="habitude__bulle" hidden></div>
     </div>
     <p class="habitude__legende"><span class="hb-k hb-k--auj"></span> aujourd’hui${courbe.length ? ` <span class="hb-k hb-k--habit"></span> d’habitude ${typeJour === 'w' ? 'le week-end' : 'en semaine'}` : ''}</p>
     ${phrases.length ? `<p class="habitude__texte">${phrases.join(' ')}</p>` : ''}
@@ -153,20 +155,16 @@ export function bindHabitude() {
     const px = PL + ((d[0] - debut) / (fin - debut)) * (W - PL - PR);
     const cur = svg.querySelector('.hb-curseur');
     cur.setAttribute('x1', px); cur.setAttribute('x2', px); cur.setAttribute('visibility', 'visible');
-    const bulle = svg.parentElement.querySelector('.habitude__bulle');
+    const bulle = svg.closest('#fiche-habitude')?.querySelector('.habitude__bulle');
+    if (!bulle) return;
     bulle.innerHTML = `<b>${hhmm(d[0])}</b>${d[1] != null ? `<span><i class="hb-k hb-k--auj"></i>Relevé : <strong>${d[1]} min</strong></span>` : ''}${d[2] != null ? `<span><i class="hb-k hb-k--habit"></i>D’habitude : ${d[2]} min</span>` : ''}`;
-    bulle.hidden = false;
-    const left = (px / W) * r.width;
-    bulle.style.left = Math.max(70, Math.min(r.width - 70, left)) + 'px';
   };
   document.addEventListener('pointermove', montrer);
   document.addEventListener('pointerdown', montrer);
   document.addEventListener('pointerout', (e) => {
     const svg = e.target.closest?.('.habitude__graph');
     if (!svg || svg.contains(e.relatedTarget)) return;
-    svg.querySelector('.hb-curseur')?.setAttribute('visibility', 'hidden');
-    const b = svg.parentElement.querySelector('.habitude__bulle');
-    if (b && e.pointerType === 'mouse') b.hidden = true;
+    if (e.pointerType === 'mouse') svg.querySelector('.hb-curseur')?.setAttribute('visibility', 'hidden');
   });
 }
 
