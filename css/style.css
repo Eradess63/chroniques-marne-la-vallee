@@ -755,3 +755,4 @@ body.vue-fiche .hero { display: none; }
 
 .habitude__conseil { margin: 6px 0 12px; padding: 10px 14px; border: 1px solid rgba(200,153,63,.5); border-radius: 10px; background: rgba(200,153,63,.1); font: 15px/1.5 var(--font-body); color: var(--encre); }
 .habitude__conseil b { color: var(--laiton-clair); }
+.livebar[data-mode="stale"] { border-color: rgba(217,137,43,.6); border-left: 3px solid var(--ambre); background: rgba(217,137,43,.1); color: #f3d9a8; }

@@ -57,7 +57,6 @@ html = re.sub(r'<link rel="stylesheet" href="css/style\.css(?:\?v=\d+)?">',
               lambda _: '<style>\n' + css + '\n</style>', html, count=1)
 html = re.sub(r'<script type="module" src="js/app\.js(?:\?v=\d+)?"></script>',
               lambda _: '<script type="application/json" id="app-data">' + data + '</script>\n'
-                        '<script type="application/json" id="app-art">' + art_json + '</script>\n'
                         '<script>\n(function(){\n' + js + '\n})();\n</script>', html, count=1)
 
 # Le plan et « Près de moi » sont des scripts ordinaires (partagés avec le
@@ -69,6 +68,12 @@ for nom in ['park-map.js', 'nearby.js', 'itinerary.js', 'wait-history.js', 'jour
     assert n == 1, nom + ' introuvable dans index.html'
 
 assert '<style>' in html and 'app-data' in html, 'le repli a manqué sa cible'
+
+# Les anciennes illustrations SVG (180 Ko) ne servent qu'à la galerie d'une
+# fiche : elles ne sont plus repliées dans la page, mais chargées après coup.
+(root / 'dist' / 'illustrations').mkdir(parents=True, exist_ok=True)
+(root / 'dist' / 'illustrations' / 'index.json').write_text(
+    _json.dumps(art, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
 
 # --- Le service worker porte le marqueur comme clé de cache ---------------
 # Changer ce nom suffit à périmer tout ce qu'un visiteur avait gardé en local,

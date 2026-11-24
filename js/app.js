@@ -233,7 +233,9 @@ function signalerChangements(avant) {
 
 function renderLivebar() {
   const bar = $('#livebar');
-  bar.dataset.mode = state.mode;
+  // Relevé de plus de 12 min (réseau faible au parc) : le bandeau le signale.
+  const vieux = state.age && Date.now() - new Date(state.age).getTime() > 12 * 60000;
+  bar.dataset.mode = vieux && state.mode !== 'unavailable' ? 'stale' : state.mode;
   const time = state.updatedAt ? state.updatedAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
   const detail = (state.failures || []).length
     ? ` Routes essayées — ${state.failures.join(' | ')}`
@@ -243,10 +245,11 @@ function renderLivebar() {
     : `à l'instant`;
   const text = {
     loading: `Chargement des temps d'attente…`,
+    stale: `⚠️ Attentes ${state.age ? ageLabel(state.age) : ''} · réseau faible, nouvel essai automatique`,
     live: `Attentes en direct · mises à jour ${horodatage}, toutes les 5 min`,
     partial: `Temps d'attente pour une partie des attractions seulement · ${horodatage}`,
     unavailable: `Temps d'attente indisponibles pour le moment, nouvel essai automatique dans 5 min.`
-  }[state.mode];
+  }[bar.dataset.mode];
   bar.innerHTML = `<span>${esc(text)}</span><button type="button" id="refresh" aria-label="Actualiser les temps d'attente">↻</button>`;
 }
 
@@ -429,7 +432,14 @@ function itemHTML(a, it) {
   return poster(a, it.variant);
 }
 
+let artCharge = null;
+function chargerArt() {
+  return artCharge ??= fetch('illustrations/index.json').then((r) => (r.ok ? r.json() : {})).then((j) => {
+    state.art = j || {}; // visibles dès la fiche suivante
+  }).catch(() => {});
+}
 function openFiche(id) {
+  chargerArt();
   const a = state.attractions.find((x) => x.id === id);
   if (!a) return;
   state.openId = id;
@@ -700,12 +710,8 @@ async function init() {
 
     // Illustrations : intégrées à la page par la construction. Celles qui
     // manquent ne cassent rien — l'attraction garde sa planche gravée.
-    const art = document.getElementById('app-art');
-    if (art) { try { state.art = JSON.parse(art.textContent); } catch { state.art = {}; } }
-    else {
-      const res = await fetch('illustrations/index.json', { cache: 'no-cache' }).catch(() => null);
-      state.art = res && res.ok ? await res.json() : {};
-    }
+    // Chargées à la première fiche ouverte : elles ne servent qu'à sa galerie.
+    state.art = {};
   } catch (err) {
     $('#grid').innerHTML = `<p class="empty">Impossible de charger les attractions (${esc(err.message)}). Servez le site via un serveur web local plutôt qu'en ouvrant le fichier directement.</p>`;
     return;
