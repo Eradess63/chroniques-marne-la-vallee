@@ -32,7 +32,8 @@ const STATE_OPTIONS = [
 // Tri de la grille : l'ordre du guide (par land) ou la file d'attente en direct.
 const SORT_OPTIONS = [
   { id: 'land', label: 'Par land' },
-  { id: 'wait', label: '⏱ Attente la plus courte' }
+  { id: 'wait', label: '⏱ Attente la plus courte' },
+  { id: 'sr', label: 'SR · Single Rider' }
 ];
 
 const PARCOURS_OPTIONS = [
@@ -166,10 +167,26 @@ function rangAttente(a) {
   return 3000;
 }
 
+/**
+ * Tri Single Rider : seulement les attractions qui proposent la file SR, de
+ * l'attente SR la plus courte à la plus longue ; puis SR ouverte sans attente
+ * publiée ; puis les fermées.
+ */
+const aSingleRider = (a) => a.fiche?.services?.singleRider === true || typeof statusOf(a).singleRider === 'number';
+function rangSingleRider(a) {
+  const st = statusOf(a);
+  if (st.kind === 'open' && typeof st.singleRider === 'number') return st.singleRider;
+  if (st.kind === 'open') return 1000;
+  return 2000 + rangAttente(a);
+}
+
 function renderGrid() {
   let list = state.attractions.filter(matches);
   if (state.filters.sort === 'wait') {
     list = list.map((a, i) => ({ a, i, r: rangAttente(a) })).sort((x, y) => x.r - y.r || x.i - y.i).map((x) => x.a);
+  }
+  if (state.filters.sort === 'sr') {
+    list = list.filter(aSingleRider).map((a, i) => ({ a, i, r: rangSingleRider(a) })).sort((x, y) => x.r - y.r || x.i - y.i).map((x) => x.a);
   }
   $('#count').textContent = `${list.length} attraction${list.length > 1 ? 's' : ''} affichée${list.length > 1 ? 's' : ''} sur ${state.attractions.length}`;
   const avant = dernieresAttentes;
