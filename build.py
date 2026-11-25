@@ -116,3 +116,9 @@ _attr = _json.loads((root / 'data' / 'attractions.json').read_text(encoding='utf
 _secrets = [{'id': a['id'], 'nom': a['name'], 's': s} for a in _attr for s in (a.get('secrets') or []) if len(s) <= 320]
 (root / 'dist' / 'secrets.json').write_text(_json.dumps(_secrets, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
 print('secrets', len(_secrets))
+
+# Attractions pour l'Encyclopédie du Carnet : parc, land, ouverture et toutes les anecdotes.
+_encyclo = [{'id': a['id'], 'nom': a['name'], 'parc': a['park'], 'land': a['land'], 'accroche': a.get('tagline') or '',
+             'ouverture': ((a.get('fiche') or {}).get('opening') or {}).get('label') or '', 'secrets': a.get('secrets') or []} for a in _attr]
+(root / 'dist' / 'encyclo.json').write_text(_json.dumps(_encyclo, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+print('encyclo', len(_encyclo))
