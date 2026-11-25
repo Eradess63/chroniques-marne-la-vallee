@@ -19,7 +19,7 @@
 <meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
 <link rel="preload" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices/jost.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices.css">
-<link rel="stylesheet" href="css/style.css?v=202611251114">
+<link rel="stylesheet" href="css/style.css?v=202611251401">
 
 <style>
 .universe-brand{position:relative;z-index:4;display:flex;align-items:center;gap:11px;width:min(940px,100%);margin:12px auto 10px;color:var(--encre);text-align:left;text-decoration:none;white-space:nowrap}
@@ -69,6 +69,10 @@
         <span class="filter-label" id="lbl-sort">Trier</span>
         <div class="seg" id="filter-sort"></div>
       </div>
+      <div class="filter-group" role="group" aria-labelledby="lbl-envie">
+        <span class="filter-label" id="lbl-envie">Envie</span>
+        <div class="seg" id="filter-envie"></div>
+      </div>
       <div class="filter-group" role="group" aria-labelledby="lbl-autour">
         <span class="filter-label" id="lbl-autour">Autour</span>
         <div class="seg"><button type="button" class="seg__btn" id="btn-pres" aria-pressed="false">📍 Près de moi</button></div>
@@ -78,6 +82,7 @@
         <div class="seg" id="filter-parcours"></div>
       </div>
     </div>
+    <p class="bilan" id="note-envie" hidden></p>
     <p class="bilan" id="parcours-bilan" hidden></p>
     <div class="filter-group" role="group" aria-labelledby="lbl-land">
       <span class="filter-label" id="lbl-land">Land</span>
@@ -108,7 +113,7 @@
 <script src="js/itinerary.js"></script>
 <script src="js/wait-history.js"></script>
 <script src="js/journal.js"></script>
-<script type="module" src="js/app.js?v=202611251114"></script>
+<script type="module" src="js/app.js?v=202611251401"></script>
 <script>
   /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
      ouvert depuis un fichier local, le site fonctionne sans lui. */
