@@ -3,7 +3,7 @@
  *
  * Gardé dans le navigateur (clé carnet-journal-v1, synchronisée entre
  * appareils), partagé entre le plan, les restaurants et les Chroniques :
- *   { "2026-12-04": [{ k: 'a'|'d', name, t: horodatage, wait?: min, lat?, lng? }] }
+ *   { "2026-12-04": [{ k: 'a'|'d'|'s' (attraction, restaurant, boutique), name, t: horodatage, wait?: min, lat?, lng? }] }
  *
  *   journal.button(kind, name, extra?) → bouton « Fait aujourd'hui » à bascule
  *   journal.toggle(kind, name, extra?) / add / remove / has(kind, name)
@@ -75,7 +75,7 @@
   .jrnBtn[aria-pressed="true"]{background:#84c7a0;color:#1b1418;border-color:#84c7a0}`;
   document.head.append(style);
   const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const label = (kind, on) => on ? '✓ Fait aujourd’hui' : kind === 'd' ? '🍽 Mangé ici aujourd’hui' : '☐ Fait aujourd’hui';
+  const label = (kind, on) => on ? (kind === 's' ? '✓ Visitée aujourd’hui' : '✓ Fait aujourd’hui') : kind === 'd' ? '🍽 Mangé ici aujourd’hui' : kind === 's' ? '🛍 Visitée aujourd’hui' : '☐ Fait aujourd’hui';
   // extra : { wait, lat, lng } connus de la page (attente affichée, position du repère).
   function button(kind, name, extra) {
     const on = has(kind, name);

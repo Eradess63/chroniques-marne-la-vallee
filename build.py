@@ -14,6 +14,20 @@ import pathlib
 
 root = pathlib.Path(__file__).parent
 
+# --- Outils communs avec le Carnet ---------------------------------------
+# Le plan, « près de moi », l'itinéraire, l'historique des attentes et le
+# journal sont écrits une seule fois, dans le dépôt du Carnet. Quand il est
+# cloné à côté, ses versions remplacent les copies de js/ : une correction
+# faite d'un côté ne peut plus manquer de l'autre.
+COMMUNS = ['park-map.js', 'nearby.js', 'itinerary.js', 'wait-history.js', 'journal.js']
+carnet = root.parent / 'carnet-parc-alexandre' / 'client'
+if carnet.is_dir():
+    for nom in COMMUNS:
+        src = carnet / nom
+        if src.is_file() and src.read_bytes() != (root / 'js' / nom).read_bytes():
+            (root / 'js' / nom).write_bytes(src.read_bytes())
+            print('repris du Carnet :', nom)
+
 # --- Dater les liens de la page servie en ligne --------------------------
 marque = time.strftime('%Y%m%d%H%M', time.gmtime())
 html = (root / 'index.html').read_text(encoding='utf-8')

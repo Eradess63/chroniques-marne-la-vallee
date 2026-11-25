@@ -26,6 +26,9 @@
     const m = data?.moyennes || {};
     return m[type]?.[id] || m[type === 'w' ? 'j' : 'w']?.[id] || null;
   }
+  // Gardé sur l'appareil : au parc sans réseau, l'habitude reste disponible.
+  const GARDE = 'carnet-habitudes-v1';
+  try { const g = JSON.parse(localStorage.getItem(GARDE)); if (g?.d && !data) { data = g.d; } } catch {}
   const api = {
     get days() { return data?.jours || 0; },
     get since() { return data?.depuis || null; },
@@ -33,7 +36,7 @@
     load() {
       if (Date.now() - at < 4 * 60000 && data) return Promise.resolve(data);
       return pending ??= fetch(location.hostname.endsWith('github.io') ? API : '/api/attentes', { cache: 'no-store' })
-        .then(r => r.ok ? r.json() : null).then(d => { if (d) { data = d; at = Date.now(); listeners.forEach(f => { try { f(); } catch {} }); } return data; })
+        .then(r => r.ok ? r.json() : null).then(d => { if (d) { data = d; at = Date.now(); try { localStorage.setItem(GARDE, JSON.stringify({ at, d })); } catch {} listeners.forEach(f => { try { f(); } catch {} }); } return data; })
         .catch(() => data).finally(() => { pending = null; });
     },
     typical(id, date = new Date()) {

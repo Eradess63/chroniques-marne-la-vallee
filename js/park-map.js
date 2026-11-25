@@ -173,6 +173,8 @@
       W, H, zoom: view.zoom,
       toScreen(lat, lng) { const p = project(lat, lng); return { x: W / 2 + (p.x - view.cx) * world, y: H / 2 + (p.y - view.cy) * world }; },
       flyTo(lat, lng, zoom = view.zoom, ms = 800) { const p = project(lat, lng); flyTo({ cx: p.x, cy: p.y, zoom }, ms); },
+      // Point au centre de l'écran (pour poser un repère en visant).
+      center() { return { lat: Math.atan(Math.sinh(Math.PI * (1 - 2 * view.cy))) * 180 / Math.PI, lng: view.cx * 360 - 180 }; },
       render
     };
   }

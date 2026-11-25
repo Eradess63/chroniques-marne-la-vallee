@@ -17,9 +17,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="app/icone-192.png">
 <title>Chroniques de Marne-la-Vallée</title>
 <meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Jost:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=Poiret+One&display=swap" rel="stylesheet">
+<link rel="preload" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices/jost.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices.css">
 <style>
 /* Direction : cabinet d'instruments scientifiques, fin XIXᵉ.
    Laiton poli, cuivre patiné, acajou, verre fumé. Les temps d'attente
@@ -1040,6 +1039,8 @@ body.vue-fiche .hero { display: none; }
       W, H, zoom: view.zoom,
       toScreen(lat, lng) { const p = project(lat, lng); return { x: W / 2 + (p.x - view.cx) * world, y: H / 2 + (p.y - view.cy) * world }; },
       flyTo(lat, lng, zoom = view.zoom, ms = 800) { const p = project(lat, lng); flyTo({ cx: p.x, cy: p.y, zoom }, ms); },
+      // Point au centre de l'écran (pour poser un repère en visant).
+      center() { return { lat: Math.atan(Math.sinh(Math.PI * (1 - 2 * view.cy))) * 180 / Math.PI, lng: view.cx * 360 - 180 }; },
       render
     };
   }
@@ -1545,6 +1546,9 @@ body.vue-fiche .hero { display: none; }
     const m = data?.moyennes || {};
     return m[type]?.[id] || m[type === 'w' ? 'j' : 'w']?.[id] || null;
   }
+  // Gardé sur l'appareil : au parc sans réseau, l'habitude reste disponible.
+  const GARDE = 'carnet-habitudes-v1';
+  try { const g = JSON.parse(localStorage.getItem(GARDE)); if (g?.d && !data) { data = g.d; } } catch {}
   const api = {
     get days() { return data?.jours || 0; },
     get since() { return data?.depuis || null; },
@@ -1552,7 +1556,7 @@ body.vue-fiche .hero { display: none; }
     load() {
       if (Date.now() - at < 4 * 60000 && data) return Promise.resolve(data);
       return pending ??= fetch(location.hostname.endsWith('github.io') ? API : '/api/attentes', { cache: 'no-store' })
-        .then(r => r.ok ? r.json() : null).then(d => { if (d) { data = d; at = Date.now(); listeners.forEach(f => { try { f(); } catch {} }); } return data; })
+        .then(r => r.ok ? r.json() : null).then(d => { if (d) { data = d; at = Date.now(); try { localStorage.setItem(GARDE, JSON.stringify({ at, d })); } catch {} listeners.forEach(f => { try { f(); } catch {} }); } return data; })
         .catch(() => data).finally(() => { pending = null; });
     },
     typical(id, date = new Date()) {
@@ -1612,7 +1616,7 @@ body.vue-fiche .hero { display: none; }
  *
  * Gardé dans le navigateur (clé carnet-journal-v1, synchronisée entre
  * appareils), partagé entre le plan, les restaurants et les Chroniques :
- *   { "2026-12-04": [{ k: 'a'|'d', name, t: horodatage, wait?: min, lat?, lng? }] }
+ *   { "2026-12-04": [{ k: 'a'|'d'|'s' (attraction, restaurant, boutique), name, t: horodatage, wait?: min, lat?, lng? }] }
  *
  *   journal.button(kind, name, extra?) → bouton « Fait aujourd'hui » à bascule
  *   journal.toggle(kind, name, extra?) / add / remove / has(kind, name)
@@ -1684,7 +1688,7 @@ body.vue-fiche .hero { display: none; }
   .jrnBtn[aria-pressed="true"]{background:#84c7a0;color:#1b1418;border-color:#84c7a0}`;
   document.head.append(style);
   const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const label = (kind, on) => on ? '✓ Fait aujourd’hui' : kind === 'd' ? '🍽 Mangé ici aujourd’hui' : '☐ Fait aujourd’hui';
+  const label = (kind, on) => on ? (kind === 's' ? '✓ Visitée aujourd’hui' : '✓ Fait aujourd’hui') : kind === 'd' ? '🍽 Mangé ici aujourd’hui' : kind === 's' ? '🛍 Visitée aujourd’hui' : '☐ Fait aujourd’hui';
   // extra : { wait, lat, lng } connus de la page (attente affichée, position du repère).
   function button(kind, name, extra) {
     const on = has(kind, name);
@@ -8104,7 +8108,13 @@ function matches(a) {
 const PHOTOS = new Set(["adventure-isle", "alices-curious-labyrinth", "art-of-disney-animation", "autopia", "avengers-flight-force", "big-thunder-mountain", "blanche-neige", "buzz-lightyear-laser-blast", "cabane-des-robinson", "carrousel-de-lancelot", "cars-quatre-roues-rallye", "cars-road-trip", "casey-jr-circus-train", "crushs-coaster", "disneyland-railroad", "dumbo", "frontierland-playground", "frozen-ever-after", "galion-des-pirates", "indiana-jones-temple-du-peril", "its-a-small-world", "la-taniere-du-dragon", "mad-hatters-tea-cups", "main-street-vehicles", "meet-mickey-mouse", "meet-spider-man", "mickeys-philharmagic", "mysteres-du-nautilus", "orbitron", "passage-aladdin", "pays-des-contes-de-fees", "peter-pans-flight", "phantom-manor", "pirates-beach", "pirates-of-the-caribbean", "princess-pavilion", "raiponce-tangled-spin", "ratatouille", "rc-racer", "river-rogue-keelboats", "slinky-dog", "spider-man-web-adventure", "star-tours", "star-wars-hyperspace-mountain", "starport", "stitch-live", "tapis-volants", "thunder-mesa-riverboat", "tower-of-terror", "toy-soldiers-parachute-drop", "voyages-de-pinocchio"]);
 // Cartes : version 800 px (~110 Ko) ; fiche : version 1200 px.
 function visuel(a, grand = false) {
-  if (PHOTOS.has(a.id)) return `<div class="illu illu--photo"><img src="app/attractions/${a.id}${grand ? '' : '-800'}.webp" alt="" loading="lazy" decoding="async"></div>`;
+  if (PHOTOS.has(a.id)) {
+    const b = `app/attractions/${a.id}`;
+    if (grand) return `<div class="illu illu--photo"><img src="${b}.webp" alt="" loading="lazy" decoding="async"></div>`;
+    // Cartes : 480 px quand ça suffit (ordinateur, mode éco), 800 px sur écran dense.
+    const eco = document.documentElement.classList.contains('eco');
+    return `<div class="illu illu--photo"><img src="${b}-${eco ? 400 : 800}.webp"${eco ? '' : ` srcset="${b}-400.webp 480w, ${b}-800.webp 800w" sizes="(max-width: 640px) 92vw, (max-width: 1100px) 46vw, 400px"`} alt="" loading="lazy" decoding="async"></div>`;
+  }
   const illu = state.art && state.art[a.id];
   return illu
     ? `<div class="illu">${illu}</div>`

@@ -8,14 +8,16 @@
  * affiche d'elle-même la date du dernier relevé quand elle ne peut pas joindre
  * l'API.
  */
-const VERSION = '202611242223';
+const VERSION = '202611250849';
 const CACHE = `chroniques-${VERSION}`;
 
 /** Ressources mises de côté dès l'installation, chemins relatifs à la portée. */
 const SOCLE = [
   './', './app/icone-180.png', './app/icone-192.png', './app/icone-512.png',
   './app/manifeste.webmanifest',
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap'
+  // Polices servies par le site principal (polices.css et ses fichiers).
+  'https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices.css',
+  ...['cinzel', 'jost', 'lora', 'lora-italique', 'playfair-500', 'poiret-one', 'spectral-400'].map((n) => `https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices/${n}.woff2`)
 ];
 
 self.addEventListener('install', (e) => {
@@ -24,27 +26,9 @@ self.addEventListener('install', (e) => {
   e.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     await Promise.allSettled(SOCLE.map((u) => cache.add(new Request(u, { cache: 'reload' }))));
-    await gardePolices(cache);
     self.skipWaiting();
   })());
 });
-
-/**
- * Garder la feuille de style des polices ne suffit pas : elle ne fait que
- * pointer vers des fichiers .woff2 dont l'adresse change à chaque révision.
- * On la lit donc pour aller chercher les fichiers eux-mêmes, sans quoi
- * l'application hors connexion retomberait sur une police système.
- */
-async function gardePolices(cache) {
-  try {
-    const css = SOCLE.find((u) => u.includes('fonts.googleapis.com'));
-    if (!css) return;
-    const rep = await cache.match(css) || await fetch(css);
-    const texte = await rep.clone().text();
-    const urls = [...new Set([...texte.matchAll(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+)\)/g)].map((m) => m[1]))];
-    await Promise.allSettled(urls.map((u) => cache.add(new Request(u, { mode: 'cors' }))));
-  } catch { /* sans les polices le site reste lisible : on n'échoue pas pour ça */ }
-}
 
 self.addEventListener('activate', (e) => {
   e.waitUntil((async () => {
@@ -82,7 +66,7 @@ self.addEventListener('fetch', (e) => {
 
   // Le reste — styles, scripts, données, illustrations, polices : on sert la
   // copie gardée tout de suite et on la rafraîchit en arrière-plan.
-  if (url.origin === location.origin || url.hostname.endsWith('gstatic.com') || url.hostname.endsWith('googleapis.com')) {
+  if (url.origin === location.origin || url.hostname === 'carnet-parc-alexandre.alexandre-207cc.workers.dev') {
     e.respondWith((async () => {
       const cache = await caches.open(CACHE);
       const garde = await cache.match(req);

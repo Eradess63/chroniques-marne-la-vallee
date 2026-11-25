@@ -84,7 +84,13 @@ function matches(a) {
 const PHOTOS = new Set(["adventure-isle", "alices-curious-labyrinth", "art-of-disney-animation", "autopia", "avengers-flight-force", "big-thunder-mountain", "blanche-neige", "buzz-lightyear-laser-blast", "cabane-des-robinson", "carrousel-de-lancelot", "cars-quatre-roues-rallye", "cars-road-trip", "casey-jr-circus-train", "crushs-coaster", "disneyland-railroad", "dumbo", "frontierland-playground", "frozen-ever-after", "galion-des-pirates", "indiana-jones-temple-du-peril", "its-a-small-world", "la-taniere-du-dragon", "mad-hatters-tea-cups", "main-street-vehicles", "meet-mickey-mouse", "meet-spider-man", "mickeys-philharmagic", "mysteres-du-nautilus", "orbitron", "passage-aladdin", "pays-des-contes-de-fees", "peter-pans-flight", "phantom-manor", "pirates-beach", "pirates-of-the-caribbean", "princess-pavilion", "raiponce-tangled-spin", "ratatouille", "rc-racer", "river-rogue-keelboats", "slinky-dog", "spider-man-web-adventure", "star-tours", "star-wars-hyperspace-mountain", "starport", "stitch-live", "tapis-volants", "thunder-mesa-riverboat", "tower-of-terror", "toy-soldiers-parachute-drop", "voyages-de-pinocchio"]);
 // Cartes : version 800 px (~110 Ko) ; fiche : version 1200 px.
 function visuel(a, grand = false) {
-  if (PHOTOS.has(a.id)) return `<div class="illu illu--photo"><img src="app/attractions/${a.id}${grand ? '' : '-800'}.webp" alt="" loading="lazy" decoding="async"></div>`;
+  if (PHOTOS.has(a.id)) {
+    const b = `app/attractions/${a.id}`;
+    if (grand) return `<div class="illu illu--photo"><img src="${b}.webp" alt="" loading="lazy" decoding="async"></div>`;
+    // Cartes : 480 px quand ça suffit (ordinateur, mode éco), 800 px sur écran dense.
+    const eco = document.documentElement.classList.contains('eco');
+    return `<div class="illu illu--photo"><img src="${b}-${eco ? 400 : 800}.webp"${eco ? '' : ` srcset="${b}-400.webp 480w, ${b}-800.webp 800w" sizes="(max-width: 640px) 92vw, (max-width: 1100px) 46vw, 400px"`} alt="" loading="lazy" decoding="async"></div>`;
+  }
   const illu = state.art && state.art[a.id];
   return illu
     ? `<div class="illu">${illu}</div>`
