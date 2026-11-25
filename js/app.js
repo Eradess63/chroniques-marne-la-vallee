@@ -457,8 +457,18 @@ function chargerArt() {
     state.art = j || {}; // visibles dès la fiche suivante
   }).catch(() => {});
 }
+function vignettes(a, items) {
+  return items.map((it, i) => `<button type="button" class="thumb" data-lightbox="${i}"><div class="thumb__art">${itemHTML(a, it)}</div><span class="cap">${esc(it.caption)}</span></button>`).join('');
+}
 function openFiche(id) {
   chargerArt();
+  // Mes photos pas encore chargées (fiche ouverte dès l'arrivée) : on complète la galerie ensuite.
+  chargerMesPhotos().then(() => {
+    const a = state.attractions.find((x) => x.id === id), g = $('#fiche .gallery');
+    if (state.openId !== id || !a || !g) return;
+    const items = galleryItems(a);
+    if (g.children.length !== items.length) g.innerHTML = vignettes(a, items);
+  });
   const a = state.attractions.find((x) => x.id === id);
   if (!a) return;
   state.openId = id;
@@ -529,7 +539,7 @@ function openFiche(id) {
     ${items.length ? `<section class="section" aria-labelledby="h-gal">
       <h3 class="section__title rule" id="h-gal"><span>Galerie</span></h3>
       <div class="gallery">
-        ${items.map((it, i) => `<button type="button" class="thumb" data-lightbox="${i}"><div class="thumb__art">${itemHTML(a, it)}</div><span class="cap">${esc(it.caption)}</span></button>`).join('')}
+        ${vignettes(a, items)}
       </div>
     </section>` : ''}
 
