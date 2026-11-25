@@ -15,11 +15,11 @@
 <link rel="manifest" href="app/manifeste.webmanifest">
 <link rel="apple-touch-icon" href="app/icone-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="app/icone-192.png">
-<title>Chroniques de Marne-la-Vallée</title>
+<title>Chroniques de Marne-la-Vallée · Univers d’Alexandre</title>
 <meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
 <link rel="preload" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices/jost.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices.css">
-<link rel="stylesheet" href="css/style.css?v=202611251458">
+<link rel="stylesheet" href="css/style.css?v=202611251521">
 
 <style>
 .universe-brand{position:relative;z-index:4;display:flex;align-items:center;gap:11px;width:min(940px,100%);margin:12px auto 10px;color:var(--encre);text-align:left;text-decoration:none;white-space:nowrap}
@@ -36,7 +36,7 @@
 <body>
 
 <header class="masthead">
-  <a class="brand" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/" aria-label="Retour aux univers d’Alexandre"><span class="brandSeal" aria-hidden="true">✦</span><span><small>LE GUIDE D’ALEXANDRE</small><strong>UNIVERS</strong></span></a>
+  <a class="brand" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/" aria-label="Retour à l’accueil · Univers d’Alexandre"><span class="brandSeal" aria-hidden="true">✦</span><span><small>UNIVERS</small><strong>D’ALEXANDRE</strong></span></a>
   <a class="planLink" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/plan">🗺 Plan des Parcs</a>
 </header>
 
@@ -113,7 +113,7 @@
 <script src="js/itinerary.js"></script>
 <script src="js/wait-history.js"></script>
 <script src="js/journal.js"></script>
-<script type="module" src="js/app.js?v=202611251458"></script>
+<script type="module" src="js/app.js?v=202611251521"></script>
 <script>
   /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
      ouvert depuis un fichier local, le site fonctionne sans lui. */
@@ -121,5 +121,6 @@
     addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
   }
 </script>
+<script src="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/menu.js" defer></script>
 </body>
 </html>

@@ -237,7 +237,7 @@ function renderGrid() {
           ${ribbonHTML(st)}
         </article>`;
       }).join('')
-    : '<p class="empty">Aucune attraction ne correspond à ces critères. Modifiez les filtres ou la recherche.</p>';
+    : '<p class="empty">Aucune attraction ne correspond à ces critères. Modifie les filtres ou la recherche.</p>';
   signalerChangements(avant);
 }
 
@@ -534,7 +534,7 @@ function openFiche(id) {
             ${serviceBadge('pmr', 'Accessibilité PMR', f.services.pmr)}
           </div></dd></div>
         </dl>
-        <p class="ticket__foot">Les mentions « à confirmer » sont à vérifier sur le site officiel avant votre visite.</p>
+        <p class="ticket__foot">Les mentions « à confirmer » sont à vérifier sur le site officiel avant ta visite.</p>
        </div>
        <aside class="ticket__stub" aria-hidden="true"><span class="stub__admit">Admit one</span><span class="stub__letter"><span>E</span></span><span class="stub__no">N° ${String(state.attractions.indexOf(a) + 1).padStart(4, '0')}</span></aside>
       </div>
@@ -761,7 +761,7 @@ async function init() {
     // Chargées à la première fiche ouverte : elles ne servent qu'à sa galerie.
     state.art = {};
   } catch (err) {
-    $('#grid').innerHTML = `<p class="empty">Impossible de charger les attractions (${esc(err.message)}). Servez le site via un serveur web local plutôt qu'en ouvrant le fichier directement.</p>`;
+    $('#grid').innerHTML = `<p class="empty">Impossible de charger les attractions (${esc(err.message)}). Sers le site via un serveur web local plutôt qu'en ouvrant le fichier directement.</p>`;
     return;
   }
   // Sans cela le navigateur restaure lui-même une position qui n'est plus la
