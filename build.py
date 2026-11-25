@@ -110,3 +110,9 @@ shutil.copytree(root / 'app', root / 'dist' / 'app', dirs_exist_ok=True)
 (root / '.check').mkdir(exist_ok=True)
 (root / '.check' / 'bundle.js').write_text('(function(){\n' + js + '\n})();', encoding='utf-8')
 print('built', len(html))
+
+# Secrets des attractions pour « Le saviez-vous ? » sur l'accueil du Carnet.
+_attr = _json.loads((root / 'data' / 'attractions.json').read_text(encoding='utf-8'))['attractions']
+_secrets = [{'id': a['id'], 'nom': a['name'], 's': s} for a in _attr for s in (a.get('secrets') or []) if len(s) <= 320]
+(root / 'dist' / 'secrets.json').write_text(_json.dumps(_secrets, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+print('secrets', len(_secrets))
