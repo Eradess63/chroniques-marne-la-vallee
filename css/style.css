@@ -756,3 +756,9 @@ body.vue-fiche .hero { display: none; }
 .habitude__conseil { margin: 6px 0 12px; padding: 10px 14px; border: 1px solid rgba(200,153,63,.5); border-radius: 10px; background: rgba(200,153,63,.1); font: 15px/1.5 var(--font-body); color: var(--encre); }
 .habitude__conseil b { color: var(--laiton-clair); }
 .livebar[data-mode="stale"] { border-color: rgba(217,137,43,.6); border-left: 3px solid var(--ambre); background: rgba(217,137,43,.1); color: #f3d9a8; }
+
+/* Courbe d'attente : meilleur créneau de ma journée et heure de départ */
+.hb-best { fill: none; stroke: #f5c66b; stroke-width: 2; }
+.hb-bestl { fill: #f5c66b; font: 600 9px var(--font-sans, 'Jost', sans-serif); text-anchor: middle; }
+.hb-dep { stroke: #e2453a; stroke-width: 1.2; stroke-dasharray: 3 3; opacity: .8; }
+.hb-depl { font-size: 9px; text-anchor: end; }

@@ -118,7 +118,9 @@ export function habitudeHTML(a) {
   // Fenêtre : de l'ouverture (ou du premier relevé) à la fin des données.
   // Sans habitude connue, la fenêtre suit les relevés du jour (au moins 2 h).
   const debut = courbe.length ? Math.min(courbe[0].slot * 30, jour[0]?.[0] ?? 24 * 60) : Math.max(8 * 60, Math.floor(((jour[0]?.[0] ?? 9 * 60) - 30) / 30) * 30);
-  const fin = Math.max(jour.length ? jour[jour.length - 1][0] + 15 : 0, courbe.length ? courbe[courbe.length - 1].slot * 30 + 30 : 0, debut + 120);
+  // Ma journée s'arrête à mon départ (TGV de 18h13 : je quitte le parc à 17h43).
+  const DEPART = 17 * 60 + 43;
+  const fin = Math.max(Math.min(18 * 60, Math.max(jour.length ? jour[jour.length - 1][0] + 15 : 0, courbe.length ? courbe[courbe.length - 1].slot * 30 + 30 : 0)), debut + 120);
   const W = 360, H = 190, PL = 24, PR = 6, PT = 10, PB = 20;
   const max = Math.ceil(Math.max(30, ...courbe.map((c) => c.wait), ...jour.map((j) => j[1])) / 20) * 20;
   const x = (m) => PL + ((m - debut) / (fin - debut)) * (W - PL - PR);
@@ -156,7 +158,11 @@ export function habitudeHTML(a) {
     const c = courbe.find((k) => k.slot === Math.floor(m / 30));
     if (r || c) det.push([m, r ? r[1] : null, c ? c.wait : null]);
   }
-  const calme = h.best(a.disney, 0), apres = h.best(a.disney, nowMin);
+  const maJournee = courbe.filter((c) => c.slot * 30 + 30 <= DEPART + 15);
+  const plusCalme = (l) => (l.length ? l.reduce((m, c) => (c.wait < m.wait ? c : m)) : null);
+  const calme = plusCalme(maJournee), apres = plusCalme(maJournee.filter((c) => c.slot * 30 + 30 > nowMin));
+  const repere = calme ? `<circle class="hb-best" cx="${x(calme.slot * 30 + 15).toFixed(1)}" cy="${y(calme.wait).toFixed(1)}" r="8"/><text class="hb-bestl" x="${x(calme.slot * 30 + 15).toFixed(1)}" y="${(y(calme.wait) - 12).toFixed(1)}">le + calme</text>` : '';
+  const ligneDepart = DEPART > debut && DEPART < fin ? `<line class="hb-dep" x1="${x(DEPART)}" x2="${x(DEPART)}" y1="${PT}" y2="${y(0)}"/><text class="hb-depl" x="${x(DEPART) - 3}" y="${PT + 9}">🚄</text>` : '';
   const phrases = [];
   if (jour.length) phrases.push(`Maintenant : <b>${jour[jour.length - 1][1]} min</b> (relevé de ${hhmm(jour[jour.length - 1][0])}).`);
   if (t) phrases.push(`D’habitude à cette heure : ~${t.wait} min.`);
@@ -166,7 +172,7 @@ export function habitudeHTML(a) {
   if (apres) {
     const maintenant = apres.slot === Math.floor(nowMin / 30);
     conseil = maintenant || (typeof actuel === 'number' && actuel <= apres.wait + 3)
-      ? `🎯 <b>C’est le bon moment</b> : ${typeof actuel === 'number' ? `~${actuel} min` : `~${apres.wait} min`}, le plus calme d’ici la fermeture.`
+      ? `🎯 <b>C’est le bon moment</b> : ${typeof actuel === 'number' ? `~${actuel} min` : `~${apres.wait} min`}, le plus calme d’ici ton départ (17h43).`
       : `🎯 Vise <b>${h.slotLabel(apres.slot)}</b> : ~${apres.wait} min d’habitude${typeof actuel === 'number' ? `, contre ${actuel} min maintenant` : ''}.`;
   } else if (calme) conseil = `🎯 En général, le plus calme : <b>${h.slotLabel(calme.slot)}</b> (~${calme.wait} min).`;
   return `<p class="habitude__date">${esc2(date)}</p>
@@ -175,7 +181,7 @@ export function habitudeHTML(a) {
     <div class="habitude__cadre">
       <svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente relevée aujourd’hui, heure par heure" data-det="${esc2(JSON.stringify(det))}" data-geo="${[debut, fin, W, PL, PR].join(',')}">
         <defs><linearGradient id="hb-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--laiton)" stop-opacity=".38"/><stop offset=".7" stop-color="var(--laiton)" stop-opacity=".08"/><stop offset="1" stop-color="var(--laiton)" stop-opacity="0"/></linearGradient>${fondu}</defs>
-        ${grille.join('')}${maint}${aire}${habit}${pts.length ? `<path class="hb-ligne" d="${ligne}"/><circle class="hb-dernier" cx="${pts[pts.length - 1][0].toFixed(1)}" cy="${pts[pts.length - 1][1].toFixed(1)}" r="3.6"/>` : ''}
+        ${grille.join('')}${ligneDepart}${maint}${aire}${habit}${repere}${pts.length ? `<path class="hb-ligne" d="${ligne}"/><circle class="hb-dernier" cx="${pts[pts.length - 1][0].toFixed(1)}" cy="${pts[pts.length - 1][1].toFixed(1)}" r="3.6"/>` : ''}
         <line class="hb-curseur" x1="0" x2="0" y1="${PT}" y2="${y(0)}" visibility="hidden"/>
       </svg>
     </div>
