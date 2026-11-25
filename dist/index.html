@@ -8449,14 +8449,27 @@ function reviewsHTML(a) {
 }
 
 /** Éléments de la galerie : photos fournies (si présentes) puis planches originales */
+/* Mes photos (site du Carnet, même origine via le relais /chroniques/) :
+   chargées au démarrage, elles ouvrent la galerie de la fiche concernée. */
+const SITE_PHOTOS = location.hostname.endsWith('github.io') ? 'https://carnet-parc-alexandre.alexandre-207cc.workers.dev' : '';
+let mesPhotosPret = null;
+function chargerMesPhotos() {
+  const s = (src) => new Promise((ok) => { const e = document.createElement('script'); e.src = SITE_PHOTOS + src; e.onload = e.onerror = ok; document.head.append(e); });
+  return mesPhotosPret ??= s('/mes-cliches.js').then(() => s('/mes-photos.js')).then(() => s('/mes-galeries.js'));
+}
+function mesPhotosDe(a) {
+  return (window.mesGaleries?.pour(a.name) || []).map((p) => ({ type: 'moi', src: SITE_PHOTOS + p.src, caption: 'Ma photo' + (p.date ? ' · ' + window.mesGaleries.date(p.date) : ''), credit: 'A. Lalevee' }));
+}
 function galleryItems(a) {
+  const moi = mesPhotosDe(a);
   const photos = (a.images || []).map((i) => ({ type: 'img', src: i.src, caption: i.caption || a.name, credit: i.credit }));
   const posters = (a.gallery || []).map((g) => ({ type: 'poster', variant: g.variant, caption: g.caption }));
   const illu = state.art && state.art[a.id] ? [{ type: 'illu', caption: 'Illustration' }] : [];
-  return [...illu, ...photos, ...posters];
+  return [...moi, ...illu, ...photos, ...posters];
 }
 
-function itemHTML(a, it) {
+function itemHTML(a, it, grand) {
+  if (it.type === 'moi') return `<img src="${esc(it.src)}-${grand ? 1600 : 800}.webp" alt="${esc(it.caption)}" loading="lazy">`;
   if (it.type === 'img') return `<img src="${esc(it.src)}" alt="${esc(it.caption)}" data-fallback="1">`;
   if (it.type === 'illu') return `<div class="illu">${state.art[a.id]}</div>`;
   return poster(a, it.variant);
@@ -8630,7 +8643,7 @@ function showLightbox(id, index) {
     <div class="lightbox__top"><strong>${esc(a.name)} · ${lb.i + 1}/${items.length}</strong><button type="button" class="fiche__close" style="float:none;position:static;margin:0" data-lb-close>Fermer ✕</button></div>
     <div class="lightbox__stage">
       <button type="button" class="lightbox__btn" data-lb="-1" aria-label="Image précédente">‹</button>
-      <div class="lightbox__img">${itemHTML(a, it)}</div>
+      <div class="lightbox__img">${itemHTML(a, it, true)}</div>
       <button type="button" class="lightbox__btn" data-lb="1" aria-label="Image suivante">›</button>
     </div>
     <p class="lightbox__cap">${esc(it.caption)}${it.credit ? ` · ${esc(it.credit)}` : ''}</p>`;
@@ -8724,6 +8737,7 @@ function routeFromHash() {
 
 /* ---------- Démarrage ---------- */
 async function init() {
+  chargerMesPhotos();
   try {
     // données intégrées à la page si présentes, sinon fichier JSON
     const inline = document.getElementById('app-data');
