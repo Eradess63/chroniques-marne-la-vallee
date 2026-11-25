@@ -44,31 +44,11 @@ const ENVIE_OPTIONS = [
   { id: 'abri', label: '☂️ À l’abri' },
   { id: 'sensations', label: '🎢 Sensations' },
   { id: 'attente', label: '⚡ Peu d’attente' },
-  { id: 'sr', label: '👤 Single Rider' },
-  { id: 'tard', label: '🌙 Ouvertes tard' }
+  { id: 'sr', label: '👤 Single Rider' }
 ];
 // File et tour à l'abri (identifiants Disney, comme le plan du Carnet).
 const COUVERTES = new Set(['P1RA03', 'P1DA08', 'P2ZA02', 'P2XA09', 'P2EA00', 'P1NA07', 'P1G103', 'P1M115', 'P1NA12', 'P1AA04', 'P1DA09', 'P1DA04', 'P2AC01', 'P2AC02', 'P2XA03', 'P1NA10', 'P1NA13', 'P1NA01', 'P1NA08', 'P1M116', 'P1DA06', 'P1M117', 'P2YS03', 'P2MG32', 'P2GS54', 'P1AA03']);
 const estSensations = (a) => { const cm = a.fiche?.minHeight?.cm || 0; return cm >= 102 || (cm > 0 && /montagnes russes|chute/i.test(a.fiche?.type || '')); };
-/* Fermeture des parcs aujourd'hui (themeparks.wiki), lue à la demande. */
-const PARCS_TPW = { dlp: 'dae968d5-630d-4719-8b06-3d107e944401', daw: 'ca888437-ebb4-4d50-aed2-d227f7096968' };
-let fermetures = null, fermeturesEnCours = null;
-function chargerFermetures() {
-  if (fermetures || fermeturesEnCours) return;
-  const jour = new Intl.DateTimeFormat('fr-CA', { timeZone: 'Europe/Paris' }).format(new Date());
-  fermeturesEnCours = Promise.all(Object.entries(PARCS_TPW).map(([k, id]) => fetch(`https://api.themeparks.wiki/v1/entity/${id}/schedule`).then((r) => r.json()).then((j) => {
-    const op = (j.schedule || []).find((x) => x.date === jour && x.type === 'OPERATING');
-    return [k, op ? new Date(op.closingTime) : null];
-  }).catch(() => [k, null]))).then((l) => { fermetures = Object.fromEntries(l); renderFilters(); renderGrid(); });
-}
-function ouverteTard(a) {
-  if (!fermetures) return true;
-  const f = fermetures[a.park]; if (!f) return false;
-  const tard = Math.max(...Object.values(fermetures).filter(Boolean).map(Number));
-  const h = +new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', hour: 'numeric', hour12: false }).format(f);
-  return +f === tard && h >= 20;
-}
-
 const PARCOURS_OPTIONS = [
   { id: 'all', label: 'Toutes' },
   { id: 'epingles', label: 'Mon parcours' },
@@ -103,7 +83,6 @@ function matches(a) {
   if (f.envie === 'sensations' && !estSensations(a)) return false;
   if (f.envie === 'attente') { const st = statusOf(a); if (st.kind !== 'open' || st.wait == null || st.wait > 10) return false; }
   if (f.envie === 'sr' && a.fiche?.services?.singleRider !== true) return false;
-  if (f.envie === 'tard' && !ouverteTard(a)) return false;
   if (f.parcours === 'epingles' && !estEpingle(a.id)) return false;
   if (f.parcours === 'reste' && (!estEpingle(a.id) || estFait(a.id))) return false;
   if (f.q && !fold(a.name).includes(fold(f.q)) && !fold(a.tagline).includes(fold(f.q))) return false;
@@ -157,13 +136,8 @@ function renderFilters() {
   $('#filter-state').innerHTML = STATE_OPTIONS.map((o) => chip('state', o.id, o.label, f.state === o.id, 'seg__btn')).join('');
   $('#filter-sort').innerHTML = SORT_OPTIONS.map((o) => chip('sort', o.id, o.label, f.sort === o.id, 'seg__btn')).join('');
   $('#filter-envie').innerHTML = ENVIE_OPTIONS.map((o) => chip('envie', o.id, o.label, f.envie === o.id, 'seg__btn')).join('');
-  const noteTard = $('#note-envie');
-  if (noteTard) {
-    if (f.envie === 'tard') chargerFermetures();
-    const fmt = (d) => d ? new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', hour: 'numeric', minute: '2-digit' }).format(d).replace(':', 'h') : 'fermé';
-    noteTard.hidden = f.envie !== 'tard' && f.envie !== 'attente';
-    noteTard.textContent = f.envie === 'tard' ? (fermetures ? `Aujourd’hui : Parc Disneyland jusqu’à ${fmt(fermetures.dlp)}, Adventure World jusqu’à ${fmt(fermetures.daw)}. Seul le parc qui ferme le plus tard est gardé.` : 'Lecture des horaires du jour…') : 'Attente en direct de 10 min ou moins.';
-  }
+  const noteEnvie = $('#note-envie');
+  if (noteEnvie) { noteEnvie.hidden = f.envie !== 'attente'; noteEnvie.textContent = 'Attente en direct de 10 min ou moins.'; }
   $('#filter-parcours').innerHTML = PARCOURS_OPTIONS.map((o) => chip('parcours', o.id, o.label, f.parcours === o.id, 'seg__btn')).join('');
   renderBilan();
 }
