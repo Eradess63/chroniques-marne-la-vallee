@@ -448,7 +448,7 @@ function reviewsHTML(a) {
 const SITE_PHOTOS = location.hostname.endsWith('github.io') ? 'https://carnet-parc-alexandre.alexandre-207cc.workers.dev' : '';
 let mesPhotosPret = null;
 function chargerMesPhotos() {
-  const s = (src) => new Promise((ok) => { const e = document.createElement('script'); e.src = SITE_PHOTOS + src; e.onload = e.onerror = ok; document.head.append(e); });
+  const s = (src) => new Promise((ok) => { const e = document.createElement('script'); const v = (window.carnetV || {})[src]; e.src = SITE_PHOTOS + src + (v ? '?v=' + v : ''); e.onload = e.onerror = ok; document.head.append(e); });
   return mesPhotosPret ??= Promise.all([s('/mes-cliches.js'), s('/mes-photos.js'), s('/mes-galeries.js')]);
 }
 function mesPhotosDe(a) {
@@ -746,7 +746,8 @@ async function init() {
     // données intégrées à la page si présentes, sinon fichier JSON
     const inline = document.getElementById('app-data');
     let data;
-    if (inline) data = JSON.parse(inline.textContent);
+    if (window.__CHRONIQUES_DATA__) data = window.__CHRONIQUES_DATA__;
+    else if (inline) data = JSON.parse(inline.textContent);
     else {
       const res = await fetch(CONFIG.DATA_URL, { cache: 'no-cache' });
       if (!res.ok) throw new Error('HTTP ' + res.status);

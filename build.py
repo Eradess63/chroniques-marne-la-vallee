@@ -1,6 +1,7 @@
 """
-Construit dist/index.html : un seul fichier, sans module ni requête, qui
-s'ouvre aussi bien depuis une clé USB que depuis un disque dur.
+Construit dist/index.html : une page légère, et dist/assets/ : styles,
+scripts et données minifiés, nommés d'après leur contenu pour être gardés
+longtemps par le navigateur.
 
 Au passage, date les liens de index.html. GitHub Pages sert css/ et js/ avec
 dix minutes de cache : sans marqueur, un visiteur qui revient juste après une
@@ -64,24 +65,56 @@ art_json = _json.dumps(art, ensure_ascii=False, separators=(',', ':')).replace('
 (root / 'illustrations' / 'index.json').write_text(
     _json.dumps(art, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
 
-# Les liens datés ne doivent pas gêner le repli : on vise le motif, pas la chaîne exacte.
-# Le remplacement passe par une fonction : sinon re.sub interpréterait les
-# antislashs du CSS et du JS comme des références de groupe.
+# --- Fichiers à part, nommés d'après leur contenu -------------------------
+# La page ne garde que sa structure. Styles, scripts et données vont dans
+# dist/assets/, sous un nom qui contient l'empreinte de leur contenu : le
+# navigateur les garde un an sans redemander, et une publication ne fait
+# retélécharger que ce qui a vraiment changé (en général, les données).
+# La cohérence reste garantie : une nouvelle page pointe vers de nouveaux noms.
+import hashlib, subprocess, shutil as _sh
+ESBUILD = next((c for c in [_sh.which('esbuild'), '/opt/npm-tools/node_modules/.bin/esbuild'] if c and pathlib.Path(c).exists()), None)
+
+def minifier(code, loader):
+    """Minifie avec esbuild s'il est installé ; sinon le code part tel quel."""
+    if not ESBUILD:
+        return code
+    r = subprocess.run([ESBUILD, '--minify', f'--loader={loader}', '--charset=utf8', '--legal-comments=none'],
+                       input=code.encode('utf-8'), capture_output=True)
+    if r.returncode != 0:
+        raise SystemExit('esbuild : ' + r.stderr.decode('utf-8', 'replace'))
+    return r.stdout.decode('utf-8')
+
+assets = root / 'dist' / 'assets'
+if assets.exists():
+    _sh.rmtree(assets)
+assets.mkdir(parents=True)
+
+def ecrire(nom, ext, contenu):
+    h = hashlib.sha256(contenu.encode('utf-8')).hexdigest()[:10]
+    (assets / f'{nom}.{h}.{ext}').write_text(contenu, encoding='utf-8')
+    return f'assets/{nom}.{h}.{ext}'
+
+css_f = ecrire('style', 'css', minifier(css, 'css'))
+communs_code = ';\n'.join((root / 'js' / n).read_text(encoding='utf-8') for n in COMMUNS)
+communs_f = ecrire('communs', 'js', minifier(communs_code, 'js'))
+donnees = _json.dumps(_json.loads(data.replace('<\\/', '</')), ensure_ascii=False, separators=(',', ':'))
+data_f = ecrire('donnees', 'js', 'window.__CHRONIQUES_DATA__=' + donnees + ';')
+app_f = ecrire('app', 'js', minifier('(function(){\n' + js + '\n})();', 'js'))
+
 html = re.sub(r'<link rel="stylesheet" href="css/style\.css(?:\?v=\d+)?">',
-              lambda _: '<style>\n' + css + '\n</style>', html, count=1)
-html = re.sub(r'<script type="module" src="js/app\.js(?:\?v=\d+)?"></script>',
-              lambda _: '<script type="application/json" id="app-data">' + data + '</script>\n'
-                        '<script>\n(function(){\n' + js + '\n})();\n</script>', html, count=1)
-
-# Le plan et « Près de moi » sont des scripts ordinaires (partagés avec le
-# Carnet de parc) : repliés tels quels, avant le script principal.
-for nom in ['park-map.js', 'nearby.js', 'itinerary.js', 'wait-history.js', 'journal.js']:
-    code = (root / 'js' / nom).read_text(encoding='utf-8').replace('</', '<\\/')
-    html, n = re.subn(r'<script src="js/' + re.escape(nom) + r'"></script>',
-                      lambda _: '<script>\n' + code + '\n</script>', html, count=1)
+              lambda _: f'<link rel="stylesheet" href="{css_f}">', html, count=1)
+# Les cinq scripts communs avec le Carnet : un seul fichier, à la place du premier.
+for i, nom in enumerate(COMMUNS):
+    html, n = re.subn(r'<script src="js/' + re.escape(nom) + r'"></script>\n?',
+                      (lambda _: f'<script src="{communs_f}"></script>\n') if i == 0 else '', html, count=1)
     assert n == 1, nom + ' introuvable dans index.html'
-
-assert '<style>' in html and 'app-data' in html, 'le repli a manqué sa cible'
+html = re.sub(r'<script type="module" src="js/app\.js(?:\?v=\d+)?"></script>',
+              lambda _: f'<script src="{data_f}"></script>\n<script src="{app_f}"></script>', html, count=1)
+assert css_f in html and data_f in html and app_f in html, 'le remplacement a manqué sa cible'
+# Les premiers octets utiles : le navigateur commence à chercher les fichiers
+# avant même d'avoir lu toute la page.
+html = html.replace('</title>', '</title>\n' + ''.join(
+    f'<link rel="preload" href="{f}" as="{a}">' for f, a in [(css_f, 'style'), (data_f, 'script'), (app_f, 'script')]), 1)
 
 # Les anciennes illustrations SVG (180 Ko) ne servent qu'à la galerie d'une
 # fiche : elles ne sont plus repliées dans la page, mais chargées après coup.
