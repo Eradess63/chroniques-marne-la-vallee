@@ -175,6 +175,11 @@ export function habitudeHTML(a) {
   const phrases = [];
   if (jour.length) phrases.push(`Maintenant : <b>${jour[jour.length - 1][1]} min</b> (relevé de ${hhmm(jour[jour.length - 1][0])}).`);
   if (t) phrases.push(`D’habitude à cette heure : ~${t.wait} min.`);
+  // Gain moyen du Single Rider sur ma journée (demi-heures relevées des deux files).
+  const paires = srCourbe.map((c) => [c, courbe.find((k) => k.slot === c.slot)]).filter(([c, k]) => k && c.slot * 30 < 18 * 60);
+  const gain = paires.length >= 3 ? Math.round(paires.reduce((s2, [c, k]) => s2 + (k.wait - c.wait), 0) / paires.length) : null;
+  const gainMax = paires.length >= 3 ? paires.reduce((m, p) => (p[1].wait - p[0].wait > m[1].wait - m[0].wait ? p : m)) : null;
+  const phraseGain = gain != null ? (gain >= 5 ? `En moyenne, le Single Rider te fait gagner <b>~${gain} min</b>${gainMax && gainMax[1].wait - gainMax[0].wait > gain + 5 ? `, jusqu’à ~${gainMax[1].wait - gainMax[0].wait} min vers ${h.slotLabel(gainMax[0].slot)}` : ''}.` : 'Ici, le Single Rider ne fait presque rien gagner en moyenne : prends la file classique.') : '';
   const phraseSR = avecSR ? `👤 Single Rider : ${srJour.length ? `<b>${srJour[srJour.length - 1][1]} min</b> maintenant` : 'pas encore de relevé aujourd’hui'}${srT ? `, ~${srT.wait} min d’habitude à cette heure` : ''}.` : '';
   // Le conseil, en une phrase et en tête : quand y aller.
   const actuel = jour.length ? jour[jour.length - 1][1] : t?.wait;
@@ -197,7 +202,7 @@ export function habitudeHTML(a) {
     </div>
     <p class="habitude__legende"><span class="hb-k hb-k--auj"></span> aujourd’hui${courbe.length ? ` <span class="hb-k hb-k--habit"></span> d’habitude ${typeJour === 'w' ? 'le week-end' : 'en semaine'}` : ''}${avecSR ? ' <span style="white-space:nowrap"><span class="hb-k hb-k--sr"></span> Single Rider</span>' : ''}</p>
     ${phrases.length ? `<p class="habitude__texte">${phrases.join(' ')}</p>` : ''}
-    ${phraseSR ? `<p class="habitude__texte">${phraseSR}</p>` : ''}
+    ${phraseSR ? `<p class="habitude__texte">${phraseSR}${phraseGain ? ' ' + phraseGain : ''}</p>` : ''}
     <p class="plan-note">Relevés du Carnet toutes les 5 min (source ThemeParks.wiki)${h.days ? ` · ${h.days} jour${h.days > 1 ? 's' : ''} d’historique` : ''} · survole ou touche la courbe pour le détail.</p>`;
 }
 const esc2 = escH;
