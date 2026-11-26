@@ -43,11 +43,14 @@ const ENVIE_OPTIONS = [
   { id: 'all', label: 'Toutes' },
   { id: 'abri', label: '☂️ À l’abri' },
   { id: 'sensations', label: '🎢 Sensations' },
+  { id: 'scenique', label: '🎭 Attractions scéniques' },
   { id: 'attente', label: '⚡ Peu d’attente' },
   { id: 'sr', label: '👤 Single Rider' }
 ];
 // File et tour à l'abri (identifiants Disney, comme le plan du Carnet).
 const COUVERTES = new Set(['P1RA03', 'P1DA08', 'P2ZA02', 'P2XA09', 'P2EA00', 'P1NA07', 'P1G103', 'P1M115', 'P1NA12', 'P1AA04', 'P1DA09', 'P1DA04', 'P2AC01', 'P2AC02', 'P2XA03', 'P1NA10', 'P1NA13', 'P1NA01', 'P1NA08', 'P1M116', 'P1DA06', 'P1M117', 'P2YS03', 'P2MG32', 'P2GS54', 'P1AA03']);
+// Parcours scéniques et dark rides (Phantom Manor, Pirates…), sans les visites à pied ni Tower of Terror (une chute).
+const estScenique = (a) => { const t = a.fiche?.type || ''; return /dark ride|parcours scénique/i.test(t) && !/à pied|chute/i.test(t); };
 const estSensations = (a) => { const cm = a.fiche?.minHeight?.cm || 0; return cm >= 102 || (cm > 0 && /montagnes russes|chute/i.test(a.fiche?.type || '')); };
 const PARCOURS_OPTIONS = [
   { id: 'all', label: 'Toutes' },
@@ -81,6 +84,7 @@ function matches(a) {
   if (f.state === 'closed' && kind !== 'closed' && kind !== 'refurb') return false;
   if (f.envie === 'abri' && !COUVERTES.has(a.disney)) return false;
   if (f.envie === 'sensations' && !estSensations(a)) return false;
+  if (f.envie === 'scenique' && !estScenique(a)) return false;
   if (f.envie === 'attente') { const st = statusOf(a); if (st.kind !== 'open' || st.wait == null || st.wait > 10) return false; }
   if (f.envie === 'sr' && a.fiche?.services?.singleRider !== true) return false;
   if (f.parcours === 'epingles' && !estEpingle(a.id)) return false;
