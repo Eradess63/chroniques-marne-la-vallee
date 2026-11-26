@@ -644,6 +644,8 @@ body.vue-fiche main { padding: 0; }
 .habitude__graph .hb-aire { fill: url(#hb-grad); }
 .habitude__graph .hb-ligne { fill: none; stroke: var(--laiton-clair); stroke-width: 2.4; filter: drop-shadow(0 0 3px #e6c77e66); stroke-linejoin: round; stroke-linecap: round; }
 .habitude__graph .hb-dernier { fill: var(--laiton-clair); stroke: #0B2025; stroke-width: 2; }
+.habitude__graph .hb-sr { fill: none; stroke: #8FC3F0; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 3px #8fc3f066); }
+.habitude__graph .hb-sr--habit { stroke-width: 1.4; stroke-dasharray: 2 4; opacity: .8; filter: none; }
 .habitude__graph .hb-habit { fill: none; stroke: var(--vert-cadran); stroke-width: 1.6; stroke-dasharray: 5 5; opacity: .85; }
 .habitude__graph .hb-now { stroke: var(--rouge-cadran); stroke-opacity: .5; stroke-dasharray: 2 3; }
 .habitude__graph .hb-curseur { stroke: var(--encre); stroke-opacity: .5; stroke-dasharray: 3 3; }
@@ -653,6 +655,7 @@ body.vue-fiche main { padding: 0; }
 .habitude__legende { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 8px 0 0; color: var(--encre-faible); font-size: .85rem; }
 .hb-k { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
 .hb-k--auj { background: var(--laiton-clair); }
+.hb-k--sr { background: #8FC3F0; margin-left: 8px; }
 .hb-k--habit { background: repeating-linear-gradient(90deg, var(--vert-cadran) 0 4px, transparent 4px 7px); margin-left: 8px; }
 .habitude__bulle .hb-k--habit { margin-left: 0; }
 .habitude__texte { margin: 8px 0 4px; }

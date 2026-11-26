@@ -110,6 +110,9 @@ export function habitudeHTML(a) {
   const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes();
   const typeJour = [0, 6].includes(now.getDay()) ? 'w' : 'j';
   const courbe = h.curve(a.disney, typeJour), jour = h.today(a.disney);
+  // File Single Rider, relevée à part (« identifiant:SR ») quand Disney l'affiche.
+  const srJour = h.today(a.disney + ':SR'), srCourbe = h.curve(a.disney + ':SR', typeJour), srT = h.typical(a.disney + ':SR');
+  const avecSR = srJour.length > 0 || srCourbe.length > 1;
   const date = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
   const t = h.typical(a.disney);
   if (!courbe.length && !jour.length) {
@@ -122,7 +125,7 @@ export function habitudeHTML(a) {
   const DEPART = 17 * 60 + 43;
   const fin = Math.max(Math.min(18 * 60, Math.max(jour.length ? jour[jour.length - 1][0] + 15 : 0, courbe.length ? courbe[courbe.length - 1].slot * 30 + 30 : 0)), debut + 120);
   const W = 360, H = 190, PL = 24, PR = 6, PT = 10, PB = 20;
-  const max = Math.ceil(Math.max(30, ...courbe.map((c) => c.wait), ...jour.map((j) => j[1])) / 20) * 20;
+  const max = Math.ceil(Math.max(30, ...courbe.map((c) => c.wait), ...jour.map((j) => j[1]), ...srJour.map((j) => j[1])) / 20) * 20;
   const x = (m) => PL + ((m - debut) / (fin - debut)) * (W - PL - PR);
   const y = (w) => PT + (H - PT - PB) * (1 - w / max);
   const grille = [];
@@ -132,23 +135,29 @@ export function habitudeHTML(a) {
   // Courbe lissée : chaque point est une moyenne pondérée (noyau gaussien,
   // ~10 min) des relevés voisins, recalculée toutes les 3 minutes. Les paliers
   // de 5 en 5 min d'attente affichés par Disney deviennent une vraie courbe.
-  const lisse = [];
-  if (jour.length > 2) {
-    const m0 = jour[0][0], m1 = jour[jour.length - 1][0];
+  const lisser = (rel) => {
+    const out = [];
+    if (rel.length <= 2) return out;
+    const m0 = rel[0][0], m1 = rel[rel.length - 1][0];
     for (let m = m0; m <= m1 + 0.1; m += 3) {
       // Lissage plus serré près des bords : la courbe finit bien sur le dernier relevé.
       const sig = Math.min(10, 1.5 + Math.min(m - m0, m1 - m) * 0.8), s2 = 2 * sig * sig;
       let sw = 0, sv = 0;
-      for (const [mj, wj] of jour) { const k = Math.exp(-((mj - m) ** 2) / s2); sw += k; sv += k * wj; }
-      lisse.push([m, sv / sw]);
+      for (const [mj, wj] of rel) { const k = Math.exp(-((mj - m) ** 2) / s2); sw += k; sv += k * wj; }
+      out.push([m, sv / sw]);
     }
-  }
+    return out;
+  };
+  const lisse = lisser(jour);
   const pts = (lisse.length ? lisse : jour).map(([m, w]) => [x(m), y(w)]);
   const ligne = courbeDouce(pts);
   const aire = pts.length > 1 ? `<path class="hb-aire" mask="url(#hb-fondu)" d="${ligne}L${pts[pts.length - 1][0].toFixed(1)},${y(0)}L${pts[0][0].toFixed(1)},${y(0)}Z"/>` : '';
   // Le dégradé s'efface doucement sur le bord gauche, au lieu d'un mur.
   const x0 = pts[0]?.[0] ?? 0, x1 = pts[pts.length - 1]?.[0] ?? W;
   const fondu = `<linearGradient id="hb-fondu-g" gradientUnits="userSpaceOnUse" x1="${x0.toFixed(1)}" x2="${x1.toFixed(1)}" y1="0" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="${Math.min(0.5, 24 / Math.max(1, x1 - x0)).toFixed(3)}" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient><mask id="hb-fondu"><rect x="0" y="0" width="${W}" height="${H}" fill="url(#hb-fondu-g)"/></mask>`;
+  // Single Rider : la journée en bleu, ou l'habitude en pointillés bleus s'il n'y a pas encore de relevé.
+  const srPts = (lisser(srJour).length ? lisser(srJour) : srJour).map(([m, w]) => [x(m), y(w)]);
+  const srTrace = srPts.length > 1 ? `<path class="hb-sr" d="${courbeDouce(srPts)}"/>` : srCourbe.length > 1 ? `<path class="hb-sr hb-sr--habit" d="${courbeDouce(srCourbe.map((c) => [x(c.slot * 30 + 15), y(c.wait)]))}"/>` : '';
   const habit = courbe.length > 1 ? `<path class="hb-habit" d="${courbeDouce(courbe.map((c) => [x(c.slot * 30 + 15), y(c.wait)]))}"/>` : '';
   const maint = nowMin >= debut && nowMin <= fin ? `<line class="hb-now" x1="${x(nowMin)}" x2="${x(nowMin)}" y1="${PT}" y2="${y(0)}"/>` : '';
   // Données du détail au survol : [minute, réel, habitude] tous les quarts d'heure.
@@ -166,6 +175,7 @@ export function habitudeHTML(a) {
   const phrases = [];
   if (jour.length) phrases.push(`Maintenant : <b>${jour[jour.length - 1][1]} min</b> (relevé de ${hhmm(jour[jour.length - 1][0])}).`);
   if (t) phrases.push(`D’habitude à cette heure : ~${t.wait} min.`);
+  const phraseSR = avecSR ? `👤 Single Rider : ${srJour.length ? `<b>${srJour[srJour.length - 1][1]} min</b> maintenant` : 'pas encore de relevé aujourd’hui'}${srT ? `, ~${srT.wait} min d’habitude à cette heure` : ''}.` : '';
   // Le conseil, en une phrase et en tête : quand y aller.
   const actuel = jour.length ? jour[jour.length - 1][1] : t?.wait;
   let conseil = '';
@@ -177,16 +187,17 @@ export function habitudeHTML(a) {
   } else if (calme) conseil = `🎯 En général, le plus calme : <b>${h.slotLabel(calme.slot)}</b> (~${calme.wait} min).`;
   return `<p class="habitude__date">${esc2(date)}</p>
     ${conseil ? `<p class="habitude__conseil">${conseil}</p>` : ''}
-    <p class="habitude__bulle" aria-live="polite">${jour.length ? `<b>${hhmm(jour[jour.length - 1][0])}</b><span><i class="hb-k hb-k--auj"></i>Relevé : <strong>${jour[jour.length - 1][1]} min</strong></span>${t ? `<span><i class="hb-k hb-k--habit"></i>D’habitude : ${t.wait} min</span>` : ''}` : '<span>Touche la courbe pour le détail</span>'}</p>
+    <p class="habitude__bulle" aria-live="polite">${jour.length ? `<b>${hhmm(jour[jour.length - 1][0])}</b><span><i class="hb-k hb-k--auj"></i>Relevé : <strong>${jour[jour.length - 1][1]} min</strong></span>${t ? `<span><i class="hb-k hb-k--habit"></i>D’habitude : ${t.wait} min</span>` : ''}${srJour.length ? `<span><i class="hb-k hb-k--sr"></i>Single Rider : ${srJour[srJour.length - 1][1]} min</span>` : ''}` : '<span>Touche la courbe pour le détail</span>'}</p>
     <div class="habitude__cadre">
       <svg class="habitude__graph" viewBox="0 0 ${W} ${H}" role="img" aria-label="Attente relevée aujourd’hui, heure par heure" data-det="${esc2(JSON.stringify(det))}" data-geo="${[debut, fin, W, PL, PR].join(',')}">
         <defs><linearGradient id="hb-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--laiton)" stop-opacity=".38"/><stop offset=".7" stop-color="var(--laiton)" stop-opacity=".08"/><stop offset="1" stop-color="var(--laiton)" stop-opacity="0"/></linearGradient>${fondu}</defs>
-        ${grille.join('')}${ligneDepart}${maint}${aire}${habit}${repere}${pts.length ? `<path class="hb-ligne" d="${ligne}"/><circle class="hb-dernier" cx="${pts[pts.length - 1][0].toFixed(1)}" cy="${pts[pts.length - 1][1].toFixed(1)}" r="3.6"/>` : ''}
+        ${grille.join('')}${ligneDepart}${maint}${aire}${habit}${srTrace}${repere}${pts.length ? `<path class="hb-ligne" d="${ligne}"/><circle class="hb-dernier" cx="${pts[pts.length - 1][0].toFixed(1)}" cy="${pts[pts.length - 1][1].toFixed(1)}" r="3.6"/>` : ''}
         <line class="hb-curseur" x1="0" x2="0" y1="${PT}" y2="${y(0)}" visibility="hidden"/>
       </svg>
     </div>
-    <p class="habitude__legende"><span class="hb-k hb-k--auj"></span> aujourd’hui${courbe.length ? ` <span class="hb-k hb-k--habit"></span> d’habitude ${typeJour === 'w' ? 'le week-end' : 'en semaine'}` : ''}</p>
+    <p class="habitude__legende"><span class="hb-k hb-k--auj"></span> aujourd’hui${courbe.length ? ` <span class="hb-k hb-k--habit"></span> d’habitude ${typeJour === 'w' ? 'le week-end' : 'en semaine'}` : ''}${avecSR ? ' <span style="white-space:nowrap"><span class="hb-k hb-k--sr"></span> Single Rider</span>' : ''}</p>
     ${phrases.length ? `<p class="habitude__texte">${phrases.join(' ')}</p>` : ''}
+    ${phraseSR ? `<p class="habitude__texte">${phraseSR}</p>` : ''}
     <p class="plan-note">Relevés du Carnet toutes les 5 min (source ThemeParks.wiki)${h.days ? ` · ${h.days} jour${h.days > 1 ? 's' : ''} d’historique` : ''} · survole ou touche la courbe pour le détail.</p>`;
 }
 const esc2 = escH;
