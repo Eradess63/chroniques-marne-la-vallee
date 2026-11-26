@@ -7,7 +7,7 @@
 <!-- Installation sur l'écran d'accueil iOS : plein écran, barre d'état fondue
      dans le bandeau, icône en laiton. Les deux balises « capable » coexistent
      parce qu'iOS lit encore la variante Apple. -->
-<meta name="theme-color" content="#1C0F0A">
+<meta name="theme-color" content="#12313a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,7 +19,8 @@
 <meta name="description" content="Encyclopédie des attractions du Parc Disneyland et de Disney Adventure World : fiches techniques, histoire et temps d'attente.">
 <link rel="preload" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices/jost.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/polices.css">
-<link rel="stylesheet" href="css/style.css?v=202611251807">
+<link rel="stylesheet" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/theme.css">
+<link rel="stylesheet" href="css/style.css?v=202611260759">
 
 <style>
 .universe-brand{position:relative;z-index:4;display:flex;align-items:center;gap:11px;width:min(940px,100%);margin:12px auto 10px;color:var(--encre);text-align:left;text-decoration:none;white-space:nowrap}
@@ -34,6 +35,8 @@
 </style>
 </head>
 <body>
+<!-- Gabarit commun des Univers d’Alexandre : bannière peinte, barre de navigation, parchemin. -->
+<script src="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/theme.js"></script>
 
 <header class="masthead">
   <a class="brand" href="https://carnet-parc-alexandre.alexandre-207cc.workers.dev/" aria-label="Retour à l’accueil · Univers d’Alexandre"><span class="brandSeal" aria-hidden="true">✦</span><span><small>UNIVERS</small><strong>D’ALEXANDRE</strong></span></a>
@@ -113,7 +116,7 @@
 <script src="js/itinerary.js"></script>
 <script src="js/wait-history.js"></script>
 <script src="js/journal.js"></script>
-<script type="module" src="js/app.js?v=202611251807"></script>
+<script type="module" src="js/app.js?v=202611260759"></script>
 <script>
   /* Le service worker n'est enregistré qu'en ligne et sur une origine sûre ;
      ouvert depuis un fichier local, le site fonctionne sans lui. */

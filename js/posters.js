@@ -73,7 +73,7 @@ const VARIANT = {
  * l'acajou et le verre fumé du cabinet : les quarante planches se lisent alors
  * comme une même collection d'instruments, et non comme quarante affiches.
  */
-const CABINET = { a: '#1C0F0A', b: '#16201C' };
+const CABINET = { a: '#0B2025', b: '#10262D' };
 const melange = (hex, vers, part) => {
   const n = (h, i) => parseInt(h.slice(1 + i * 2, 3 + i * 2), 16);
   return '#' + [0, 1, 2].map((i) => Math.round(n(hex, i) * (1 - part) + n(vers, i) * part)
@@ -948,7 +948,7 @@ export function posterSVG(motif, variant = 'poster', opts = {}) {
     <clipPath id="${uid}c"><rect x="18" y="60" width="264" height="240"/></clipPath>
   </defs>
 
-  <rect width="300" height="420" fill="#1C0F0A"/>
+  <rect width="300" height="420" fill="#0B2025"/>
 
   <!-- Bandeau du land -->
   <text x="150" y="33" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="${land.length > 18 ? 9 : 10.5}" letter-spacing="${land.length > 18 ? 3 : 4.5}" fill="${v.gold}">${land}</text>
